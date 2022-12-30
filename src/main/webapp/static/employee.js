@@ -1,16 +1,15 @@
 
 function getEmployeeUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/employee";
+	return baseUrl + "/api/brand";
 }
 
 //BUTTON ACTIONS
 function addEmployee(event){
 	//Set the values to update
-	var $form = $("#employee-form");
+	var $form = $("#brand-form");
 	var json = toJson($form);
 	var url = getEmployeeUrl();
-
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -28,13 +27,13 @@ function addEmployee(event){
 }
 
 function updateEmployee(event){
-	$('#edit-employee-modal').modal('toggle');
+	$('#edit-brand-modal').modal('toggle');
 	//Get the ID
-	var id = $("#employee-edit-form input[name=id]").val();	
+	var id = $("#brand-edit-form input[name=id]").val();	
 	var url = getEmployeeUrl() + "/" + id;
 
 	//Set the values to update
-	var $form = $("#employee-edit-form");
+	var $form = $("#brand-edit-form");
 	var json = toJson($form);
 
 	$.ajax({
@@ -86,7 +85,7 @@ var processCount = 0;
 
 
 function processData(){
-	var file = $('#employeeFile')[0].files[0];
+	var file = $('#brandFile')[0].files[0];
 	readFileData(file, readFileDataCallback);
 }
 
@@ -149,8 +148,8 @@ function displayEmployeeList(data){
 		buttonHtml += ' <button onclick="displayEditEmployee(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.name + '</td>'
-		+ '<td>'  + e.age + '</td>'
+		+ '<td>' + e.brand + '</td>'
+		+ '<td>'  + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -209,8 +208,8 @@ function displayEmployee(data){
 
 //INITIALIZATION CODE
 function init(){
-	$('#add-employee').click(addEmployee);
-	$('#update-employee').click(updateEmployee);
+	$('#add-brand').click(addEmployee);
+	$('#update-brand').click(updateEmployee);
 	$('#refresh-data').click(getEmployeeList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);

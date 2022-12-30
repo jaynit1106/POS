@@ -1,15 +1,18 @@
 
 function getEmployeeUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/employee";
+	return baseUrl + "/api/brand";
 }
 
 //BUTTON ACTIONS
 function addEmployee(event){
 	//Set the values to update
-	var $form = $("#employee-form");
+	var $form = $("#brand-form");
 	var json = toJson($form);
 	var url = getEmployeeUrl();
+	console.log("shdil0");
+	console.log(url);
+	console.log("shdil0");
 
 	$.ajax({
 	   url: url,
@@ -56,6 +59,7 @@ function updateEmployee(event){
 
 function getEmployeeList(){
 	var url = getEmployeeUrl();
+	console.log(url)
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -99,6 +103,10 @@ function uploadRows(){
 	//Update progress
 	updateUploadDialog();
 	//If everything processed then return
+	if(fileData.length>5000){
+		alert("Size too Large");
+		return;
+	}
 	if(processCount==fileData.length){
 		return;
 	}
