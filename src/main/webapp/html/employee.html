@@ -46,7 +46,7 @@
 
  <!-- Table -->
  <div class="col-12">
-	<table class="table table-striped" id="employee-table">
+	<table class="table table-striped" id="brand-table">
 	  <thead>
 	    <tr>
 	      <th scope="col">ID</th>
@@ -92,7 +92,6 @@
 			      <input type="text" class="form-control" name="category" placeholder="enter category">
 			    </div>
 			  </div>
- 	        <input type="hidden" name="id" >
 			</form>        
       </div>
       <div class="modal-footer">
@@ -105,7 +104,7 @@
 
 
 <!-- Employee Edit Modal -->
-<div class="modal" tabindex="-1" role="dialog" id="upload-employee-modal">
+<div class="modal" tabindex="-1" role="dialog" id="upload-brand-modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       
@@ -119,7 +118,7 @@
       <div class="modal-body">
       	<div class="employee-file">
 		  <input type="file" class="custom-file-input" id="brandFile">
-		  <label class="custom-file-label" for="employeeFile" id="employeeFileName">Choose file</label>
+		  <label class="custom-file-label" for="employeeFile" id="brandFileName">Choose file</label>
 		</div>
 		<a th:href="@{/sample/employee.tsv}" target="_blank">Download Sample</a> 
 		<br>
