@@ -205,7 +205,7 @@ function init(){
 	$('#upload-data').click(displayBrandData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#brandFile').on('change', updateFileName)
+    $('#brandFile').on('change', updateFileName);
 }
 
 $(document).ready(init);
