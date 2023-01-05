@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.employee.dao.BrandDao;
+import com.increff.employee.dao.InventoryDao;
+import com.increff.employee.dao.ProductDao;
 import com.increff.employee.pojo.BrandPojo;
+import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.util.StringUtil;
 
 
@@ -17,6 +20,12 @@ public class BrandService {
 
 	@Autowired
 	private BrandDao dao;
+	
+	@Autowired
+	private ProductDao productDao;
+	
+	@Autowired
+	private InventoryDao inventoryDao;
 
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandPojo p) throws ApiException {
@@ -31,7 +40,12 @@ public class BrandService {
 	}
 
 	@Transactional
-	public void delete(int id) {
+	public void delete(int id) throws ApiException{
+		List<ProductPojo> products = productDao.selectAllProducts(id);
+		for(ProductPojo p : products) {
+			inventoryDao.delete(p.getId());
+		}
+		productDao.deleteProducts(id);
 		dao.delete(id);
 	}
 
@@ -65,9 +79,10 @@ public class BrandService {
 	
 	@Transactional
 	public boolean checkRepeat(String brand,String category) throws ApiException {
-		boolean result = dao.checkRepeat(brand, category);
-		if(result)return true;
+		BrandPojo p = dao.checkRepeat(brand, category);
+		if(p==null)return true;
 		throw new ApiException("Brand and Category already exists");
+		
 	}
 
 	protected static void normalize(BrandPojo p) {

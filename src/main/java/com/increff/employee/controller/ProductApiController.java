@@ -32,6 +32,7 @@ public class ProductApiController {
 		ProductPojo p = convert(form);
 		p.setbrandId(service.getBrandId(form.getBrand(), form.getCategory()));
 		p.setBarcode(service.generateBarcode(p));
+		service.productExist(p.getbrandId(), p.getName());
 		service.add(p);
 	}
 
@@ -65,6 +66,7 @@ public class ProductApiController {
 	public void update(@PathVariable int id, @RequestBody ProductForm f) throws ApiException {
 		ProductPojo p = convert(f);
 		p.setbrandId(service.getBrandId(f.getBrand(), f.getCategory()));
+		service.productExist(p.getbrandId(), p.getName());
 		service.update(id, p);
 	}
 	

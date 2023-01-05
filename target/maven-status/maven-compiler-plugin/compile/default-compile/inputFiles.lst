@@ -2,6 +2,7 @@ C:\Increff Project\POS\src\main\java\com\increff\employee\model\ProductData.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\model\EmployeeForm.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\controller\ProductApiController.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\controller\SampleController.java
+C:\Increff Project\POS\src\main\java\com\increff\employee\model\InventoryData.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\dao\EmployeeDao.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\model\BrandData.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\controller\LoginController.java
@@ -28,6 +29,7 @@ C:\Increff Project\POS\src\main\java\com\increff\employee\util\BarcodeUtil.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\util\CookieUtil.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\pojo\BrandPojo.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\spring\DbConfig.java
+C:\Increff Project\POS\src\main\java\com\increff\employee\pojo\InventoryPojo.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\service\ApiException.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\service\ProductService.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\spring\SpringSecurityInitializer.java
@@ -41,10 +43,14 @@ C:\Increff Project\POS\src\main\java\com\increff\employee\spring\ControllerConfi
 C:\Increff Project\POS\src\main\java\com\increff\employee\pojo\ProductPojo.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\controller\BrandApiController.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\model\MessageData.java
+C:\Increff Project\POS\src\main\java\com\increff\employee\service\InventoryService.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\util\StringUtil.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\model\UserForm.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\dao\EmployeeInMemDao.java
+C:\Increff Project\POS\src\main\java\com\increff\employee\controller\InventoryApiController.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\model\EmployeeData.java
+C:\Increff Project\POS\src\main\java\com\increff\employee\model\InventoryForm.java
+C:\Increff Project\POS\src\main\java\com\increff\employee\dao\InventoryDao.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\model\LoginForm.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\controller\InitApiController.java
 C:\Increff Project\POS\src\main\java\com\increff\employee\service\EmployeeService.java

@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.increff.employee.dao.BrandDao;
+import com.increff.employee.dao.InventoryDao;
 import com.increff.employee.dao.ProductDao;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
@@ -20,6 +22,12 @@ public class ProductService {
 	@Autowired
 	private ProductDao dao;
 
+	@Autowired
+	private BrandDao brandDao;
+	
+	@Autowired
+	private InventoryDao inventoryDao;
+
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo p) throws ApiException {
 		normalize(p);
@@ -31,6 +39,10 @@ public class ProductService {
 
 	@Transactional
 	public void delete(int id) {
+		List<ProductPojo> products = dao.selectAll();
+		for(ProductPojo p : products) {
+			inventoryDao.delete(p.getId());
+		}
 		dao.delete(id);
 	}
 
@@ -62,12 +74,17 @@ public class ProductService {
 		}
 		return p;
 	}
+	@Transactional
+	public boolean productExist(int brandId , String name) throws ApiException{
+		if(dao.productExist(brandId, name)==null)return false;
+		throw new ApiException("Product already exist");
+	}
 	
 	@Transactional
 	public int getBrandId(String brand,String category) throws ApiException {
-		List<BrandPojo> p = dao.getBrandId(brand, category);
-		if(p.isEmpty())throw new ApiException("The brand and category does not exist");
-		return p.get(0).getId();
+		BrandPojo p = brandDao.checkRepeat(brand, category);
+		if(p==null)throw new ApiException("The brand and category does not exist");
+		return p.getId();
 	}
 	
 	@Transactional
