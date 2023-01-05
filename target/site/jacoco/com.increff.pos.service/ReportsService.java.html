@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReportsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-spring</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.service</a> &gt; <span class="el_source">ReportsService.java</span></div><h1>ReportsService.java</h1><pre class="source lang-java linenums">package com.increff.pos.service;
+import java.util.*;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.increff.pos.dao.InventoryDao;
+import com.increff.pos.dao.ProductDao;
+import com.increff.pos.pojo.InventoryPojo;
+import com.increff.pos.pojo.ProductPojo;
+
+
+@Service
+<span class="fc" id="L16">public class ReportsService {</span>
+
+	@Autowired
+	private ProductDao productDao;
+
+	@Autowired
+	private InventoryDao inventoryDao;
+
+
+	@Transactional
+	public HashMap&lt;Integer,Integer&gt; getInventoryReport() throws ApiException {
+<span class="nc" id="L27">		List&lt;InventoryPojo&gt; list = inventoryDao.selectAll();</span>
+<span class="nc" id="L28">		HashMap&lt;Integer,Integer&gt; inventory = new HashMap&lt;Integer,Integer&gt;();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">		for(InventoryPojo p : list) {</span>
+<span class="nc" id="L30">			ProductPojo product = productDao.select(p.getId());</span>
+<span class="nc" id="L31">			int quant = 0;</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">			if(inventory.get(product.getbrandId())!= null)quant = inventory.get(product.getbrandId());</span>
+<span class="nc" id="L33">			inventory.put(product.getbrandId() , quant + p.getQuantity());</span>
+<span class="nc" id="L34">		}</span>
+<span class="nc" id="L35">		return inventory;</span>
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
