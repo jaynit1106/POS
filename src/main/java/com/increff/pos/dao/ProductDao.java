@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -21,10 +20,10 @@ public class ProductDao extends AbstractDao {
 	private static String select_all_products = "select p from ProductPojo p where brandId=:brandId";
 	private static String check_barcode="select p from ProductPojo p where barcode=:barcode";
 	private static String product_exist="select p from ProductPojo p where brandId=:brandId and name=:name";
+	
 	@PersistenceContext
 	private EntityManager em;
 
-	@Transactional
 	public void insert(ProductPojo p) {
 		em.persist(p);
 	}

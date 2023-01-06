@@ -5,7 +5,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -17,11 +16,11 @@ public class OrderItemDao extends AbstractDao {
 	private static String delete_id = "delete from OrderItemPojo p where id=:id";
 	private static String select_id = "select p from OrderItemPojo p where id=:id";
 	private static String select_all = "select p from OrderItemPojo p";
+	private static String select_by_order_id = "select p from OrderItemPojo p where orderid=:orderId";
 	
 	@PersistenceContext
 	private EntityManager em;
 
-	@Transactional
 	public void insert(OrderItemPojo p) {
 		em.persist(p);
 	}
@@ -40,6 +39,12 @@ public class OrderItemDao extends AbstractDao {
 
 	public List<OrderItemPojo> selectAll() {
 		TypedQuery<OrderItemPojo> query = getQuery(select_all, OrderItemPojo.class);
+		return query.getResultList();
+	}
+	
+	public List<OrderItemPojo> selectByOrderId(int orderId) {
+		TypedQuery<OrderItemPojo> query = getQuery(select_by_order_id, OrderItemPojo.class);
+		query.setParameter("orderId", orderId);
 		return query.getResultList();
 	}
 

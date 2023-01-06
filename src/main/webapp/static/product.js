@@ -6,13 +6,36 @@ function getProductUrl(){
 	return baseUrl + "/api/product";
 }
 
+function getInventoryUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/inventory";
+}
+
 //BUTTON ACTIONS
 function addProduct(event){
 	//Set the values to update
 	var $form = $("#product-form");
 	var json = toJson($form);
 	var url = getProductUrl();
+	
+	$.ajax({
+	   url: url,
+	   type: 'POST',
+	   data: json,
+	   headers: {
+       	'Content-Type': 'application/json'
+       },	   
+	   success: function(response) {
+	   		addInventory(json);  
+	   },
+	   error: handleAjaxError
+	});
 
+	return false;
+}
+
+function addInventory(json){
+	var url = getInventoryUrl();
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -58,6 +81,24 @@ function updateProduct(){
 	var url = getProductUrl() + "/" + editProductId;
 	var $form = $("#product-edit-form");
 	var json = toJson($form);
+	
+	$.ajax({
+	   url: url,
+	   type: 'PUT',
+	   data: json,
+	   headers: {
+       	'Content-Type': 'application/json'
+       },	   
+	   success: function(response) {
+	   		updateInventory(json);
+	   },
+	   error: handleAjaxError
+	});
+	return false;
+}
+
+function updateInventory(json){
+	var url = getInventoryUrl() + "/" + editProductId;
 	console.log(json);
 	console.log(url);
 	

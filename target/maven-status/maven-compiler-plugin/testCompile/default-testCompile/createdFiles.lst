@@ -1,5 +1,4 @@
 com\increff\pos\service\QaConfig.class
-com\increff\pos\service\EmployeeServiceTest.class
 com\increff\pos\service\AboutAppServiceTest.class
 com\increff\pos\service\SampleTest.class
 com\increff\pos\service\AbstractUnitTest.class
