@@ -28,6 +28,7 @@ C:\Increff Project\POS\src\main\java\com\increff\pos\service\OrderService.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\dao\InventoryDao.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\model\BrandForm.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\service\UserService.java
+C:\Increff Project\POS\src\main\java\com\increff\pos\util\generateXml.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\spring\SpringSecurityInitializer.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\controller\InitApiController.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\controller\InventoryApiController.java
@@ -37,6 +38,7 @@ C:\Increff Project\POS\src\main\java\com\increff\pos\controller\AbstractUiContro
 C:\Increff Project\POS\src\main\java\com\increff\pos\service\ReportsService.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\spring\SpringConfig.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\model\InventoryReportData.java
+C:\Increff Project\POS\src\main\java\com\increff\pos\util\generatePdf.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\model\BrandData.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\pojo\InventoryPojo.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\controller\BrandApiController.java

@@ -1,4 +1,5 @@
-package com.increff.pos.pdf;
+package com.increff.pos.util;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -14,18 +15,15 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-/**
- * @author Debasmita.Sahoo
- *
- */
-public class TestPDF {
-	public static void main(String args[]){
+
+public class generatePdf {
+	public static void createPdf() {
 		try {
-			File xmlfile = new File("C:\\Increff Project\\POS\\src\\main\\java\\com\\increff\\pos\\pdf\\organization.xml");
-			File xslfile = new File("C:\\Increff Project\\POS\\src\\main\\java\\com\\increff\\pos\\pdf\\template.xsl");
-			File pdfDir = new File("C:\\Increff Project\\POS\\src\\main\\java\\com\\increff\\pos\\pdf");
+			File xmlfile = new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\template.xml");
+			File xslfile = new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\template.xsl");
+			File pdfDir = new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\pdf");
 			pdfDir.mkdirs();
-			File pdfFile = new File(pdfDir,"org.pdf");
+			File pdfFile = new File(pdfDir,"salesReport.pdf");
 			final FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
 			FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
 			OutputStream out = new FileOutputStream(pdfFile);
@@ -54,4 +52,5 @@ public class TestPDF {
 			// TODO: handle exception
 		}
 	}
+
 }

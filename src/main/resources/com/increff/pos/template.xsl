@@ -23,9 +23,9 @@
 							<fo:table-column column-width="2cm" />
 							<fo:table-column column-width="5cm" />
 							<fo:table-header>
-								<fo:table-cell><fo:block>name</fo:block></fo:table-cell>
-								<fo:table-cell><fo:block>city</fo:block></fo:table-cell>
-								<fo:table-cell><fo:block>startdate</fo:block></fo:table-cell>
+								<fo:table-cell><fo:block>brand</fo:block></fo:table-cell>
+								<fo:table-cell><fo:block>category</fo:block></fo:table-cell>
+								<fo:table-cell><fo:block>revenue</fo:block></fo:table-cell>
 							</fo:table-header>
 							<fo:table-body>
 								<xsl:apply-templates select="branch"/>
@@ -41,19 +41,19 @@
 		<fo:table-row>
 			<fo:table-cell>
 				<fo:block>
-					<xsl:value-of select="name"/>
+					<xsl:value-of select="brand"/>
 				</fo:block>
 			</fo:table-cell>
 			
 			<fo:table-cell>
 				<fo:block>
-					<xsl:value-of select="city"/>
+					<xsl:value-of select="category"/>
 				</fo:block>
 			</fo:table-cell>
 			
 			<fo:table-cell>
 				<fo:block>
-					<xsl:value-of select="startdate"/>
+					<xsl:value-of select="revenue"/>
 				</fo:block>
 			</fo:table-cell>
 		</fo:table-row>
