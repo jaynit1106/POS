@@ -64,19 +64,6 @@ function getProductList(){
 	});
 }
 
-function deleteProduct(id){
-	var url = getProductUrl() + "/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getProductList();    
-	   },
-	   error: handleAjaxError
-	});
-}
-
 function updateProduct(){
 	var url = getProductUrl() + "/" + editProductId;
 	var $form = $("#product-edit-form");
@@ -233,8 +220,7 @@ function displayProductList(data){
 	
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteProduct(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="toggleEditProduct(' + e.id + ')">edit</button>'
+		var buttonHtml = ' <button onclick="toggleEditProduct(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.name + '</td>'

@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.BrandDao;
-import com.increff.pos.dao.InventoryDao;
-import com.increff.pos.dao.ProductDao;
 import com.increff.pos.pojo.BrandPojo;
-import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.StringUtil;
 
 
@@ -21,12 +18,6 @@ public class BrandService {
 	@Autowired
 	private BrandDao dao;
 	
-	@Autowired
-	private ProductDao productDao;
-	
-	@Autowired
-	private InventoryDao inventoryDao;
-
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandPojo p) throws ApiException {
 		normalize(p);
@@ -37,16 +28,6 @@ public class BrandService {
 			throw new ApiException("Category cannot be empty");
 		}
 		dao.insert(p);
-	}
-
-	@Transactional
-	public void delete(int id) throws ApiException{
-		List<ProductPojo> products = productDao.selectAllProducts(id);
-		for(ProductPojo p : products) {
-			inventoryDao.delete(p.getId());
-		}
-		productDao.deleteProducts(id);
-		dao.delete(id);
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -78,11 +59,9 @@ public class BrandService {
 	}
 	
 	@Transactional
-	public boolean checkRepeat(String brand,String category) throws ApiException {
+	public BrandPojo getBrandId(String brand,String category) throws ApiException {
 		BrandPojo p = dao.checkRepeat(brand, category);
-		if(p==null)return true;
-		throw new ApiException("Brand and Category already exists");
-		
+		return p;
 	}
 
 	protected static void normalize(BrandPojo p) {

@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.OrderItemDao;
-import com.increff.pos.dao.ProductDao;
 import com.increff.pos.pojo.OrderItemPojo;
-import com.increff.pos.pojo.ProductPojo;
 
 
 @Service
@@ -19,17 +17,9 @@ public class OrderItemService {
 	@Autowired
 	private OrderItemDao dao;
 	
-	@Autowired
-	private ProductDao productDao;
-	
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(OrderItemPojo p) throws ApiException {
 		dao.insert(p);
-	}
-
-	@Transactional
-	public void delete(int id) {
-		dao.delete(id);
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -58,15 +48,6 @@ public class OrderItemService {
 			throw new ApiException("OrderItem with given ID does not exit, id: " + id);
 		}
 		return p;
-	}
-	
-	@Transactional
-	public int getProductId(String barcode) throws ApiException {
-		ProductPojo p = productDao.barcodeExist(barcode);
-		if (p == null) {
-			throw new ApiException("Barcode does not exist");
-		}
-		return p.getId();
 	}
 	
 }

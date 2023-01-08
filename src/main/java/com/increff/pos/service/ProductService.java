@@ -7,10 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.increff.pos.dao.BrandDao;
-import com.increff.pos.dao.InventoryDao;
 import com.increff.pos.dao.ProductDao;
-import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.BarcodeUtil;
 import com.increff.pos.util.StringUtil;
@@ -22,12 +19,6 @@ public class ProductService {
 	@Autowired
 	private ProductDao dao;
 
-	@Autowired
-	private BrandDao brandDao;
-	
-	@Autowired
-	private InventoryDao inventoryDao;
-
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo p) throws ApiException {
 		normalize(p);
@@ -35,15 +26,6 @@ public class ProductService {
 			throw new ApiException("Name cannot be empty");
 		}
 		dao.insert(p);
-	}
-
-	@Transactional
-	public void delete(int id) {
-		List<ProductPojo> products = dao.selectAll();
-		for(ProductPojo p : products) {
-			inventoryDao.delete(p.getId());
-		}
-		dao.delete(id);
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -75,17 +57,19 @@ public class ProductService {
 		return p;
 	}
 	@Transactional
-	public boolean productExist(int brandId , String name) throws ApiException{
-		if(dao.productExist(brandId, name)==null)return false;
-		throw new ApiException("Product already exist");
+	public ProductPojo productExist(int brandId , String name) throws ApiException{
+		return dao.productExist(brandId, name);
 	}
 	
 	@Transactional
-	public int getBrandId(String brand,String category) throws ApiException {
-		BrandPojo p = brandDao.checkRepeat(brand, category);
-		if(p==null)throw new ApiException("The brand and category does not exist");
+	public int getProductIdByBarcode(String barcode) throws ApiException {
+		ProductPojo p = dao.barcodeExist(barcode);
+		if (p == null) {
+			throw new ApiException("Barcode does not exist");
+		}
 		return p.getId();
 	}
+	
 	
 	@Transactional
 	public String generateBarcode(ProductPojo p) {

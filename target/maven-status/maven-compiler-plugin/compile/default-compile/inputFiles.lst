@@ -17,6 +17,7 @@ C:\Increff Project\POS\src\main\java\com\increff\pos\model\AboutAppData.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\pojo\BrandPojo.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\dao\BrandDao.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\model\UserForm.java
+C:\Increff Project\POS\src\main\java\com\increff\pos\dto\ProductDto.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\pojo\ProductPojo.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\controller\LoginController.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\model\InventoryData.java
@@ -49,6 +50,7 @@ C:\Increff Project\POS\src\main\java\com\increff\pos\dao\OrderDao.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\model\MessageData.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\controller\OrderItemApiController.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\util\BarcodeUtil.java
+C:\Increff Project\POS\src\main\java\com\increff\pos\dto\BrandDto.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\model\OrderItemForm.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\controller\AppRestControllerAdvice.java
 C:\Increff Project\POS\src\main\java\com\increff\pos\util\UserPrincipal.java
