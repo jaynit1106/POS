@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head th:replace="snippets.html :: name_head"></head>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'></link>  
 
 <body>
 
@@ -16,17 +17,22 @@
  <div class="row">
 	 <div class="col-12">
 			<form id="product-form">
+			  <div class="form-row">
 			  <div class="form-group">
-			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
+			    <label for="brands" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="brand" id="brand" placeholder="enter Brand">
-			    </div>
+				  	<select name="brand" id="brands" class="form-control">
+				    	<option value="Select a Brand">Brand</option>
+				  	</select>
+					</div>
 			  </div>
-			  <div class="form-group">
-			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" id="category" placeholder="enter category">
-			    </div>
+			  <div class="form-group col-2">
+			    <label for="categories" class="col-sm-2 col-form-label">Category</label>
+				  <div class="col-sm-10">
+				  	<select name="category" class="form-control" id="category">
+				    	<option value="Select a Category">Category</option>
+				  	</select>
+				  </div>
 			  </div>
 			  <div class="form-group">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
@@ -35,24 +41,23 @@
 			    </div>
 			  </div>
 			  <div class="form-group">
-			    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
+			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="mrp" id="inputMrp" placeholder="enter product MRP">
+			      <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="enter Barcode">
 			    </div>
 			  </div>
 			  <div class="form-group">
-			    <label for="inputquantity" class="col-sm-2 col-form-label">Quantity</label>
+			    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="quantity" id="inputQuantity" placeholder="enter Quantity">
+			      <input type="number" class="form-control" name="mrp" id="inputMrp" placeholder="enter MRP">
 			    </div>
 			  </div>
+			  <div class="col-sm-10">
 		  	  <button type="button" class="btn btn-primary" id="add-product">Add</button>
 		 	  	&nbsp;
-		  	  <button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
-		  	  &nbsp;
 		  	  <button type="button" class="btn btn-primary" id="upload-data">Upload</button>	
-		  
-			  
+		  	</div>
+			</div>
 			</form>
 	 </div>	
 </div> 
@@ -70,7 +75,9 @@
 	  <thead>
 	    <tr>
 	      <th scope="col">ID</th>
-	      <th scope="col">Name</th>
+	      <th scope="col">Brand</th>
+	      <th scope="col">Category</th>
+	      <th scope="col">name</th>
 	      <th scope="col">MRP</th>
 	      <th scope="col">Actions</th>
 	    </tr>
@@ -80,7 +87,10 @@
 	  	<!-- table body -->
 	  </tbody>
 	</table>
-
+	<div class="col">
+		<button value="0" id="previous-button" type="button" style="visibility: hidden;">Prev</button>
+		<button value="2" id="next-button" type="button">Next</button>
+	</div>
 </div>
 </div>
 
@@ -97,7 +107,7 @@
       <div class="modal-body">
 			<form class="form-inline" id="product-edit-form">
 			  <div class="form-group">
-			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand-Id</label>
+			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
 			      <input type="text" class="form-control" name="brand" placeholder="enter brand">
 			    </div>
@@ -118,16 +128,16 @@
 			  </div>
 			  &nbsp;
 			  <div class="form-group">
-			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
+			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="mrp" placeholder="enter MRP">
+			      <input type="text" class="form-control" name="barcode" placeholder="enter barcode">
 			    </div>
 			  </div>
 			  &nbsp;
 			  <div class="form-group">
-			    <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="quantity" placeholder="enter Quantity">
+			      <input type="text" class="form-control" name="mrp" placeholder="enter MRP">
 			    </div>
 			  </div>
 			</form>   
@@ -178,6 +188,7 @@
 <footer th:replace="snippets.html :: name_footer"></footer>
 
 <script th:src="@{/static/product.js}"/></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>  
 
 </body>	
 

@@ -43,9 +43,6 @@ public class InventoryService {
 	@Transactional
 	public InventoryPojo getCheck(int id) throws ApiException {
 		InventoryPojo p = dao.select(id);
-		if (p == null) {
-			throw new ApiException("Product with given ID does not exit, id: " + id);
-		}
 		return p;
 	}
 	

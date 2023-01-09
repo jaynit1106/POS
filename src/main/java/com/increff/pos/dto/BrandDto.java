@@ -43,7 +43,7 @@ public class BrandDto {
 	public void update(int id, BrandForm f) throws ApiException {
 		BrandPojo p = convert(f);
 		BrandPojo brand = brandService.getBrandId(p.getBrand(), p.getCategory());
-		if(brand.equals(null))brandService.update(id, p);
+		if(brand==null)brandService.update(id, p);
 		else throw new ApiException("Brand and Category already exists");
 	}
 	

@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.InventoryForm;
-import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
-import com.increff.pos.service.BrandService;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.ProductService;
 
@@ -23,34 +21,38 @@ public class InventoryDto {
 	@Autowired
 	private InventoryService inventoryService;
 	
-	@Autowired
-	private BrandService brandService;
 	
 	@Autowired
 	private ProductService productService;
 	
 	public void add(@RequestBody InventoryForm form) throws ApiException {
 		InventoryPojo p = convert(form);
-		BrandPojo brand=brandService.getBrandId(form.getBrand(), form.getCategory());
-		if(brand == null)throw new ApiException("Brand and Category Does not exist");
 		
-		ProductPojo product = productService.productExist(brand.getId(), form.getName());
+		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
 		if(product == null)throw new ApiException("Product Does Not Exist");
 		p.setId(product.getId());
 		
-		inventoryService.get(p.getId());
+		if(inventoryService.get(p.getId())!=null)throw new ApiException("Inventory Already Exists");
 		inventoryService.add(p);
 	}
 	
 	public InventoryData get(int id) throws ApiException {
-		return convert(inventoryService.get(id));
+		InventoryPojo p = inventoryService.get(id);
+		if(p==null)throw new ApiException("Inventory does not exist");
+		InventoryData data =  convert(p);
+		ProductPojo product = productService.get(id);
+		data.setBarcode(product.getBarcode());
+		return  data;
 	}
 	
-	public List<InventoryData> getAll() {
+	public List<InventoryData> getAll() throws ApiException {
 		List<InventoryPojo> list = inventoryService.getAll();
 		List<InventoryData> list2 = new ArrayList<InventoryData>();
 		for (InventoryPojo p : list) {
-			list2.add(convert(p));
+			InventoryData data =  convert(p);
+			ProductPojo product = productService.get(p.getId());
+			data.setBarcode(product.getBarcode());
+			list2.add(data);
 		}
 		return list2;
 	}

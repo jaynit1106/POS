@@ -26,23 +26,31 @@ public class ProductDto {
 		ProductPojo p = convert(form);
 		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());
 		if(brand == null)throw new ApiException("Brand and Category does not exist");
-		
 		p.setbrandId(brand.getId());
-		p.setBarcode(productService.generateBarcode(p));
-		
 		if(productService.productExist(p.getbrandId(), p.getName())!=null)throw new ApiException("Product already exists");
+		if(productService.getProductByBarcode(form.getBarcode())!=null)throw new ApiException("Barcode already exists");
+		
 		productService.add(p);
 	}
 	
 	public ProductData get(int id) throws ApiException {
-		return convert(productService.get(id));
+		ProductPojo product = productService.get(id);
+		ProductData data = convert(product);
+		BrandPojo brand = brandService.get(product.getbrandId());
+		data.setCategory(brand.getCategory());
+		data.setBrand(brand.getBrand());
+		return data;
 	}
 	
-	public List<ProductData> getAll() {
+	public List<ProductData> getAll() throws ApiException{
 		List<ProductPojo> list = productService.getAll();
 		List<ProductData> list2 = new ArrayList<ProductData>();
 		for (ProductPojo p : list) {
-			list2.add(convert(p));
+			ProductData data = convert(p);
+			BrandPojo brand = brandService.get(p.getbrandId());
+			data.setCategory(brand.getCategory());
+			data.setBrand(brand.getBrand());
+			list2.add(data);
 		}
 		return list2;
 	}
@@ -55,15 +63,20 @@ public class ProductDto {
 		p.setbrandId(brand.getId());
 		
 		if(productService.productExist(p.getbrandId(), p.getName())!=null)throw new ApiException("Product already exists");
+		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
+		if(product!=null) {
+			if(product.getId()!=id)throw new ApiException("Barcode already exists");
+		}
+		
 		productService.update(id,p);
 	}
 	
 	private static ProductData convert(ProductPojo p) {
 		ProductData d = new ProductData();
 		d.setName(p.getName());
-		d.setId(p.getId());
 		d.setBarcode(p.getBarcode());
 		d.setMrp(p.getMrp());
+		d.setId(p.getId());
 		return d;
 	}
 
@@ -71,6 +84,7 @@ public class ProductDto {
 		ProductPojo p = new ProductPojo();
 		p.setName(f.getName());
 		p.setMrp(f.getMrp());
+		p.setBarcode(f.getBarcode());
 		return p;
 	}
 	

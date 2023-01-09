@@ -1,24 +1,15 @@
-var editProductId=null;
 
-
-function getProductUrl(){
+function getInventoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/product";
+	return baseUrl + "/api/inventory";
 }
-
-function getBrandUrl(){
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
-}
-
 
 //BUTTON ACTIONS
-function addProduct(event){
+function addInventory(event){
 	//Set the values to update
-	var $form = $("#product-form");
+	var $form = $("#inventory-form");
 	var json = toJson($form);
-	var url = getProductUrl();
-	
+	var url = getInventoryUrl();
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -27,8 +18,8 @@ function addProduct(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		getProductList();
-	   		swal("Hurray", "Product added successfully", "success");  
+	   		getInventoryList();
+	   		swal("Hurray", "Inventory added successfully", "success");  
 	   },
 	   error: function(response){
 	   		swal("Oops!", response.responseJSON.message, "error");
@@ -38,54 +29,17 @@ function addProduct(event){
 	return false;
 }
 
-function addBrandCategoryDropdown(data){
-	var brandSelect = document.getElementById("brands");
-	var categorySelect = document.getElementById("category");
-	for(var i in data){
-		var e = data[i];
-		
-		var brandOption = document.createElement('option');
-        brandOption.text = brandOption.value = e.brand;
-        brandSelect.add(brandOption, 1);
-        
-		var categoryOption = document.createElement('option');
-        categoryOption.text = categoryOption.value = e.category;
-        categorySelect.add(categoryOption, 1);
-        
-	}
+var editInventoryId=null;
+function displayUpdateDialog(id){
+	$('#edit-inventory-modal').modal('toggle');
+	//Get the ID
+	window.editInventoryId = id	
+	return false;
 }
 
-function getBrandList(){
-	var url = getBrandUrl();
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-			addBrandCategoryDropdown(data);   		   
-	   },
-	   error: function(response){
-	   		swal("Oops!", response.responseJSON.message, "error");
-	   }
-	});
-}
-
-function getProductList(){
-	var url = getProductUrl();
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displayProductList(data);   
-	   },
-	   error: function(response){
-	   		swal("Oops!", response.responseJSON.message, "error");
-	   }
-	});
-}
-
-function updateProduct(){
-	var url = getProductUrl() + "/" + editProductId;
-	var $form = $("#product-edit-form");
+function updateInventory(){
+	var url = getInventoryUrl() + "/" + editInventoryId;
+	var $form = $("#inventory-edit-form");
 	var json = toJson($form);
 	
 	$.ajax({
@@ -96,14 +50,30 @@ function updateProduct(){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		getProductList();
-	   		swal("Hurray", "Product updated successfully", "success");
+	   		swal("Hurray", "inventory updated successfully", "success");
+	   		$('#edit-inventory-modal').modal('toggle');
+	   		getInventoryList();   
 	   },
 	   error: function(response){
 	   		swal("Oops!", response.responseJSON.message, "error");
 	   }
 	});
 	return false;
+}
+
+
+function getInventoryList(){
+	var url = getInventoryUrl();
+	$.ajax({
+	   url: url,
+	   type: 'GET',
+	   success: function(data) {
+	   		displayInventoryList(data);  
+	   },
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
+	});
 }
 
 // FILE UPLOAD METHODS
@@ -113,7 +83,7 @@ var processCount = 0;
 
 
 function processData(){
-	var file = $('#productFile')[0].files[0];
+	var file = $('#inventoryFile')[0].files[0];
 	readFileData(file, readFileDataCallback);
 }
 
@@ -128,20 +98,20 @@ function uploadRows(){
 	
 	//To avoid large files
 	if(fileData.length>5000){
-		swal("Oops!","File size too large", "error");
+		alert("Size too large");
 		return;
 	}
 	
 	//To avoid empty files
 	if(fileData.length==0){
-		swal("Oops!","File is empty", "error");
+		alert("File is empty");
 		return;
 	}
 	
 	//If everything processed then return
 	if(processCount==fileData.length){
-		getProductList();
-		swal("Hurray", "Upload successfull", "success");
+		getInventoryList();
+	   	swal("Hurray", "Inventory upload successfull", "success");
 		return;
 	}
 	
@@ -150,7 +120,7 @@ function uploadRows(){
 	processCount++;
 	
 	var json = JSON.stringify(row);
-	var url = getProductUrl();
+	var url = getInventoryUrl();
 
 	//Make ajax call
 	$.ajax({
@@ -176,10 +146,9 @@ function downloadErrors(){
 	writeFileData(errorData);
 }
 
-
 // PAGINATION METHODS
-function diplayPaginatedProducts(items,rows_per_page,page){
-	var $tbody = $('#product-table').find('tbody');
+function displayPaginatedInventory(items,rows_per_page,page){
+	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
 	page--;
 	let start = rows_per_page*page;
@@ -190,13 +159,11 @@ function diplayPaginatedProducts(items,rows_per_page,page){
 
 	for(let i=0 ; i<paginatedItems.length;i++){
 		var e = paginatedItems[i];
-		var buttonHtml = ' <button onclick="toggleEditProduct(' + e.id + ')">edit</button>';
+		var buttonHtml = '<button onclick="displayUpdateDialog(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>' + e.category + '</td>'
-		+ '<td>' + e.name + '</td>'
-		+ '<td>' + e.mrp + '</td>'
+		+ '<td>' + e.barcode + '</td>'
+		+ '<td>'  + e.quantity + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -205,10 +172,10 @@ function diplayPaginatedProducts(items,rows_per_page,page){
 }
 
 function nextPage(){
-	var pages = Math.ceil(productData.length/5);
+	var pages = Math.ceil(inventoryData.length/5);
 	var button = document.getElementById("next-button");
 	var page = parseInt(button.value);
-	diplayPaginatedProducts(productData,5,page);
+	displayPaginatedInventory(inventoryData,5,page);
 	if(page == pages){
 		button.style.visibility = 'hidden';
 
@@ -229,10 +196,11 @@ function nextPage(){
 }
 
 function prevPage(){
+	var pages = Math.ceil(inventoryData.length/5);
 	var button = document.getElementById("previous-button");
 	var page = parseInt(button.value);
 	
-	diplayPaginatedProducts(productData,5,page);
+	displayPaginatedInventory(inventoryData,5,page);
 	page--;
 	if(page == 0){
 		button.value="0";
@@ -253,33 +221,34 @@ function prevPage(){
 }
 
 function hideNext(){
-	if(productData.length<=5){
+	if(inventoryData.length<=5){
 		document.getElementById("next-button").style.visibility='hidden';
 	}else{
 		document.getElementById("next-button").style.visibility='visible';
 	}
 }
 
-//UI DISPLAY METHODS
 
-var productData = [];
-function displayProductList(data){
-	productData=[];
+//UI DISPLAY METHODS
+var inventoryData = [];
+function displayInventoryList(data){
+	inventoryData=[];
 	for(var i in data){
 		var e = data[i];
-		productData.push(e);
+		inventoryData.push(e);
 	}
+	
 	document.getElementById("previous-button").value="0";
 	document.getElementById("next-button").value="2";
-	diplayPaginatedProducts(productData,5,1);
+	displayPaginatedInventory(inventoryData,5,1);
 	hideNext();
 }
 
 function resetUploadDialog(){
 	//Reset file name
-	var $file = $('#productFile');
+	var $file = $('#inventoryFile');
 	$file.val('');
-	$('#productFileName').html("Choose File");
+	$('#inventoryFileName').html("Choose File");
 	//Reset various counts
 	processCount = 0;
 	fileData = [];
@@ -295,21 +264,14 @@ function updateUploadDialog(){
 }
 
 function updateFileName(){
-	var $file = $('#productFile');
+	var $file = $('#inventoryFile');
 	var fileName = $file.val();
-	$('#productFileName').html(fileName);
+	$('#brandFileName').html(fileName);
 }
 
-function toggleEditProduct(id){
-	$('#edit-product-modal').modal('toggle');
-	window.editProductId=id;
-	return;
-}
-
-function toggleAddProduct(id){
-	resetUploadDialog();
-	$('#upload-product-modal').modal('toggle');
-	return;
+function displayinventoryData(){
+ 	resetUploadDialog(); 	
+	$('#upload-inventory-modal').modal('toggle');
 }
 
 
@@ -317,17 +279,16 @@ function toggleAddProduct(id){
 
 //INITIALIZATION CODE
 function init(){
-	$('#add-product').click(addProduct);
-	$('#update-product').click(updateProduct);
-	$('#upload-data').click(toggleAddProduct);
+	$('#add-inventory').click(addInventory);
+	$('#update-inventory').click(updateInventory);
+	$('#upload-data').click(displayinventoryData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#productFile').on('change', updateFileName);
+    $('#inventoryFile').on('change', updateFileName);
 	$('#next-button').on('click',nextPage);
 	$('#previous-button').on('click',prevPage);
-		
 }
 
 $(document).ready(init);
-$(document).ready(getProductList);
-$(document).ready(getBrandList);
+$(document).ready(getInventoryList);
+

@@ -25,7 +25,7 @@ public class OrderItemDto {
 	public void add(OrderItemForm form,int id) throws ApiException {
 		OrderItemPojo p =convert(form);
 		p.setOrderId(id);
-		p.setProductId(productService.getProductIdByBarcode(form.getBarcode()));
+		p.setProductId(productService.getProductByBarcode(form.getBarcode()).getId());
 		orderItemService.add(p);
 	}
 	

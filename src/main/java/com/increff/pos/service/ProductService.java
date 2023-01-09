@@ -45,6 +45,7 @@ public class ProductService {
 		ex.setbrandId(p.getbrandId());
 		ex.setMrp(p.getMrp());
 		ex.setName(p.getName());
+		ex.setBarcode(p.getBarcode());
 		dao.update(ex);
 	}
 
@@ -62,12 +63,9 @@ public class ProductService {
 	}
 	
 	@Transactional
-	public int getProductIdByBarcode(String barcode) throws ApiException {
+	public ProductPojo getProductByBarcode(String barcode) throws ApiException {
 		ProductPojo p = dao.barcodeExist(barcode);
-		if (p == null) {
-			throw new ApiException("Barcode does not exist");
-		}
-		return p.getId();
+		return p;
 	}
 	
 	
