@@ -19,10 +19,14 @@ public class OrderDto {
 	@Autowired
 	private OrderService orderService;
 	
-	public void add() throws ApiException {
+	public OrderData add() throws ApiException {
 		OrderPojo p = new OrderPojo();
 		p.setTimestamp(TimestampUtil.getTimestamp());
 		orderService.add(p);
+		OrderData data = new OrderData();
+		data.setId(p.getId());
+		data.setTimestamp(p.getTimestamp());
+		return data;
 	}
 	
 	public OrderData get(@PathVariable int id) throws ApiException {

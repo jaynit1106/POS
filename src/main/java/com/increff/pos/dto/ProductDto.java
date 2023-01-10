@@ -1,5 +1,7 @@
 package com.increff.pos.dto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +26,17 @@ public class ProductDto {
 	
 	public void add(ProductForm form) throws ApiException {
 		ProductPojo p = convert(form);
+		
+		if(form.getBarcode().length()!=8)throw new ApiException("Barcode Should be of 8 characters");
+		if(form.getMrp()<0)throw new ApiException("MRP should be positive");
+		
 		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());
 		if(brand == null)throw new ApiException("Brand and Category does not exist");
+		
 		p.setbrandId(brand.getId());
 		if(productService.productExist(p.getbrandId(), p.getName())!=null)throw new ApiException("Product already exists");
 		if(productService.getProductByBarcode(form.getBarcode())!=null)throw new ApiException("Barcode already exists");
+		
 		
 		productService.add(p);
 	}
@@ -57,7 +65,8 @@ public class ProductDto {
 	
 	public void update(int id,ProductForm form) throws ApiException {
 		ProductPojo p = convert(form);
-		
+		if(form.getBarcode().length()!=8)throw new ApiException("Barcode Should be of 8 characters");
+		if(form.getMrp()<0)throw new ApiException("MRP should be positive");
 		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());
 		if(brand == null)throw new ApiException("Brand and Category does not exist");
 		p.setbrandId(brand.getId());
@@ -83,7 +92,7 @@ public class ProductDto {
 	private static ProductPojo convert(ProductForm f) {
 		ProductPojo p = new ProductPojo();
 		p.setName(f.getName());
-		p.setMrp(f.getMrp());
+		p.setMrp(BigDecimal.valueOf(f.getMrp()).setScale(3,RoundingMode.HALF_UP).doubleValue());
 		p.setBarcode(f.getBarcode());
 		return p;
 	}

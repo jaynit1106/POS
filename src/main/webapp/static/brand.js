@@ -147,18 +147,20 @@ function downloadErrors(){
 }
 
 // PAGINATION METHODS
-function displayPaginatedBrands(items,rows_per_page,page){
+
+function paginate() {
+	$('#brand-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
+}
+
+//UI DISPLAY METHODS
+var brandData = [];
+function displayBrandList(data){
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
-	page--;
-	let start = rows_per_page*page;
-	let end = start + rows_per_page;
-	let paginatedItems = items.slice(start,end);
-	var counter = (page)*rows_per_page;
-	counter++;
-
-	for(let i=0 ; i<paginatedItems.length;i++){
-		var e = paginatedItems[i];
+	var counter=1;
+	for(var i in data){
+		var e = data[i];
 		var buttonHtml = '<button onclick="displayUpdateDialog(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
@@ -167,81 +169,10 @@ function displayPaginatedBrands(items,rows_per_page,page){
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
-		counter++;
+        counter++;
 	}
-}
-
-function nextPage(){
-	var pages = Math.ceil(brandData.length/5);
-	var button = document.getElementById("next-button");
-	var page = parseInt(button.value);
-	displayPaginatedBrands(brandData,5,page);
-	if(page == pages){
-		button.style.visibility = 'hidden';
-
-	}else{
-		button.style.visibility = 'visible';
-	}
-	page++;
-
-
-	button.value=page.toString();
+	paginate();
 	
-	button = document.getElementById("previous-button");
-	page = parseInt(button.value);
-	page++;
-	button.value = page.toString();
-	button.style.visibility = 'visible';
-	
-}
-
-function prevPage(){
-	var pages = Math.ceil(brandData.length/5);
-	var button = document.getElementById("previous-button");
-	var page = parseInt(button.value);
-	
-	displayPaginatedBrands(brandData,5,page);
-	page--;
-	if(page == 0){
-		button.value="0";
-		button.style.visibility = 'hidden';
-		document.getElementById("next-button").value="2";
-		hideNext();
-		return;
-	}else{
-		button.style.visibility = 'visible';
-	}
-	button.value=page.toString();
-
-	button = document.getElementById("next-button");
-	page = parseInt(button.value);
-	page--;
-	button.value = page.toString();
-	button.style.visibility = 'visible';
-}
-
-function hideNext(){
-	if(brandData.length<=5){
-		document.getElementById("next-button").style.visibility='hidden';
-	}else{
-		document.getElementById("next-button").style.visibility='visible';
-	}
-}
-
-
-//UI DISPLAY METHODS
-var brandData = [];
-function displayBrandList(data){
-	brandData=[];
-	for(var i in data){
-		var e = data[i];
-		brandData.push(e);
-	}
-	
-	document.getElementById("previous-button").value="0";
-	document.getElementById("next-button").value="2";
-	displayPaginatedBrands(brandData,5,1);
-	hideNext();
 }
 
 function resetUploadDialog(){
@@ -277,6 +208,8 @@ function displayBrandData(){
 
 
 
+
+
 //INITIALIZATION CODE
 function init(){
 	$('#add-brand').click(addBrand);
@@ -285,8 +218,6 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#brandFile').on('change', updateFileName);
-	$('#next-button').on('click',nextPage);
-	$('#previous-button').on('click',prevPage);
 }
 
 $(document).ready(init);

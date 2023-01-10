@@ -26,6 +26,7 @@ public class InventoryDto {
 	private ProductService productService;
 	
 	public void add(@RequestBody InventoryForm form) throws ApiException {
+		if(form.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
 		InventoryPojo p = convert(form);
 		
 		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
@@ -58,6 +59,7 @@ public class InventoryDto {
 	}
 	
 	public void update(int id,InventoryForm form) throws ApiException {
+		if(form.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
 		InventoryPojo p = convert(form);
 		inventoryService.update(id, p);
 	}

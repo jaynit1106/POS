@@ -7,7 +7,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.increff.pos.dao.InventoryDao;
 import com.increff.pos.dao.OrderItemDao;
+import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
 
 
@@ -17,9 +19,34 @@ public class OrderItemService {
 	@Autowired
 	private OrderItemDao dao;
 	
+	@Autowired
+	private InventoryDao inventoryDao;
+	
+	@Autowired
+	private InventoryService inventoryService;
+	
+	@Autowired
+	private ProductService productService;
+	
 	@Transactional(rollbackOn = ApiException.class)
-	public void add(OrderItemPojo p) throws ApiException {
-		dao.insert(p);
+	public void checkQuantity(List<OrderItemPojo> items) throws ApiException {
+		for(OrderItemPojo p : items) {
+			InventoryPojo inventory = inventoryDao.select(p.getProductId());
+			int quantity = inventory.getQuantity();
+			if(quantity<p.getQuantity())throw new ApiException("Only "+quantity+" pieces left of " + productService.get(p.getProductId()).getBarcode());
+			quantity=quantity-p.getQuantity();
+			inventory.setQuantity(quantity);
+			inventoryService.update(inventory.getId(), inventory);
+		}
+	}
+	
+	@Transactional(rollbackOn = ApiException.class)
+	public void add(List<OrderItemPojo> items) throws ApiException {
+		for(OrderItemPojo p : items) {
+			
+			dao.insert(p);
+		}
+		
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
@@ -47,6 +74,12 @@ public class OrderItemService {
 		if (p == null) {
 			throw new ApiException("OrderItem with given ID does not exit, id: " + id);
 		}
+		return p;
+	}
+	
+	@Transactional
+	public List<OrderItemPojo> getOrderItemByOrderId(int id) throws ApiException {
+		List<OrderItemPojo> p = dao.selectByOrderId(id);
 		return p;
 	}
 	

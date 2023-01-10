@@ -178,101 +178,32 @@ function downloadErrors(){
 
 
 // PAGINATION METHODS
-function diplayPaginatedProducts(items,rows_per_page,page){
-	var $tbody = $('#product-table').find('tbody');
-	$tbody.empty();
-	page--;
-	let start = rows_per_page*page;
-	let end = start + rows_per_page;
-	let paginatedItems = items.slice(start,end);
-	var counter = (page)*rows_per_page;
-	counter++;
-
-	for(let i=0 ; i<paginatedItems.length;i++){
-		var e = paginatedItems[i];
-		var buttonHtml = ' <button onclick="toggleEditProduct(' + e.id + ')">edit</button>';
-		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>' + e.category + '</td>'
-		+ '<td>' + e.name + '</td>'
-		+ '<td>' + e.mrp + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
-		counter++;
-	}
-}
-
-function nextPage(){
-	var pages = Math.ceil(productData.length/5);
-	var button = document.getElementById("next-button");
-	var page = parseInt(button.value);
-	diplayPaginatedProducts(productData,5,page);
-	if(page == pages){
-		button.style.visibility = 'hidden';
-
-	}else{
-		button.style.visibility = 'visible';
-	}
-	page++;
-
-
-	button.value=page.toString();
-	
-	button = document.getElementById("previous-button");
-	page = parseInt(button.value);
-	page++;
-	button.value = page.toString();
-	button.style.visibility = 'visible';
-	
-}
-
-function prevPage(){
-	var button = document.getElementById("previous-button");
-	var page = parseInt(button.value);
-	
-	diplayPaginatedProducts(productData,5,page);
-	page--;
-	if(page == 0){
-		button.value="0";
-		button.style.visibility = 'hidden';
-		document.getElementById("next-button").value="2";
-		hideNext();
-		return;
-	}else{
-		button.style.visibility = 'visible';
-	}
-	button.value=page.toString();
-
-	button = document.getElementById("next-button");
-	page = parseInt(button.value);
-	page--;
-	button.value = page.toString();
-	button.style.visibility = 'visible';
-}
-
-function hideNext(){
-	if(productData.length<=5){
-		document.getElementById("next-button").style.visibility='hidden';
-	}else{
-		document.getElementById("next-button").style.visibility='visible';
-	}
+function paginate() {
+	$('#product-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
 }
 
 //UI DISPLAY METHODS
 
-var productData = [];
 function displayProductList(data){
-	productData=[];
+	var $tbody = $('#product-table').find('tbody');
+	$tbody.empty();
+	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		productData.push(e);
+		var buttonHtml = '<button onclick="displayUpdateDialog(' + e.id + ')">edit</button>';
+		var row = '<tr>'
+		+ '<td>' + counter + '</td>'
+		+ '<td>' + e.brand + '</td>'
+		+ '<td>'  + e.category + '</td>'
+		+ '<td>'  + e.name + '</td>'
+		+ '<td>'  + e.mrp + '</td>'
+		+ '<td>' + buttonHtml + '</td>'
+		+ '</tr>';
+        $tbody.append(row);
+        counter++;
 	}
-	document.getElementById("previous-button").value="0";
-	document.getElementById("next-button").value="2";
-	diplayPaginatedProducts(productData,5,1);
-	hideNext();
+	paginate();
 }
 
 function resetUploadDialog(){
@@ -323,8 +254,6 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#productFile').on('change', updateFileName);
-	$('#next-button').on('click',nextPage);
-	$('#previous-button').on('click',prevPage);
 		
 }
 

@@ -24,8 +24,8 @@ public class OrderApiController {
 
 	@ApiOperation(value = "Adds a Order")
 	@RequestMapping(path = "/api/order", method = RequestMethod.POST)
-	public void add() throws ApiException {
-		dto.add();
+	public OrderData add() throws ApiException {
+		return dto.add();
 	}
 
 	@ApiOperation(value = "Gets a Order by ID")

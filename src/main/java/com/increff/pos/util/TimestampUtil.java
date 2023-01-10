@@ -7,7 +7,7 @@ public class TimestampUtil {
 		String ts = Instant.now().toString();
 		ts=ts.replace('T', ' ');
 		ts=ts.replace('Z',' ');
-		ts=ts.split(" ")[0];
+		ts = ts.substring(0, 16);
 		return ts;
 	}
 }

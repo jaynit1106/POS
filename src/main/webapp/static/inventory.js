@@ -147,18 +147,18 @@ function downloadErrors(){
 }
 
 // PAGINATION METHODS
-function displayPaginatedInventory(items,rows_per_page,page){
+function paginate() {
+	$('#inventory-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
+}
+
+//UI DISPLAY METHODS
+function displayInventoryList(data){
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
-	page--;
-	let start = rows_per_page*page;
-	let end = start + rows_per_page;
-	let paginatedItems = items.slice(start,end);
-	var counter = (page)*rows_per_page;
-	counter++;
-
-	for(let i=0 ; i<paginatedItems.length;i++){
-		var e = paginatedItems[i];
+	var counter=1;
+	for(var i in data){
+		var e = data[i];
 		var buttonHtml = '<button onclick="displayUpdateDialog(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
@@ -167,81 +167,9 @@ function displayPaginatedInventory(items,rows_per_page,page){
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
-		counter++;
+        counter++;
 	}
-}
-
-function nextPage(){
-	var pages = Math.ceil(inventoryData.length/5);
-	var button = document.getElementById("next-button");
-	var page = parseInt(button.value);
-	displayPaginatedInventory(inventoryData,5,page);
-	if(page == pages){
-		button.style.visibility = 'hidden';
-
-	}else{
-		button.style.visibility = 'visible';
-	}
-	page++;
-
-
-	button.value=page.toString();
-	
-	button = document.getElementById("previous-button");
-	page = parseInt(button.value);
-	page++;
-	button.value = page.toString();
-	button.style.visibility = 'visible';
-	
-}
-
-function prevPage(){
-	var pages = Math.ceil(inventoryData.length/5);
-	var button = document.getElementById("previous-button");
-	var page = parseInt(button.value);
-	
-	displayPaginatedInventory(inventoryData,5,page);
-	page--;
-	if(page == 0){
-		button.value="0";
-		button.style.visibility = 'hidden';
-		document.getElementById("next-button").value="2";
-		hideNext();
-		return;
-	}else{
-		button.style.visibility = 'visible';
-	}
-	button.value=page.toString();
-
-	button = document.getElementById("next-button");
-	page = parseInt(button.value);
-	page--;
-	button.value = page.toString();
-	button.style.visibility = 'visible';
-}
-
-function hideNext(){
-	if(inventoryData.length<=5){
-		document.getElementById("next-button").style.visibility='hidden';
-	}else{
-		document.getElementById("next-button").style.visibility='visible';
-	}
-}
-
-
-//UI DISPLAY METHODS
-var inventoryData = [];
-function displayInventoryList(data){
-	inventoryData=[];
-	for(var i in data){
-		var e = data[i];
-		inventoryData.push(e);
-	}
-	
-	document.getElementById("previous-button").value="0";
-	document.getElementById("next-button").value="2";
-	displayPaginatedInventory(inventoryData,5,1);
-	hideNext();
+	paginate();
 }
 
 function resetUploadDialog(){
@@ -285,8 +213,6 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#inventoryFile').on('change', updateFileName);
-	$('#next-button').on('click',nextPage);
-	$('#previous-button').on('click',prevPage);
 }
 
 $(document).ready(init);

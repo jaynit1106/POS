@@ -25,15 +25,15 @@ public class OrderItemApiController {
 	private OrderItemDto dto;
 
 	@ApiOperation(value = "Adds a Order Item")
-	@RequestMapping(path = "/api/orderitem/{id}", method = RequestMethod.POST)
-	public void add(@RequestBody OrderItemForm form,@PathVariable int id) throws ApiException {
-		dto.add(form, id);
+	@RequestMapping(path = "/api/orderitem", method = RequestMethod.POST)
+	public void add(@RequestBody List<OrderItemForm> form) throws ApiException {
+		dto.add(form);
 	}
 
-	@ApiOperation(value = "Gets a Order Item by ID")
+	@ApiOperation(value = "Gets a Order Item by orderID")
 	@RequestMapping(path = "/api/orderitem/{id}", method = RequestMethod.GET)
-	public OrderItemData get(@PathVariable int id) throws ApiException {
-		return dto.get(id);
+	public List<OrderItemData> get(@PathVariable int id) throws ApiException {
+		return dto.getOrderItemByOrderID(id);
 	}
 
 	@ApiOperation(value = "Gets list of all Order Items")
