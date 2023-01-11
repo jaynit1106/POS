@@ -15,6 +15,7 @@ import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.BrandService;
 import com.increff.pos.service.ProductService;
+import com.increff.pos.util.StringUtil;
 
 @Component
 public class ProductDto {
@@ -84,15 +85,16 @@ public class ProductDto {
 		ProductData d = new ProductData();
 		d.setName(p.getName());
 		d.setBarcode(p.getBarcode());
-		d.setMrp(p.getMrp());
+		d.setMrp(StringUtil.convertMrp(p.getMrp()));
 		d.setId(p.getId());
+		
 		return d;
 	}
 
 	private static ProductPojo convert(ProductForm f) {
 		ProductPojo p = new ProductPojo();
 		p.setName(f.getName());
-		p.setMrp(BigDecimal.valueOf(f.getMrp()).setScale(3,RoundingMode.HALF_UP).doubleValue());
+		p.setMrp(BigDecimal.valueOf(f.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
 		p.setBarcode(f.getBarcode());
 		return p;
 	}

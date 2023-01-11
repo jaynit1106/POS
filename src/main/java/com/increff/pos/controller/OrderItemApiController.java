@@ -2,6 +2,9 @@ package com.increff.pos.controller;
 
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +35,7 @@ public class OrderItemApiController {
 
 	@ApiOperation(value = "Gets a Order Item by orderID")
 	@RequestMapping(path = "/api/orderitem/{id}", method = RequestMethod.GET)
-	public List<OrderItemData> get(@PathVariable int id) throws ApiException {
+	public List<OrderItemData> get(@PathVariable int id) throws ApiException, ParserConfigurationException, TransformerException {
 		return dto.getOrderItemByOrderID(id);
 	}
 

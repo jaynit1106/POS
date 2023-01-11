@@ -150,12 +150,14 @@ function downloadErrors(){
 
 function paginate() {
 	$('#brand-table').DataTable();
-	$('.dataTables_length').addClass('bs-select');
+	
+	// $('.dataTables_length').addClass('bs-select');
 }
 
 //UI DISPLAY METHODS
 var brandData = [];
 function displayBrandList(data){
+	$('#brand-table').DataTable().destroy();
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
 	var counter=1;

@@ -95,6 +95,7 @@ function viewModal(id){
 }
 
 function displayOrderList(data){
+	$('#order-table').DataTable().destroy();
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
@@ -103,6 +104,7 @@ function displayOrderList(data){
 		var buttonHtml = '<button onclick="viewModal(' + e.id + ')">view</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
+		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.timestamp + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
@@ -118,6 +120,7 @@ function displayCreateItemModal(){
 	displayItemList();
 	itemList=[];
 	deleteList=[];
+	productMap = new Map();
 	var $tbody = $('#items-table').find('tbody');
 	$tbody.empty();
 	$('#edit-order-modal').modal('toggle');
@@ -125,25 +128,26 @@ function displayCreateItemModal(){
 var deleteList=[]
 function deleteItem(id){
 	deleteList.push(id);
-	console.log(deleteList);
+	let barcode = JSON.parse(itemList[id]).barcode;
+	productMap.delete(barcode);
 	displayItemList();
 }
 
+productMap = new Map();
+
 function displayItemList(){
+	$('#items-table').DataTable().destroy();
 	var $tbody = $('#items-table').find('tbody');
 	$tbody.empty();
 	var itr = 0;
 	var serialId=1;
 	for(var i in itemList){
-		// console.log(i);
-		
-		console.log(deleteList.find(function (element) {return element == i;}));
 		if(deleteList.find(function (element) {return element == i;})!=undefined){
 			itr++;
 			continue;
 		}
-
 		var e = JSON.parse(itemList[i]);
+		productMap.set(e.barcode,itr);
 		var buttonHtml = '<button onclick="editItem(' + itr + ')">edit</button>';
 		var deleteButton = '<button onclick="deleteItem(' + itr + ')">delete</button>';
 		var row = '<tr>'
@@ -163,19 +167,27 @@ function displayItemList(){
 function editItem(id){
 	var $form = $("#row"+id);
 	var json = toJson($form);
-	console.log(itemList);
 	itemList[id]=json;
-	console.log(itemList);
 	displayItemList();
 }
 
 function addItem(){
 	var $form = $("#item-form");
 	var json = toJson($form);
+	var e =JSON.parse(json);
+	if(productMap.get(e.barcode)!=undefined){
+		let id = productMap.get(e.barcode);
+		let  q = parseInt(JSON.parse(itemList[id]).quantity);
+		q+=parseInt(e.quantity);
+		e.quantity = q;
+		itemList[id] = JSON.stringify(e);
+		displayItemList();
+		return;
+	}
 	itemList.push(json);
-	console.log(itemList);
 	document.getElementById("item-form").reset();
 	displayItemList();
+	$("#item-form").reset();
 
 }
 function convertArrayToJson(){
@@ -193,7 +205,6 @@ function convertArrayToJson(){
 function submitOrder(){
 	var url = getOrderItemUrl();
 	let form = convertArrayToJson();
-	console.log(form);
 	$.ajax({
 		url: url,
 		type: 'POST',

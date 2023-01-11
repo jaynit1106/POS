@@ -98,6 +98,7 @@ function updateProduct(){
 	   success: function(response) {
 	   		getProductList();
 	   		swal("Hurray", "Product updated successfully", "success");
+			$('#edit-product-modal').modal('toggle');
 	   },
 	   error: function(response){
 	   		swal("Oops!", response.responseJSON.message, "error");
@@ -186,12 +187,13 @@ function paginate() {
 //UI DISPLAY METHODS
 
 function displayProductList(data){
+	$('#product-table').DataTable().destroy();
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="displayUpdateDialog(' + e.id + ')">edit</button>';
+		var buttonHtml = '<button onclick="toggleEditProduct(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.brand + '</td>'

@@ -154,6 +154,7 @@ function paginate() {
 
 //UI DISPLAY METHODS
 function displayInventoryList(data){
+	$('#inventory-table').DataTable().destroy();
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
