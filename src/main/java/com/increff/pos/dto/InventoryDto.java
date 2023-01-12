@@ -14,6 +14,7 @@ import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.ProductService;
+import com.increff.pos.util.ConvertUtil;
 
 @Component
 public class InventoryDto {
@@ -27,22 +28,28 @@ public class InventoryDto {
 	
 	public void add(@RequestBody InventoryForm form) throws ApiException {
 		if(form.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
-		InventoryPojo p = convert(form);
-		
+		InventoryPojo p = ConvertUtil.objectMapper(form, InventoryPojo.class);
+
 		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
 		if(product == null)throw new ApiException("Product Does Not Exist");
 		p.setId(product.getId());
 		
-		if(inventoryService.get(p.getId())!=null)throw new ApiException("Inventory Already Exists");
+		InventoryPojo inventory = inventoryService.get(p.getId()); 
+		if(inventory!=null) {
+			inventory.setQuantity(inventory.getQuantity()+form.getQuantity());
+			inventoryService.update(inventory.getId(), inventory);
+			return;
+		};
 		inventoryService.add(p);
 	}
 	
 	public InventoryData get(int id) throws ApiException {
 		InventoryPojo p = inventoryService.get(id);
 		if(p==null)throw new ApiException("Inventory does not exist");
-		InventoryData data =  convert(p);
+		InventoryData data =  ConvertUtil.objectMapper(p, InventoryData.class);
 		ProductPojo product = productService.get(id);
 		data.setBarcode(product.getBarcode());
+		data.setName(product.getName());
 		return  data;
 	}
 	
@@ -50,9 +57,10 @@ public class InventoryDto {
 		List<InventoryPojo> list = inventoryService.getAll();
 		List<InventoryData> list2 = new ArrayList<InventoryData>();
 		for (InventoryPojo p : list) {
-			InventoryData data =  convert(p);
+			InventoryData data =  ConvertUtil.objectMapper(p,InventoryData.class);
 			ProductPojo product = productService.get(p.getId());
 			data.setBarcode(product.getBarcode());
+			data.setName(product.getName());
 			list2.add(data);
 		}
 		return list2;
@@ -60,20 +68,7 @@ public class InventoryDto {
 	
 	public void update(int id,InventoryForm form) throws ApiException {
 		if(form.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
-		InventoryPojo p = convert(form);
-		inventoryService.update(id, p);
-	}
-	
-	private static InventoryData convert(InventoryPojo p) {
-		InventoryData d = new InventoryData();
-		d.setId(p.getId());
-		d.setQuantity(p.getQuantity());
-		return d;
-	}
-
-	private static InventoryPojo convert(InventoryForm f) {
-		InventoryPojo p = new InventoryPojo();
-		p.setQuantity(f.getQuantity());
-		return p;
+		InventoryPojo inventory = ConvertUtil.objectMapper(form, InventoryPojo.class);
+		inventoryService.update(id, inventory);
 	}
 }

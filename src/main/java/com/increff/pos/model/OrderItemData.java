@@ -4,8 +4,14 @@ public class OrderItemData extends OrderItemForm{
 	private int id;
 	private int orderId;
 	private int productId;
+	private String name;
 	
-	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public int getId() {
 		return id;
 	}

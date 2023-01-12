@@ -15,6 +15,7 @@ import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.BrandService;
 import com.increff.pos.service.ProductService;
+import com.increff.pos.util.ConvertUtil;
 import com.increff.pos.util.StringUtil;
 
 @Component
@@ -26,7 +27,8 @@ public class ProductDto {
 	private BrandService brandService;
 	
 	public void add(ProductForm form) throws ApiException {
-		ProductPojo p = convert(form);
+		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);
+		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
 		
 		if(form.getBarcode().length()!=8)throw new ApiException("Barcode Should be of 8 characters");
 		if(form.getMrp()<0)throw new ApiException("MRP should be positive");
@@ -44,7 +46,10 @@ public class ProductDto {
 	
 	public ProductData get(int id) throws ApiException {
 		ProductPojo product = productService.get(id);
-		ProductData data = convert(product);
+		
+		ProductData data = ConvertUtil.objectMapper(product, ProductData.class);
+		data.setMrp(StringUtil.convertMrp(product.getMrp()));
+		
 		BrandPojo brand = brandService.get(product.getbrandId());
 		data.setCategory(brand.getCategory());
 		data.setBrand(brand.getBrand());
@@ -55,7 +60,10 @@ public class ProductDto {
 		List<ProductPojo> list = productService.getAll();
 		List<ProductData> list2 = new ArrayList<ProductData>();
 		for (ProductPojo p : list) {
-			ProductData data = convert(p);
+			
+			ProductData data = ConvertUtil.objectMapper(p, ProductData.class);
+			data.setMrp(StringUtil.convertMrp(p.getMrp()));
+			
 			BrandPojo brand = brandService.get(p.getbrandId());
 			data.setCategory(brand.getCategory());
 			data.setBrand(brand.getBrand());
@@ -65,9 +73,12 @@ public class ProductDto {
 	}
 	
 	public void update(int id,ProductForm form) throws ApiException {
-		ProductPojo p = convert(form);
+		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);
+		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
+		
 		if(form.getBarcode().length()!=8)throw new ApiException("Barcode Should be of 8 characters");
 		if(form.getMrp()<0)throw new ApiException("MRP should be positive");
+		
 		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());
 		if(brand == null)throw new ApiException("Brand and Category does not exist");
 		p.setbrandId(brand.getId());
@@ -80,23 +91,4 @@ public class ProductDto {
 		
 		productService.update(id,p);
 	}
-	
-	private static ProductData convert(ProductPojo p) {
-		ProductData d = new ProductData();
-		d.setName(p.getName());
-		d.setBarcode(p.getBarcode());
-		d.setMrp(StringUtil.convertMrp(p.getMrp()));
-		d.setId(p.getId());
-		
-		return d;
-	}
-
-	private static ProductPojo convert(ProductForm f) {
-		ProductPojo p = new ProductPojo();
-		p.setName(f.getName());
-		p.setMrp(BigDecimal.valueOf(f.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
-		p.setBarcode(f.getBarcode());
-		return p;
-	}
-	
 }

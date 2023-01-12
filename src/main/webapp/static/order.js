@@ -4,6 +4,11 @@ function getOrderUrl(){
 	return baseUrl + "/api/order";
 }
 
+function getBaseUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl;
+}
+
 function getOrderItemUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/orderitem";
@@ -78,6 +83,7 @@ function displayItemData(data){
 		var e = data[i];
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
+		+ '<td>' + e.name + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>' + e.quantity + '</td>'
 		+ '<td>' + e.sellingPrice +'</td>'
@@ -94,6 +100,11 @@ function viewModal(id){
 	getItemList(url);
 }
 
+function downloadPdf(id){
+	// var pdfName = "invoice "+id;
+	var url = getBaseUrl()+"/api/order/download/"+id;
+	window.location.href = url;
+}
 function displayOrderList(data){
 	$('#order-table').DataTable().destroy();
 	var $tbody = $('#order-table').find('tbody');
@@ -102,11 +113,12 @@ function displayOrderList(data){
 	for(var i in data){
 		var e = data[i];
 		var buttonHtml = '<button onclick="viewModal(' + e.id + ')">view</button>';
+		var downloadPdf = '<button onclick="downloadPdf(' + e.id + ')">Download</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.timestamp + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
+		+ '<td>' + buttonHtml + "  " + downloadPdf + '</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
@@ -152,7 +164,7 @@ function displayItemList(){
 		var deleteButton = '<button onclick="deleteItem(' + itr + ')">delete</button>';
 		var row = '<tr>'
 		+'<td><form id="row'+ itr +'">'+serialId+'</form>'
-		+ '<td><input type="text" class="form-control" form="row'+itr+'" name="barcode" id="barcode" value="'+e.barcode+'"></td>'
+		+ '<td><input type="text" class="form-control" form="row'+itr+'" name="barcode" id="barcode" value="'+e.barcode+'" disabled></td>'
 		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity" value="'+e.quantity+'"></td>'
 		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price" value="'+e.sellingPrice+'"></td>'
 		+ '<td>' + buttonHtml +"   "+ deleteButton + '</td>'
@@ -167,6 +179,9 @@ function displayItemList(){
 function editItem(id){
 	var $form = $("#row"+id);
 	var json = toJson($form);
+	json = JSON.parse(json);
+	json.barcode = JSON.parse(itemList[id]).barcode;
+	json = JSOn.stringify(json);
 	itemList[id]=json;
 	displayItemList();
 }
@@ -178,6 +193,11 @@ function addItem(){
 	if(productMap.get(e.barcode)!=undefined){
 		let id = productMap.get(e.barcode);
 		let  q = parseInt(JSON.parse(itemList[id]).quantity);
+		let price = parseInt(JSON.parse(itemList[id]).sellingPrice);
+		if(price!=parseInt(e.sellingPrice)){
+			swal("Oops!", "The selling price does not match within the products", "error");
+			return;
+		}
 		q+=parseInt(e.quantity);
 		e.quantity = q;
 		itemList[id] = JSON.stringify(e);

@@ -29,7 +29,7 @@ public class OrderItemApiController {
 
 	@ApiOperation(value = "Adds a Order Item")
 	@RequestMapping(path = "/api/orderitem", method = RequestMethod.POST)
-	public void add(@RequestBody List<OrderItemForm> form) throws ApiException {
+	public void add(@RequestBody List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException {
 		dto.add(form);
 	}
 

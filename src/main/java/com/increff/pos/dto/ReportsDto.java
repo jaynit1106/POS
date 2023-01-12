@@ -27,6 +27,8 @@ public class ReportsDto {
 	}
 	
 	public void getSalesReport(SalesReportForm form) throws ApiException, ParserConfigurationException, TransformerException {
+		form.setStartDate(form.getStartDate()+" 00:00");
+		form.setEndDate(form.getEndDate()+" 23:59");
 		List<SalesReportData> data = reportService.getSalesReport(form.getStartDate(), form.getEndDate());
 		generateXml.createXml(data);
 		generatePdf.createPdf();

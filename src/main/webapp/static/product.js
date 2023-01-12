@@ -185,7 +185,7 @@ function paginate() {
 }
 
 //UI DISPLAY METHODS
-
+productData=[]
 function displayProductList(data){
 	$('#product-table').DataTable().destroy();
 	var $tbody = $('#product-table').find('tbody');
@@ -193,14 +193,16 @@ function displayProductList(data){
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="toggleEditProduct(' + e.id + ')">edit</button>';
+		let id = counter-1;
+		productData.push(e);
+		var buttonHtml = '<button onclick="toggleEditProduct(' + id + ')">edit</button>';
 		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>'  + e.name + '</td>'
-		+ '<td>'  + e.mrp + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
+		+ '<td style="text-align:center">' + counter + '</td>'
+		+ '<td style="text-align:center">' + e.brand + '</td>'
+		+ '<td style="text-align:center">'  + e.category + '</td>'
+		+ '<td style="text-align:center">'  + e.name + '</td>'
+		+ '<td style="text-align:right">'  + e.mrp + '</td>'
+		+ '<td style="text-align:center">' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
@@ -230,12 +232,18 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#productFile');
 	var fileName = $file.val();
-	$('#productFileName').html(fileName);
+	$('#productFileName').html(String(fileName).split(/(\\|\/)/g).pop());
 }
 
-function toggleEditProduct(id){
+function toggleEditProduct(ids){
 	$('#edit-product-modal').modal('toggle');
-	window.editProductId=id;
+	document.getElementById('product-edit-form').reset();
+	document.getElementById('editBrand').value = productData[ids].brand;
+	document.getElementById('editCategory').value = productData[ids].category;
+	document.getElementById('editName').value = productData[ids].name;
+	document.getElementById('editBarcode').value = productData[ids].barcode;
+	document.getElementById('editMrp').value = productData[ids].mrp;
+	window.editProductId=productData[ids].id;
 	return;
 }
 

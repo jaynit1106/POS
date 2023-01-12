@@ -58,7 +58,7 @@ public class InventoryService {
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
-	public void checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
+	public int checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
 		for(OrderItemPojo p : items) {
 			InventoryPojo inventory = dao.select(p.getProductId());
 			int quantity = inventory.getQuantity();
@@ -76,6 +76,7 @@ public class InventoryService {
 			items.get(i).setOrderId(p.getId());
 		}
 		orderItemService.add(items);
+		return p.getId();
 	}
 	
 	

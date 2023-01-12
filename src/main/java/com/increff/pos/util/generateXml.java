@@ -22,26 +22,25 @@ public class generateXml {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		Document doc = docBuilder.newDocument();
-		Element rootElement = doc.createElement("organization");
+		Element rootElement = doc.createElement("invoice-record");
 		doc.appendChild(rootElement);
 
-		Element orgname = doc.createElement("orgname");
-		orgname.appendChild(doc.createTextNode("Increff"));
+		Element orgname = doc.createElement("line-item-records");
 		rootElement.appendChild(orgname);
 
 		for(SalesReportData data : list) {
-			Element branch = doc.createElement("branch");
-			rootElement.appendChild(branch);
+			Element branch = doc.createElement("line-item-record");
+			orgname.appendChild(branch);
 			
-			Element brand = doc.createElement("brand");
+			Element brand = doc.createElement("description");
 			brand.appendChild(doc.createTextNode(data.getBrand()));
 			branch.appendChild(brand);
 			
-			Element category = doc.createElement("category");
+			Element category = doc.createElement("vat");
 			category.appendChild(doc.createTextNode(data.getCategory()));
 			branch.appendChild(category);
 			
-			Element revenue = doc.createElement("revenue");
+			Element revenue = doc.createElement("amount");
 			revenue.appendChild(doc.createTextNode(String.valueOf(data.getRevenue())));
 			branch.appendChild(revenue);
 		}
@@ -51,7 +50,7 @@ public class generateXml {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\template.xml").toURI()
+		StreamResult result = new StreamResult(new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\template1.xml").toURI()
 						.getPath());
 		transformer.transform(source, result);
 		System.out.println("File saved!");

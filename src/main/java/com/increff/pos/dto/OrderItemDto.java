@@ -17,6 +17,7 @@ import com.increff.pos.service.ApiException;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.ProductService;
+import com.increff.pos.util.ConvertUtil;
 import com.increff.pos.util.generateInvoicePdf;
 import com.increff.pos.util.generateInvoiceXML;
 
@@ -32,10 +33,10 @@ public class OrderItemDto {
 	@Autowired
 	private InventoryService inventoryService;
 	
-	public void add(List<OrderItemForm> form) throws ApiException {
+	public void add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException {
 		List<OrderItemPojo> items = new ArrayList<>(); 
 		for(OrderItemForm f : form) {
-			OrderItemPojo p =convert(f);
+			OrderItemPojo p =ConvertUtil.objectMapper(f, OrderItemPojo.class);
 			p.setOrderId(1);
 			ProductPojo product = productService.getProductByBarcode(f.getBarcode());
 			if(product==null)throw new ApiException("The Product "+f.getBarcode()+" Does not exist");
@@ -45,25 +46,36 @@ public class OrderItemDto {
 			items.add(p);
 		}
 		
-		inventoryService.checkAndCreateOrder(items);	
+		int orderId = inventoryService.checkAndCreateOrder(items);
+		items = orderItemService.getOrderItemByOrderId(orderId);
+		List<OrderItemData> list = new ArrayList<>();
+		for(OrderItemPojo p : items) {
+			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
+			ProductPojo product = productService.get(p.getProductId());
+			item.setBarcode(product.getBarcode());
+			item.setName(product.getName());
+			list.add(item);
+		}
+		generateInvoiceXML.createXml(list);
+		generateInvoicePdf.createPdf("Invoice "+String.valueOf(orderId));
 		
 	}
 	
 	public OrderItemData get(int id) throws ApiException {
-		return convert(orderItemService.get(id));
+		return ConvertUtil.objectMapper(orderItemService.get(id),OrderItemData.class);
 	}
 	
 	public List<OrderItemData> getAll() {
 		List<OrderItemPojo> list = orderItemService.getAll();
 		List<OrderItemData> list2 = new ArrayList<OrderItemData>();
 		for (OrderItemPojo p : list) {
-			list2.add(convert(p));
+			list2.add(ConvertUtil.objectMapper(p,OrderItemData.class));
 		}
 		return list2;
 	}
 	
 	public void update(int id,OrderItemForm form) throws ApiException {
-		OrderItemPojo p = convert(form);
+		OrderItemPojo p = ConvertUtil.objectMapper(form,OrderItemPojo.class);
 		orderItemService.update(id, p);
 	}
 	
@@ -71,29 +83,12 @@ public class OrderItemDto {
 		List<OrderItemPojo> list = orderItemService.getOrderItemByOrderId(id);
 		List<OrderItemData> items = new ArrayList<>();
 		for(OrderItemPojo p : list) {
-			OrderItemData item = convert(p);
-			item.setBarcode(productService.get(p.getProductId()).getBarcode());
+			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
+			ProductPojo product = productService.get(p.getProductId());
+			item.setBarcode(product.getBarcode());
+			item.setName(product.getName());
 			items.add(item);
 		}
-		generateInvoiceXML.createXml(items);
-		generateInvoicePdf.createPdf();
 		return items;
 	}
-	
-
-	private static OrderItemData convert(OrderItemPojo p) {
-		OrderItemData d = new OrderItemData();
-		d.setId(p.getId());
-		d.setQuantity(p.getQuantity());
-		d.setSellingPrice(p.getSellingPrice());
-		return d;
-	}
-
-	private static OrderItemPojo convert(OrderItemForm f) {
-		OrderItemPojo p = new OrderItemPojo();
-		p.setQuantity(f.getQuantity());
-		p.setSellingPrice(f.getSellingPrice());
-		return p;
-	}
-	
 }

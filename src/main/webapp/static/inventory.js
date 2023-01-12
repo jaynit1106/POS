@@ -30,10 +30,12 @@ function addInventory(event){
 }
 
 var editInventoryId=null;
-function displayUpdateDialog(id){
+function displayUpdateDialog(ids){
 	$('#edit-inventory-modal').modal('toggle');
+	document.getElementById('inventory-edit-form').reset();
+	document.getElementById('editQuantity').value = inventoryData[ids].quantity;
 	//Get the ID
-	window.editInventoryId = id	
+	window.editInventoryId = inventoryData[ids].id;	
 	return false;
 }
 
@@ -153,6 +155,7 @@ function paginate() {
 }
 
 //UI DISPLAY METHODS
+inventoryData = []
 function displayInventoryList(data){
 	$('#inventory-table').DataTable().destroy();
 	var $tbody = $('#inventory-table').find('tbody');
@@ -160,9 +163,12 @@ function displayInventoryList(data){
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="displayUpdateDialog(' + e.id + ')">edit</button>';
+		inventoryData.push(e)
+		let id =counter-1;
+		var buttonHtml = '<button onclick="displayUpdateDialog(' + id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
+		+ '<td>' + e.name + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
@@ -195,7 +201,7 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#inventoryFile');
 	var fileName = $file.val();
-	$('#brandFileName').html(fileName);
+	$('#inventoryFileName').html(String(fileName).split(/(\\|\/)/g).pop());
 }
 
 function displayinventoryData(){

@@ -16,14 +16,15 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
+
 public class generateInvoicePdf {
-	public static void createPdf() {
+	public static void createPdf(String name) {
 		try {
 			File xmlfile = new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\invoiceTemplate.xml");
 			File xslfile = new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\invoiceTemplate.xsl");
 			File pdfDir = new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\pdf");
 			pdfDir.mkdirs();
-			File pdfFile = new File(pdfDir,"invoice.pdf");
+			File pdfFile = new File(pdfDir,name+".pdf");
 			final FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
 			FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
 			OutputStream out = new FileOutputStream(pdfFile);

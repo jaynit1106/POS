@@ -30,10 +30,14 @@ function addBrand(event){
 }
 
 var editBrandId=null;
-function displayUpdateDialog(id){
+function displayUpdateDialog(ids){
+	// data = JSON.parse(data);
+	document.getElementById("brand-edit-form").reset();
 	$('#edit-brand-modal').modal('toggle');
+	document.getElementById('editBrand').value = brandData[ids].brand;
+	document.getElementById('editCategory').value = brandData[ids].category;
 	//Get the ID
-	window.editBrandId = id	
+	window.editBrandId = brandData[ids].id;	
 	return false;
 }
 
@@ -163,7 +167,9 @@ function displayBrandList(data){
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="displayUpdateDialog(' + e.id + ')">edit</button>';
+		brandData.push(e);
+		let id = counter-1;
+		var buttonHtml = '<button onclick="displayUpdateDialog(' + id +')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.brand + '</td>'
@@ -199,7 +205,8 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#brandFile');
 	var fileName = $file.val();
-	$('#brandFileName').html(fileName);
+
+	$('#brandFileName').html(String(fileName).split(/(\\|\/)/g).pop());
 }
 
 function displayBrandData(){

@@ -71,8 +71,8 @@
 
  <!-- Table -->
  <div class="col-12">
-	<table class="table table-striped" id="product-table">
-	  <thead>
+	<table class="table table-hover" id="product-table">
+	  <thead class="thead-dark">
 	    <tr>
 	      <th scope="col">S.No.</th>
 	      <th scope="col">Brand</th>
@@ -105,7 +105,7 @@
 			  <div class="form-group">
 			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="brand" placeholder="enter brand">
+			      <input type="text" class="form-control" name="brand" id="editBrand" placeholder="enter brand">
 			    </div>
 			  </div>
 			  <br>
@@ -113,7 +113,7 @@
 			  <div class="form-group">
 			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" placeholder="enter category">
+			      <input type="text" class="form-control" name="category" id="editCategory" placeholder="enter category">
 			    </div>
 			  </div>
 			  <br>
@@ -121,7 +121,7 @@
 			  <div class="form-group">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="name" placeholder="enter product name">
+			      <input type="text" class="form-control" name="name" id="editName" placeholder="enter product name">
 			    </div>
 			  </div>
 			  <br>
@@ -129,7 +129,7 @@
 			  <div class="form-group">
 			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="barcode" placeholder="enter barcode">
+			      <input type="text" class="form-control" name="barcode" id="editBarcode" placeholder="enter barcode">
 			    </div>
 			  </div>
 			  <br>
@@ -137,7 +137,7 @@
 			  <div class="form-group">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="mrp" placeholder="enter MRP">
+			      <input type="text" class="form-control" name="mrp" id="editMrp" placeholder="enter MRP">
 			    </div>
 			  </div>
 			</form>   
@@ -167,7 +167,7 @@
 		  <input type="file" class="custom-file-input" id="productFile">
 		  <label class="custom-file-label" for="productFile" id="productFileName">Choose file</label>
 		</div>
-		<a th:href="@{/sample/employee.tsv}" target="_blank">Download Sample</a> 
+		<a th:href="@{/sample/product.tsv}" target="_blank">Download Sample</a> 
 		<br>
 		Rows: <span id="rowCount">0</span>, 
 		Processed: <span id="processCount">0</span>, 
