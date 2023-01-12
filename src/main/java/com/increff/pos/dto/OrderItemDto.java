@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.model.SchedulerForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
@@ -33,6 +34,9 @@ public class OrderItemDto {
 	@Autowired
 	private InventoryService inventoryService;
 	
+	@Autowired
+	private SchedulerDto schedulerDto;
+	
 	public void add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException {
 		List<OrderItemPojo> items = new ArrayList<>(); 
 		for(OrderItemForm f : form) {
@@ -49,15 +53,22 @@ public class OrderItemDto {
 		int orderId = inventoryService.checkAndCreateOrder(items);
 		items = orderItemService.getOrderItemByOrderId(orderId);
 		List<OrderItemData> list = new ArrayList<>();
+		double total = 0;
 		for(OrderItemPojo p : items) {
 			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
 			ProductPojo product = productService.get(p.getProductId());
 			item.setBarcode(product.getBarcode());
 			item.setName(product.getName());
+			total += (item.getSellingPrice()*item.getQuantity());
 			list.add(item);
 		}
 		generateInvoiceXML.createXml(list);
 		generateInvoicePdf.createPdf("Invoice "+String.valueOf(orderId));
+		
+		SchedulerForm sform = new SchedulerForm();
+		sform.setItems_count(list.size());
+		sform.setRevenue(total);
+		schedulerDto.add(sform);
 		
 	}
 	

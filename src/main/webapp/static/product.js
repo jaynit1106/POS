@@ -195,7 +195,7 @@ function displayProductList(data){
 		var e = data[i];
 		let id = counter-1;
 		productData.push(e);
-		var buttonHtml = '<button onclick="toggleEditProduct(' + id + ')">edit</button>';
+		var buttonHtml = '<button class="btn btn-dark" onclick="toggleEditProduct(' + id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td style="text-align:center">' + counter + '</td>'
 		+ '<td style="text-align:center">' + e.brand + '</td>'

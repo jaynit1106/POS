@@ -165,7 +165,7 @@ function displayInventoryList(data){
 		var e = data[i];
 		inventoryData.push(e)
 		let id =counter-1;
-		var buttonHtml = '<button onclick="displayUpdateDialog(' + id + ')">edit</button>';
+		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.name + '</td>'

@@ -4,6 +4,11 @@ function getOrderUrl(){
 	return baseUrl + "/api/order";
 }
 
+function getSchedulerUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/scheduler";
+}
+
 function getBaseUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl;
@@ -112,8 +117,8 @@ function displayOrderList(data){
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="viewModal(' + e.id + ')">view</button>';
-		var downloadPdf = '<button onclick="downloadPdf(' + e.id + ')">Download</button>';
+		var buttonHtml = '<button class="btn btn-dark" onclick="viewModal(' + e.id + ')">view</button>';
+		var downloadPdf = '<button class="btn btn-primary" onclick="downloadPdf(' + e.id + ')">Download</button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.id + '</td>'
@@ -160,8 +165,8 @@ function displayItemList(){
 		}
 		var e = JSON.parse(itemList[i]);
 		productMap.set(e.barcode,itr);
-		var buttonHtml = '<button onclick="editItem(' + itr + ')">edit</button>';
-		var deleteButton = '<button onclick="deleteItem(' + itr + ')">delete</button>';
+		var buttonHtml = '<button class="btn btn-dark" onclick="editItem(' + itr + ')">edit</button>';
+		var deleteButton = '<button class="btn btn-danger" onclick="deleteItem(' + itr + ')">delete</button>';
 		var row = '<tr>'
 		+'<td><form id="row'+ itr +'">'+serialId+'</form>'
 		+ '<td><input type="text" class="form-control" form="row'+itr+'" name="barcode" id="barcode" value="'+e.barcode+'" disabled></td>'

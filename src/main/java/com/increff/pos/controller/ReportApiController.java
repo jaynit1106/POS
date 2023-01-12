@@ -1,6 +1,6 @@
 package com.increff.pos.controller;
 
-import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.increff.pos.model.InventoryReportData;
+import com.increff.pos.model.SalesReportData;
 import com.increff.pos.model.SalesReportForm;
 import com.increff.pos.dto.ReportsDto;
 import com.increff.pos.service.ApiException;
@@ -27,13 +29,13 @@ public class ReportApiController {
 
 	@ApiOperation(value = "gives inventory report")
 	@RequestMapping(path = "/api/report/inventory", method = RequestMethod.GET)
-	public HashMap<Integer,Integer> getInventoryReport() throws ApiException {
+	public List<InventoryReportData> getInventoryReport() throws ApiException {
 		return dto.getInventoryReport();
 	}
 	
 	@ApiOperation(value = "gives sales report")
 	@RequestMapping(path = "/api/report/sales", method = RequestMethod.POST)
-	public void getSalesReport(@RequestBody SalesReportForm form) throws ApiException, ParserConfigurationException, TransformerException {
-		dto.getSalesReport(form);
+	public List<SalesReportData> getSalesReport(@RequestBody SalesReportForm form) throws ApiException, ParserConfigurationException, TransformerException {
+		return dto.getSalesReport(form);
 	}
 }

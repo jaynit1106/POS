@@ -63,6 +63,18 @@ public class BrandService {
 		BrandPojo p = dao.checkRepeat(brand, category);
 		return p;
 	}
+	
+	@Transactional
+	public List<BrandPojo> getByBrand(String brand) throws ApiException {
+		List<BrandPojo> p = dao.selectByBrand(brand);
+		return p;
+	}
+	
+	@Transactional
+	public List<BrandPojo> getByCategory(String category) throws ApiException {
+		List<BrandPojo> p = dao.selectByBrand(category);
+		return p;
+	}
 
 	protected static void normalize(BrandPojo p) {
 		p. setBrand(StringUtil.toLowerCase(p. getBrand()));

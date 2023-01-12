@@ -1,22 +1,30 @@
 package com.increff.pos.model;
 
-import java.util.List;
-
 public class InventoryReportData {
-	private List<Integer> brandId;
-	private List<Integer> quantity;
-	public List<Integer> getBrandId() {
-		return brandId;
+	private String brand;
+	private String category;
+	private int quantity;
+	
+	public String getBrand() {
+		return brand;
 	}
-	public void setBrandId(List<Integer> brandId) {
-		this.brandId = brandId;
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
-	public List<Integer> getQuantity() {
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public int getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(List<Integer> quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	
+	
 
 
 }

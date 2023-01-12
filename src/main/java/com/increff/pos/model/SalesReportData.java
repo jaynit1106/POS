@@ -5,7 +5,14 @@ public class SalesReportData {
 	private String brand;
 	private String category;
 	private double revenue;
+	private int quantity;
 	
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 	public String getBrand() {
 		return brand;
 	}

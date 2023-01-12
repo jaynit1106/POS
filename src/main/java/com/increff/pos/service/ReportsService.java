@@ -11,6 +11,7 @@ import com.increff.pos.dao.InventoryDao;
 import com.increff.pos.dao.OrderDao;
 import com.increff.pos.dao.OrderItemDao;
 import com.increff.pos.dao.ProductDao;
+import com.increff.pos.model.InventoryReportData;
 import com.increff.pos.model.SalesReportData;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.InventoryPojo;
@@ -39,7 +40,7 @@ public class ReportsService {
 
 
 	@Transactional
-	public HashMap<Integer,Integer> getInventoryReport() throws ApiException {
+	public List<InventoryReportData> getInventoryReport() throws ApiException {
 		List<InventoryPojo> list = inventoryDao.selectAll();
 		HashMap<Integer,Integer> inventory = new HashMap<Integer,Integer>();
 		for(InventoryPojo p : list) {
@@ -50,7 +51,17 @@ public class ReportsService {
 			if(inventory.get(brandId)!= null)quant = inventory.get(brandId);
 			inventory.put(brandId , quant + p.getQuantity());
 		}
-		return inventory;
+		List<InventoryReportData> list2 = new ArrayList<>();
+		for(Integer id : inventory.keySet()) {
+			BrandPojo brand = brandDao.select(id);
+			InventoryReportData data = new InventoryReportData();
+			data.setBrand(brand.getBrand());
+			data.setCategory(brand.getCategory());
+			data.setQuantity(inventory.get(id));
+			list2.add(data);
+		}
+		
+		return list2;
 	}
 	
 	@Transactional
@@ -68,6 +79,7 @@ public class ReportsService {
 		}
 		
 		//generate product revenues
+		HashMap<Integer,Integer> quantityProducts = getProductsQuantity(orders);
 		HashMap<Integer,Double> revenueProducts = getProductsRevenue(orders);
 		List<ProductPojo> products = new ArrayList<>();
 		for(int id : revenueProducts.keySet()) {
@@ -76,6 +88,7 @@ public class ReportsService {
 		
 		//generate brand revenues
 		HashMap<Integer,Double> revenueBrands = getBrandsRevenue(revenueProducts,products);
+		HashMap<Integer,Integer> quantityBrands = getBrandsQuantity(quantityProducts,products);
 		
 		//generate sales report
 		List<SalesReportData> data = new ArrayList<>();
@@ -85,6 +98,7 @@ public class ReportsService {
 			item.setBrand(p.getBrand());
 			item.setCategory(p.getCategory());
 			item.setRevenue(revenueBrands.get(id));
+			item.setQuantity(quantityBrands.get(id));
 			data.add(item);
 		}
 		return data;
@@ -104,6 +118,20 @@ public class ReportsService {
 		return revenueBrands;
 	}
 	
+	private HashMap<Integer,Integer> getBrandsQuantity(HashMap<Integer,Integer> quantityProducts,List<ProductPojo> products){
+		
+		HashMap<Integer,Integer> quantityBrands = new HashMap<Integer,Integer>();
+		for(ProductPojo product : products) {
+			Integer quant = 0;
+			int brandId = product.getbrandId();
+			int productId = product.getId();
+			if(quantityBrands.get(brandId)!=null)quant = quantityBrands.get(brandId);
+			quantityBrands.put(brandId, quant + quantityProducts.get(productId));
+		}
+		
+		return quantityBrands;
+	}
+	
 	private HashMap<Integer,Double> getProductsRevenue(List<OrderItemPojo> orders){
 		
 		HashMap<Integer,Double> revenueProducts = new HashMap<Integer,Double>();
@@ -115,6 +143,19 @@ public class ReportsService {
 		}
 		
 		return revenueProducts;
+	}
+	
+	private HashMap<Integer,Integer> getProductsQuantity(List<OrderItemPojo> orders){
+		
+		HashMap<Integer,Integer> quantityProducts = new HashMap<Integer,Integer>();
+		for(OrderItemPojo item : orders) {
+			Integer quant = 0;
+			int productId = item.getProductId();
+			if(quantityProducts.get(productId)!=null)quant = quantityProducts.get(productId);
+			quantityProducts.put(productId, quant + item.getQuantity());
+		}
+		
+		return quantityProducts;
 	}
 	
 }
