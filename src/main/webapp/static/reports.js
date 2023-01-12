@@ -3,11 +3,6 @@ function getSchedulerUrl(){
 	return baseUrl + "/api/scheduler";
 }
 
-function getReportUrl(){
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/report";
-}
-
 function getSchedulerList(){
 	var url = getSchedulerUrl();
 	$.ajax({
@@ -47,30 +42,9 @@ function paginate() {
 	$('#scheduler-table').DataTable();
 }
 
-function getSalesReport(){
-    var $form = $("#report-form");
-	var json = toJson($form);
-    var url = getReportUrl()+"/sales";
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: json,
-        headers: {
-            'Content-Type': 'application/json'
-        },	   
-        success: function(response) {
-                swal("Hurray", "Created Report Successfully", "success");
-                console.log(response);  
-        },
-        error: function(response){
-                swal("Oops!", response.responseJSON.message, "error");
-        }
-     });
-}
 
 //INITIALIZATION CODE
 function init(){
-    $('#submit-filter').click(getSalesReport);
 }
 
 $(document).ready(init);

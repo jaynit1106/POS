@@ -186,7 +186,7 @@ function editItem(id){
 	var json = toJson($form);
 	json = JSON.parse(json);
 	json.barcode = JSON.parse(itemList[id]).barcode;
-	json = JSOn.stringify(json);
+	json = JSON.stringify(json);
 	itemList[id]=json;
 	displayItemList();
 }
