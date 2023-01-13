@@ -34,7 +34,7 @@ public class BrandDto {
 	
 	public List<BrandData> getAll() {
 		List<BrandPojo> list = brandService.getAll();
-		List<BrandData> list2 = new ArrayList<BrandData>();
+		List<BrandData> list2 = new ArrayList<>();
 		for (BrandPojo p : list) {
 			list2.add(ConvertUtil.objectMapper(p, BrandData.class));
 		}

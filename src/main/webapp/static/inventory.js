@@ -161,6 +161,7 @@ function displayInventoryList(data){
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
+	inventoryData=[];
 	for(var i in data){
 		var e = data[i];
 		inventoryData.push(e)

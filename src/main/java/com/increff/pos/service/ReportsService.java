@@ -46,7 +46,7 @@ public class ReportsService {
 		for(InventoryPojo p : list) {
 			ProductPojo product = productDao.select(p.getId());
 			int quant = 0;
-			int brandId = product.getbrandId();
+			int brandId = product.getBrandId();
 			
 			if(inventory.get(brandId)!= null)quant = inventory.get(brandId);
 			inventory.put(brandId , quant + p.getQuantity());
@@ -109,7 +109,7 @@ public class ReportsService {
 		HashMap<Integer,Double> revenueBrands = new HashMap<Integer,Double>();
 		for(ProductPojo product : products) {
 			double price = 0;
-			int brandId = product.getbrandId();
+			int brandId = product.getBrandId();
 			int productId = product.getId();
 			if(revenueBrands.get(brandId)!=null)price = revenueBrands.get(brandId);
 			revenueBrands.put(brandId, price + revenueProducts.get(productId));
@@ -123,7 +123,7 @@ public class ReportsService {
 		HashMap<Integer,Integer> quantityBrands = new HashMap<Integer,Integer>();
 		for(ProductPojo product : products) {
 			Integer quant = 0;
-			int brandId = product.getbrandId();
+			int brandId = product.getBrandId();
 			int productId = product.getId();
 			if(quantityBrands.get(brandId)!=null)quant = quantityBrands.get(brandId);
 			quantityBrands.put(brandId, quant + quantityProducts.get(productId));

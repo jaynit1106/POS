@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 public class BrandApiController {
 	
 	@Autowired
-	private BrandDto dto;
+	private final BrandDto dto = new BrandDto();
 
 	@ApiOperation(value = "Adds an Brand")
 	@RequestMapping(path = "/api/brand", method = RequestMethod.POST)

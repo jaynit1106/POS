@@ -2,8 +2,6 @@ package com.increff.pos.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -18,12 +16,6 @@ public class ProductDao extends AbstractDao {
 	private static String check_barcode="select p from ProductPojo p where barcode=:barcode";
 	private static String product_exist="select p from ProductPojo p where brandId=:brandId and name=:name";
 	
-	@PersistenceContext
-	private EntityManager em;
-
-	public void insert(ProductPojo p) {
-		em.persist(p);
-	}
 	
 	public ProductPojo select(int id) {
 		TypedQuery<ProductPojo> query = getQuery(select_id, ProductPojo.class);

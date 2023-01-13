@@ -39,18 +39,25 @@ function addProduct(event){
 }
 
 function addBrandCategoryDropdown(data){
+	let mapBrand = new Map();
+	let mapCategory = new Map();
 	var brandSelect = document.getElementById("brands");
 	var categorySelect = document.getElementById("category");
 	for(var i in data){
 		var e = data[i];
-		
-		var brandOption = document.createElement('option');
-        brandOption.text = brandOption.value = e.brand;
-        brandSelect.add(brandOption, 1);
+		if(mapBrand.get(e.brand)==undefined){
+			mapBrand.set(e.brand,1);
+			var brandOption = document.createElement('option');
+			brandOption.text = brandOption.value = e.brand;
+			brandSelect.add(brandOption, 1);
+		}
         
-		var categoryOption = document.createElement('option');
-        categoryOption.text = categoryOption.value = e.category;
-        categorySelect.add(categoryOption, 1);
+		if(mapCategory.get(e.category)==undefined){
+			mapCategory.set(e.category,1);
+			var categoryOption = document.createElement('option');
+        	categoryOption.text = categoryOption.value = e.category;
+        	categorySelect.add(categoryOption, 1);
+		}
         
 	}
 }
@@ -190,6 +197,7 @@ function displayProductList(data){
 	$('#product-table').DataTable().destroy();
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
+	productData=[];
 	var counter=1;
 	for(var i in data){
 		var e = data[i];

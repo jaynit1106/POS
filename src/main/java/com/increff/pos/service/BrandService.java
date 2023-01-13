@@ -16,8 +16,9 @@ import com.increff.pos.util.StringUtil;
 public class BrandService {
 
 	@Autowired
-	private BrandDao dao;
-	
+	private final BrandDao dao = new BrandDao();
+
+
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandPojo p) throws ApiException {
 		normalize(p);
@@ -59,21 +60,18 @@ public class BrandService {
 	}
 	
 	@Transactional
-	public BrandPojo getBrandId(String brand,String category) throws ApiException {
-		BrandPojo p = dao.checkRepeat(brand, category);
-		return p;
+	public BrandPojo getBrandId(String brand,String category){
+		return dao.checkRepeat(brand, category);
 	}
 	
 	@Transactional
-	public List<BrandPojo> getByBrand(String brand) throws ApiException {
-		List<BrandPojo> p = dao.selectByBrand(brand);
-		return p;
+	public List<BrandPojo> getByBrand(String brand){
+		return dao.selectByBrand(brand);
 	}
 	
 	@Transactional
-	public List<BrandPojo> getByCategory(String category) throws ApiException {
-		List<BrandPojo> p = dao.selectByBrand(category);
-		return p;
+	public List<BrandPojo> getByCategory(String category){
+		return dao.selectByBrand(category);
 	}
 
 	protected static void normalize(BrandPojo p) {

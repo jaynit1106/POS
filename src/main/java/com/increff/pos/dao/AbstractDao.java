@@ -1,8 +1,10 @@
 package com.increff.pos.dao;
 
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
 
 public abstract class AbstractDao {
 	
@@ -11,6 +13,10 @@ public abstract class AbstractDao {
 
 	protected <T> T getSingle(TypedQuery<T> query) {
 		return query.getResultList().stream().findFirst().orElse(null);
+	}
+	
+	public <T> void insert(T pojo) {
+		em.persist(pojo);
 	}
 	
 	protected <T> TypedQuery<T> getQuery(String jpql, Class<T> clazz) {

@@ -161,10 +161,12 @@ function paginate() {
 //UI DISPLAY METHODS
 var brandData = [];
 function displayBrandList(data){
+	// brandData=data;
 	$('#brand-table').DataTable().destroy();
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
+	brandData=[];
 	for(var i in data){
 		var e = data[i];
 		brandData.push(e);

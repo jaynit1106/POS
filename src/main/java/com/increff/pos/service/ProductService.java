@@ -42,7 +42,7 @@ public class ProductService {
 	public void update(int id, ProductPojo p) throws ApiException {
 		normalize(p);
 		ProductPojo ex = getCheck(id);
-		ex.setbrandId(p.getbrandId());
+		ex.setBrandId(p.getBrandId());
 		ex.setMrp(p.getMrp());
 		ex.setName(p.getName());
 		ex.setBarcode(p.getBarcode());

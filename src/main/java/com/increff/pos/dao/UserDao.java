@@ -16,10 +16,6 @@ public class UserDao extends AbstractDao {
 	private static String select_all = "select p from UserPojo p";
 
 	
-	public void insert(UserPojo p) {
-		em().persist(p);
-	}
-	
 	public UserPojo select(int id) {
 		TypedQuery<UserPojo> query = getQuery(select_id, UserPojo.class);
 		query.setParameter("id", id);

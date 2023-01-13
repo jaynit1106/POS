@@ -36,8 +36,8 @@ public class ProductDto {
 		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());
 		if(brand == null)throw new ApiException("Brand and Category does not exist");
 		
-		p.setbrandId(brand.getId());
-		if(productService.productExist(p.getbrandId(), p.getName())!=null)throw new ApiException("Product already exists");
+		p.setBrandId(brand.getId());
+		if(productService.productExist(p.getBrandId(), p.getName())!=null)throw new ApiException("Product already exists");
 		if(productService.getProductByBarcode(form.getBarcode())!=null)throw new ApiException("Barcode already exists");
 		
 		
@@ -50,7 +50,7 @@ public class ProductDto {
 		ProductData data = ConvertUtil.objectMapper(product, ProductData.class);
 		data.setMrp(StringUtil.convertMrp(product.getMrp()));
 		
-		BrandPojo brand = brandService.get(product.getbrandId());
+		BrandPojo brand = brandService.get(product.getBrandId());
 		data.setCategory(brand.getCategory());
 		data.setBrand(brand.getBrand());
 		return data;
@@ -64,7 +64,7 @@ public class ProductDto {
 			ProductData data = ConvertUtil.objectMapper(p, ProductData.class);
 			data.setMrp(StringUtil.convertMrp(p.getMrp()));
 			
-			BrandPojo brand = brandService.get(p.getbrandId());
+			BrandPojo brand = brandService.get(p.getBrandId());
 			data.setCategory(brand.getCategory());
 			data.setBrand(brand.getBrand());
 			list2.add(data);
@@ -81,9 +81,9 @@ public class ProductDto {
 		
 		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());
 		if(brand == null)throw new ApiException("Brand and Category does not exist");
-		p.setbrandId(brand.getId());
+		p.setBrandId(brand.getId());
 		
-		if(productService.productExist(p.getbrandId(), p.getName())!=null)throw new ApiException("Product already exists");
+		if(productService.productExist(p.getBrandId(), p.getName())!=null)throw new ApiException("Product already exists");
 		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
 		if(product!=null) {
 			if(product.getId()!=id)throw new ApiException("Barcode already exists");

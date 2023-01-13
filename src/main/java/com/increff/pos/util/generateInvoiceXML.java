@@ -64,6 +64,17 @@ public class generateInvoiceXML {
 			totalCost+=data.getQuantity()*data.getSellingPrice();
 			id++;
 		}
+
+		Element costs = doc.createElement("cost");
+		costs.appendChild(doc.createTextNode(String.valueOf(totalCost)));
+		rootElement.appendChild(costs);
+		
+		double gsts = totalCost*(0.18);
+		totalCost+=gsts;
+		
+		Element gst = doc.createElement("gst");
+		gst.appendChild(doc.createTextNode(String.valueOf(gsts)));
+		rootElement.appendChild(gst);
 		
 		Element cost = doc.createElement("totalCost");
 		cost.appendChild(doc.createTextNode(String.valueOf(totalCost)));

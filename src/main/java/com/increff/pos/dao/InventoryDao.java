@@ -1,8 +1,6 @@
 package com.increff.pos.dao;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -15,12 +13,7 @@ public class InventoryDao extends AbstractDao {
 	private static String select_id = "select p from InventoryPojo p where id=:id";
 	private static String select_all = "select p from InventoryPojo p";
 	
-	@PersistenceContext
-	private EntityManager em;
-
-	public void insert(InventoryPojo p) {
-		em.persist(p);
-	}
+	
 
 	public InventoryPojo select(int id) {
 		TypedQuery<InventoryPojo> query = getQuery(select_id, InventoryPojo.class);

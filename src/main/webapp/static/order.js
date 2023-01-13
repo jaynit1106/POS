@@ -230,6 +230,10 @@ function convertArrayToJson(){
 function submitOrder(){
 	var url = getOrderItemUrl();
 	let form = convertArrayToJson();
+	if(itemList.length-deleteList.length==0){
+		swal("Oops!","Cart cannot be empty", "error");
+		return;
+	}
 	$.ajax({
 		url: url,
 		type: 'POST',
