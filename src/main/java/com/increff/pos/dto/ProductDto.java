@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,10 +22,10 @@ import com.increff.pos.util.StringUtil;
 @Component
 public class ProductDto {
 	@Autowired
-	private ProductService productService;
+	private final ProductService productService = new ProductService();
 	
 	@Autowired
-	private BrandService brandService;
+	private final BrandService brandService = new BrandService();
 	
 	public void add(ProductForm form) throws ApiException {
 		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);
@@ -34,11 +35,11 @@ public class ProductDto {
 		if(form.getMrp()<0)throw new ApiException("MRP should be positive");
 		
 		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());
-		if(brand == null)throw new ApiException("Brand and Category does not exist");
+		if(Objects.isNull(brand))throw new ApiException("Brand and Category does not exist");
 		
 		p.setBrandId(brand.getId());
-		if(productService.productExist(p.getBrandId(), p.getName())!=null)throw new ApiException("Product already exists");
-		if(productService.getProductByBarcode(form.getBarcode())!=null)throw new ApiException("Barcode already exists");
+		if(Objects.isNull(productService.productExist(p.getBrandId(), p.getName())))throw new ApiException("Product already exists");
+		if(Objects.isNull(productService.getProductByBarcode(form.getBarcode())))throw new ApiException("Barcode already exists");
 		
 		
 		productService.add(p);
@@ -46,7 +47,6 @@ public class ProductDto {
 	
 	public ProductData get(int id) throws ApiException {
 		ProductPojo product = productService.get(id);
-		
 		ProductData data = ConvertUtil.objectMapper(product, ProductData.class);
 		data.setMrp(StringUtil.convertMrp(product.getMrp()));
 		
@@ -58,7 +58,7 @@ public class ProductDto {
 	
 	public List<ProductData> getAll() throws ApiException{
 		List<ProductPojo> list = productService.getAll();
-		List<ProductData> list2 = new ArrayList<ProductData>();
+		List<ProductData> list2 = new ArrayList<>();
 		for (ProductPojo p : list) {
 			
 			ProductData data = ConvertUtil.objectMapper(p, ProductData.class);
@@ -80,12 +80,16 @@ public class ProductDto {
 		if(form.getMrp()<0)throw new ApiException("MRP should be positive");
 		
 		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());
-		if(brand == null)throw new ApiException("Brand and Category does not exist");
+		if(Objects.isNull(brand))throw new ApiException("Brand and Category does not exist");
 		p.setBrandId(brand.getId());
-		
-		if(productService.productExist(p.getBrandId(), p.getName())!=null)throw new ApiException("Product already exists");
+
+		ProductPojo prod = productService.productExist(p.getBrandId(), p.getName());
+		if(Objects.isNull(prod)){
+			if(!Objects.equals(prod.getBarcode(), form.getBarcode()))throw new ApiException("Product already exists");
+		}
+
 		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
-		if(product!=null) {
+		if(Objects.isNull(product)) {
 			if(product.getId()!=id)throw new ApiException("Barcode already exists");
 		}
 		

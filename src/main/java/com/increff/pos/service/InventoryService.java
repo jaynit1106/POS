@@ -18,16 +18,16 @@ import com.increff.pos.util.TimestampUtil;
 public class InventoryService {
 
 	@Autowired
-	private InventoryDao dao;
+	private final InventoryDao dao = new InventoryDao();
 	
 	@Autowired
-	private ProductService productService;
+	private final ProductService productService = new ProductService();
 	
 	@Autowired
-	private OrderService orderService;
+	private final OrderService orderService = new OrderService();
 
 	@Autowired
-	private OrderItemService orderItemService;
+	private final OrderItemService orderItemService = new OrderItemService();
 
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(InventoryPojo p) throws ApiException {
@@ -52,9 +52,8 @@ public class InventoryService {
 	}
 
 	@Transactional
-	public InventoryPojo getCheck(int id) throws ApiException {
-		InventoryPojo p = dao.select(id);
-		return p;
+	public InventoryPojo getCheck(int id) {
+		return dao.select(id);
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
@@ -71,9 +70,9 @@ public class InventoryService {
 		OrderPojo p = new OrderPojo();
 		p.setTimestamp(TimestampUtil.getTimestamp());
 		orderService.add(p);
-		
-		for(int i=0;i<items.size();i++) {
-			items.get(i).setOrderId(p.getId());
+
+		for (OrderItemPojo item : items) {
+			item.setOrderId(p.getId());
 		}
 		orderItemService.add(items);
 		return p.getId();

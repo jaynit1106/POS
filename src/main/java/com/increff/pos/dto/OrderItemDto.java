@@ -2,6 +2,7 @@ package com.increff.pos.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -26,16 +27,16 @@ import com.increff.pos.util.generateInvoiceXML;
 public class OrderItemDto {
 	
 	@Autowired
-	private OrderItemService orderItemService;
+	private final OrderItemService orderItemService = new OrderItemService();
 	
 	@Autowired
-	private ProductService productService;
+	private final ProductService productService = new ProductService();
 	
 	@Autowired
-	private InventoryService inventoryService;
+	private final InventoryService inventoryService = new InventoryService();
 	
 	@Autowired
-	private SchedulerDto schedulerDto;
+	private final SchedulerDto schedulerDto = new SchedulerDto();
 	
 	public void add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException {
 		List<OrderItemPojo> items = new ArrayList<>(); 
@@ -43,7 +44,7 @@ public class OrderItemDto {
 			OrderItemPojo p =ConvertUtil.objectMapper(f, OrderItemPojo.class);
 			p.setOrderId(1);
 			ProductPojo product = productService.getProductByBarcode(f.getBarcode());
-			if(product==null)throw new ApiException("The Product "+f.getBarcode()+" Does not exist");
+			if(Objects.isNull(product))throw new ApiException("The Product "+f.getBarcode()+" Does not exist");
 			if(f.getQuantity()<=0)throw new ApiException("Please Enter a Valid Quantity for "+product.getBarcode());
 			if(f.getSellingPrice()<0)throw new ApiException("Please Enter a Valid Price for "+product.getBarcode());
 			p.setProductId(product.getId());
@@ -63,7 +64,7 @@ public class OrderItemDto {
 			list.add(item);
 		}
 		generateInvoiceXML.createXml(list);
-		generateInvoicePdf.createPdf("Invoice "+String.valueOf(orderId));
+		generateInvoicePdf.createPdf("Invoice "+ orderId);
 		
 		SchedulerForm sform = new SchedulerForm();
 		sform.setItems_count(list.size());
@@ -78,7 +79,7 @@ public class OrderItemDto {
 	
 	public List<OrderItemData> getAll() {
 		List<OrderItemPojo> list = orderItemService.getAll();
-		List<OrderItemData> list2 = new ArrayList<OrderItemData>();
+		List<OrderItemData> list2 = new ArrayList<>();
 		for (OrderItemPojo p : list) {
 			list2.add(ConvertUtil.objectMapper(p,OrderItemData.class));
 		}
@@ -90,7 +91,7 @@ public class OrderItemDto {
 		orderItemService.update(id, p);
 	}
 	
-	public List<OrderItemData> getOrderItemByOrderID(int id) throws ApiException, ParserConfigurationException, TransformerException{
+	public List<OrderItemData> getOrderItemByOrderID(int id) throws ApiException {
 		List<OrderItemPojo> list = orderItemService.getOrderItemByOrderId(id);
 		List<OrderItemData> items = new ArrayList<>();
 		for(OrderItemPojo p : list) {

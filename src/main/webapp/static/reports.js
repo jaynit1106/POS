@@ -48,6 +48,10 @@ function paginate() {
 }
 
 function getFilteredList(){
+	if( document.getElementById('startDate').value>document.getElementById('endDate').value){
+		swal("Oops!","Pls select a valid range", "error");
+		return;
+	}
 	flag = 0;
 	getSchedulerList();
 }

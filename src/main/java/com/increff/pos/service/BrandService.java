@@ -1,6 +1,7 @@
 package com.increff.pos.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -53,7 +54,7 @@ public class BrandService {
 	@Transactional
 	public BrandPojo getCheck(int id) throws ApiException {
 		BrandPojo p = dao.select(id);
-		if (p == null) {
+		if (Objects.isNull(p)) {
 			throw new ApiException("Brand with given ID does not exit, id: " + id);
 		}
 		return p;

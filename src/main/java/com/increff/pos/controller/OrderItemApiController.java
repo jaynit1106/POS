@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiOperation;
 public class OrderItemApiController {
 
 	@Autowired
-	private OrderItemDto dto;
+	private final OrderItemDto dto = new OrderItemDto();
 
 	@ApiOperation(value = "Adds a Order Item")
 	@RequestMapping(path = "/api/orderitem", method = RequestMethod.POST)

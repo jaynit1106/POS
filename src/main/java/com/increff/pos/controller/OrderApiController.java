@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
 public class OrderApiController {
 
 	@Autowired
-	private OrderDto dto;
+	private final OrderDto dto = new OrderDto();
 
 	@ApiOperation(value = "Adds a Order")
 	@RequestMapping(path = "/api/order", method = RequestMethod.POST)

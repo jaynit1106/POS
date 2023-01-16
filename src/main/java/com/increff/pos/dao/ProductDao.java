@@ -10,11 +10,10 @@ import com.increff.pos.pojo.ProductPojo;
 
 @Repository
 public class ProductDao extends AbstractDao {
-	private static String select_id = "select p from ProductPojo p where id=:id";
-	private static String select_all = "select p from ProductPojo p";
-	private static String select_all_products = "select p from ProductPojo p where brandId=:brandId";
-	private static String check_barcode="select p from ProductPojo p where barcode=:barcode";
-	private static String product_exist="select p from ProductPojo p where brandId=:brandId and name=:name";
+	private static final String select_id = "select p from ProductPojo p where id=:id";
+	private static final String select_all = "select p from ProductPojo p";
+	private static final String check_barcode="select p from ProductPojo p where barcode=:barcode";
+	private static final String product_exist="select p from ProductPojo p where brandId=:brandId and name=:name";
 	
 	
 	public ProductPojo select(int id) {
@@ -25,12 +24,6 @@ public class ProductDao extends AbstractDao {
 	
 	public List<ProductPojo> selectAll() {
 		TypedQuery<ProductPojo> query = getQuery(select_all, ProductPojo.class);
-		return query.getResultList();
-	}
-	
-	public List<ProductPojo> selectAllProducts(int brandId) {
-		TypedQuery<ProductPojo> query = getQuery(select_all_products, ProductPojo.class);
-		query.setParameter("brandId", brandId);
 		return query.getResultList();
 	}
 	
@@ -46,7 +39,5 @@ public class ProductDao extends AbstractDao {
 		query.setParameter("name", name);
 		return getSingle(query);
 	}
-	
-	public void update(ProductPojo p) {
-	}
+
 }

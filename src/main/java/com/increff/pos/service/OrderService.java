@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +25,7 @@ import com.increff.pos.pojo.OrderPojo;
 public class OrderService {
 
 	@Autowired
-	private OrderDao dao;
+	private final OrderDao dao = new OrderDao();
 
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(OrderPojo p) throws ApiException {
@@ -44,7 +45,7 @@ public class OrderService {
 	@Transactional
 	public OrderPojo getCheck(int id) throws ApiException {
 		OrderPojo p = dao.select(id);
-		if (p == null) {
+		if (Objects.isNull(p)) {
 			throw new ApiException("Order with given ID does not exit, id: " + id);
 		}
 		return p;

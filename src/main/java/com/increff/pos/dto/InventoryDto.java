@@ -2,6 +2,7 @@ package com.increff.pos.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,32 +21,32 @@ import com.increff.pos.util.ConvertUtil;
 public class InventoryDto {
 
 	@Autowired
-	private InventoryService inventoryService;
+	private final InventoryService inventoryService = new InventoryService();
 	
 	
 	@Autowired
-	private ProductService productService;
+	private final ProductService productService = new ProductService();
 	
 	public void add(@RequestBody InventoryForm form) throws ApiException {
 		if(form.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
 		InventoryPojo p = ConvertUtil.objectMapper(form, InventoryPojo.class);
 
 		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
-		if(product == null)throw new ApiException("Product Does Not Exist");
+		if(Objects.isNull(product))throw new ApiException("Product Does Not Exist");
 		p.setId(product.getId());
 		
 		InventoryPojo inventory = inventoryService.get(p.getId()); 
-		if(inventory!=null) {
+		if(Objects.isNull(inventory)) {
 			inventory.setQuantity(inventory.getQuantity()+form.getQuantity());
 			inventoryService.update(inventory.getId(), inventory);
 			return;
-		};
+		}
 		inventoryService.add(p);
 	}
 	
 	public InventoryData get(int id) throws ApiException {
 		InventoryPojo p = inventoryService.get(id);
-		if(p==null)throw new ApiException("Inventory does not exist");
+		if(Objects.isNull(p))throw new ApiException("Inventory does not exist");
 		InventoryData data =  ConvertUtil.objectMapper(p, InventoryData.class);
 		ProductPojo product = productService.get(id);
 		data.setBarcode(product.getBarcode());
@@ -55,7 +56,7 @@ public class InventoryDto {
 	
 	public List<InventoryData> getAll() throws ApiException {
 		List<InventoryPojo> list = inventoryService.getAll();
-		List<InventoryData> list2 = new ArrayList<InventoryData>();
+		List<InventoryData> list2 = new ArrayList<>();
 		for (InventoryPojo p : list) {
 			InventoryData data =  ConvertUtil.objectMapper(p,InventoryData.class);
 			ProductPojo product = productService.get(p.getId());

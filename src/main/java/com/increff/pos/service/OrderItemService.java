@@ -1,6 +1,7 @@
 package com.increff.pos.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -15,7 +16,7 @@ import com.increff.pos.pojo.OrderItemPojo;
 public class OrderItemService {
 
 	@Autowired
-	private OrderItemDao dao;
+	private final OrderItemDao dao = new OrderItemDao();
 	
 	
 	@Transactional(rollbackOn = ApiException.class)
@@ -49,16 +50,15 @@ public class OrderItemService {
 	@Transactional
 	public OrderItemPojo getCheck(int id) throws ApiException {
 		OrderItemPojo p = dao.select(id);
-		if (p == null) {
+		if (Objects.isNull(p)) {
 			throw new ApiException("OrderItem with given ID does not exit, id: " + id);
 		}
 		return p;
 	}
 	
 	@Transactional
-	public List<OrderItemPojo> getOrderItemByOrderId(int id) throws ApiException {
-		List<OrderItemPojo> p = dao.selectByOrderId(id);
-		return p;
+	public List<OrderItemPojo> getOrderItemByOrderId(int id) {
+		return dao.selectByOrderId(id);
 	}
 	
 }

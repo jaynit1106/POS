@@ -4,26 +4,34 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.increff.pos.model.InfoData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.UserDao;
 import com.increff.pos.pojo.UserPojo;
-
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 @Service
 public class UserService {
 
 	@Autowired
-	private UserDao dao;
+	private final UserDao dao = new UserDao();
+
+	@Autowired
+	private InfoData info;
 
 	@Transactional
-	public void add(UserPojo p) throws ApiException {
+	public ModelAndView add(UserPojo p) throws ApiException {
 		normalize(p);
 		UserPojo existing = dao.select(p.getEmail());
 		if (existing != null) {
-			throw new ApiException("User with given email already exists");
+			info.setMessage("email id already exists");
+			return new ModelAndView("redirect:/site/signup");
 		}
 		dao.insert(p);
+		info.setMessage("None");
+		return  new ModelAndView("redirect:/site/login");
 	}
 
 	@Transactional(rollbackOn = ApiException.class)

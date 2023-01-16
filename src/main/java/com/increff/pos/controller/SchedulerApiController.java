@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 public class SchedulerApiController {
 	
 	@Autowired
-	private SchedulerDto dto;
+	private final SchedulerDto dto = new SchedulerDto();
 
 
 	@ApiOperation(value = "Gets an Scheduler by ID")

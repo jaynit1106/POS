@@ -1,6 +1,7 @@
 package com.increff.pos.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.ProductDao;
 import com.increff.pos.pojo.ProductPojo;
-import com.increff.pos.util.BarcodeUtil;
 import com.increff.pos.util.StringUtil;
 
 
@@ -17,7 +17,7 @@ import com.increff.pos.util.StringUtil;
 public class ProductService {
 
 	@Autowired
-	private ProductDao dao;
+	private final ProductDao dao = new ProductDao();
 
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo p) throws ApiException {
@@ -46,36 +46,27 @@ public class ProductService {
 		ex.setMrp(p.getMrp());
 		ex.setName(p.getName());
 		ex.setBarcode(p.getBarcode());
-		dao.update(ex);
 	}
 
 	@Transactional
 	public ProductPojo getCheck(int id) throws ApiException {
 		ProductPojo p = dao.select(id);
-		if (p == null) {
+		if (Objects.isNull(p)) {
 			throw new ApiException("Product with given ID does not exit, id: " + id);
 		}
 		return p;
 	}
 	@Transactional
-	public ProductPojo productExist(int brandId , String name) throws ApiException{
+	public ProductPojo productExist(int brandId , String name){
 		return dao.productExist(brandId, name);
 	}
 	
 	@Transactional
-	public ProductPojo getProductByBarcode(String barcode) throws ApiException {
-		ProductPojo p = dao.barcodeExist(barcode);
-		return p;
+	public ProductPojo getProductByBarcode(String barcode){
+		return dao.barcodeExist(barcode);
 	}
 	
-	
-	@Transactional
-	public String generateBarcode(ProductPojo p) {
-		while(true) {
-			if(dao.barcodeExist(BarcodeUtil.generateBarcode())!=null)continue;
-			return BarcodeUtil.generateBarcode();
-		}
-	}
+
 	
 	protected static void normalize(ProductPojo p) {
 		p. setName(StringUtil.toLowerCase(p. getName()));

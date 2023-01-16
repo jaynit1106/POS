@@ -1,3 +1,8 @@
+
+let salesData = []
+
+
+//URL FUNCTIONS
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
@@ -8,44 +13,16 @@ function getReportUrl(){
 	return baseUrl + "/api/report";
 }
 
-function displaySalesList(){
-    let data = salesData;
-	$('#sales-table').DataTable().destroy();
-	var $tbody = $('#sales-table').find('tbody');
-	$tbody.empty();
-	var counter=1;
-	for(var i in data){
-		var e = data[i];
-        if(document.getElementById('brands').value != "All"){
-            if(document.getElementById('brands').value != String(e.brand))continue;
-        }
 
-        if(document.getElementById('category').value != "All"){
-            if(document.getElementById('category').value != String(e.category))continue;
-        }
-
-		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.brand+ '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>'  + e.quantity + '</td>'
-		+ '<td>'  + e.revenue + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
-        counter++;
-	}
-	paginate();
-	
-}
-
-function paginate() {
-	$('#sales-table').DataTable();
-}
-let salesData = []
+//API CALLING FUNCTIONS
 function getSalesReport(){
     var $form = $("#sales-form");
 	var json = toJson($form);
     var url = getReportUrl()+"/sales";
+	if(JSON.parse(json).startDate>JSON.parse(json).endDate){
+		swal("Oops!","Pls select a valid range", "error");
+		return;
+	}
     console.log(url);
     $.ajax({
         url: url,
@@ -79,7 +56,44 @@ function getBrandList(){
 	   }
 	});
 }
+//CREATING TABLES
+function displaySalesList(){
+    let data = salesData;
+	$('#sales-table').DataTable().destroy();
+	var $tbody = $('#sales-table').find('tbody');
+	$tbody.empty();
+	var counter=1;
+	for(var i in data){
+		var e = data[i];
+        if(document.getElementById('brands').value != "All"){
+            if(document.getElementById('brands').value != String(e.brand))continue;
+        }
 
+        if(document.getElementById('category').value != "All"){
+            if(document.getElementById('category').value != String(e.category))continue;
+        }
+
+		var row = '<tr>'
+		+ '<td>' + counter + '</td>'
+		+ '<td>' + e.brand+ '</td>'
+		+ '<td>'  + e.category + '</td>'
+		+ '<td>'  + e.quantity + '</td>'
+		+ '<td>'  + e.revenue + '</td>'
+		+ '</tr>';
+        $tbody.append(row);
+        counter++;
+	}
+	paginate();
+	
+}
+
+//PAGINATION UTIL
+function paginate() {
+	$('#sales-table').DataTable();
+}
+
+
+//OTHER UTIL FUNCTIONS
 function addBrandCategoryDropdown(data){
 	let mapBrand = new Map();
 	let mapCategory = new Map();

@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 public class ProductApiController {
 
 	@Autowired
-	private ProductDto dto;
+	private final ProductDto dto = new ProductDto();
 
 	@ApiOperation(value = "Adds a Product")
 	@RequestMapping(path = "/api/product", method = RequestMethod.POST)

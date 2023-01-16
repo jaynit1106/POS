@@ -2,6 +2,7 @@ package com.increff.pos.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class BrandDto {
 	public void add(BrandForm form) throws ApiException{
 		BrandPojo p = ConvertUtil.objectMapper(form, BrandPojo.class);
 		BrandPojo brand = brandService.getBrandId(p.getBrand(), p.getCategory());
-		if(brand==null)brandService.add(p);
+		if(Objects.isNull(brand))brandService.add(p);
 		else throw new ApiException("Brand and Category already exists");
 	}
 	
@@ -42,9 +43,11 @@ public class BrandDto {
 	}
 	
 	public void update(int id, BrandForm f) throws ApiException {
+
 		BrandPojo p = ConvertUtil.objectMapper(f, BrandPojo.class);
 		BrandPojo brand = brandService.getBrandId(p.getBrand(), p.getCategory());
-		if(brand==null)brandService.update(id, p);
+
+		if(Objects.isNull(brand))brandService.update(id, p);
 		else throw new ApiException("Brand and Category already exists");
 	}
 }

@@ -22,7 +22,7 @@ import com.increff.pos.util.TimestampUtil;
 public class OrderDto {
 
 	@Autowired
-	private OrderService orderService;
+	private final OrderService orderService = new OrderService();
 	
 	public OrderData add() throws ApiException {
 		OrderPojo p = new OrderPojo();
@@ -40,7 +40,7 @@ public class OrderDto {
 	
 	public List<OrderData> getAll() {
 		List<OrderPojo> list = orderService.getAll();
-		List<OrderData> list2 = new ArrayList<OrderData>();
+		List<OrderData> list2 = new ArrayList<>();
 		for (OrderPojo p : list) {
 			list2.add(ConvertUtil.objectMapper(p, OrderData.class));
 		}

@@ -15,7 +15,7 @@ import com.increff.pos.pojo.SchedulerPojo;
 public class SchedulerService {
 
 	@Autowired
-	private SchedulerDao dao;
+	private final SchedulerDao dao = new SchedulerDao();
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(SchedulerPojo p) throws ApiException {
@@ -38,12 +38,10 @@ public class SchedulerService {
 		ex.setInvoiced_items_count(p.getInvoiced_items_count());
 		ex.setInvoiced_orders_count(p.getInvoiced_orders_count());
 		ex.setTotal_revenue(p.getTotal_revenue());
-		return;
 	}
 
 	@Transactional
-	public SchedulerPojo getCheck(String date) throws ApiException {
-		SchedulerPojo p = dao.select(date);
-		return p;
+	public SchedulerPojo getCheck(String date) {
+		return dao.select(date);
 	}
 }

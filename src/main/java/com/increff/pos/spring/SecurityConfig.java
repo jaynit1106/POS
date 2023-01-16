@@ -24,8 +24,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/**")//
 				.antMatchers("/ui/**")//
 				.and().authorizeRequests()//
-				.antMatchers("/api/**").permitAll()//
-				.antMatchers("/ui/**").permitAll()
+				.antMatchers("/api/brand").hasAuthority("supervisor")//
+				.antMatchers("/api/product").hasAuthority("supervisor")//
+				.antMatchers("/api/inventory").hasAuthority("supervisor")//
+				.antMatchers("/api/report").hasAuthority("supervisor")//
+				.antMatchers("/api/scheduler").hasAuthority("supervisor")//
+				.antMatchers("/api/order").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/api/orderitem").hasAnyAuthority("supervisor","operator")//
+				// UI Pages
+				.antMatchers("/ui/brand").hasAuthority("supervisor")//
+				.antMatchers("/ui/product").hasAuthority("supervisor")//
+				.antMatchers("/ui/inventory").hasAuthority("supervisor")//
+				.antMatchers("/ui/reports").hasAuthority("supervisor")//
+				.antMatchers("/ui/inventoryReport").hasAuthority("supervisor")//
+				.antMatchers("/ui/salesReport").hasAuthority("supervisor")//
+				.antMatchers("/ui/order").hasAnyAuthority("supervisor","operator")//
 				// Ignore CSRF and CORS
 				.and().csrf().disable().cors().disable();
 		logger.info("Configuration complete");

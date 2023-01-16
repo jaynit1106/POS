@@ -1,4 +1,9 @@
+//INITIALIZING VARIABLES
+var itemList=[];
+var deleteList=[]
+productMap = new Map();
 
+//URL FUNCTIONS
 function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
@@ -19,7 +24,7 @@ function getOrderItemUrl(){
 	return baseUrl + "/api/orderitem";
 }
 
-//BUTTON ACTIONS
+//API CALLING FUNCTIONS
 function addOrder(event){
 	//Set the values to update
 	var url = getOrderUrl();
@@ -42,7 +47,6 @@ function addOrder(event){
 	return false;
 }
 
-
 function getOrderList(){
 	var url = getOrderUrl();
 	$.ajax({
@@ -57,16 +61,6 @@ function getOrderList(){
 	});
 }
 
-
-// PAGINATION METHODS
-function paginate() {
-	$('#order-table').DataTable();
-    $('#items-table').DataTable();
-	$('#view-table').DataTable();
-	$('.dataTables_length').addClass('bs-select');
-}
-
-//UI DISPLAY METHODS
 function getItemList(url){
 	$.ajax({
 		url: url,
@@ -80,6 +74,40 @@ function getItemList(url){
 	 });
 }
 
+function submitOrder(){
+	var url = getOrderItemUrl();
+	let form = convertArrayToJson();
+	if(itemList.length-deleteList.length==0){
+		swal("Oops!","Cart cannot be empty", "error");
+		return;
+	}
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: form,
+		headers: {
+			'Content-Type': 'application/json'
+		},	   
+		success: function(response) {
+				swal("Hurray", "Order added successfully", "success");
+				$('#edit-order-modal').modal('toggle');
+				getOrderList();  
+		},
+		error: function(response){
+				swal("Oops!", response.responseJSON.message, "error");
+		}
+	 });
+}
+
+// PAGINATION METHODS
+function paginate() {
+	$('#order-table').DataTable();
+    $('#items-table').DataTable();
+	$('#view-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
+}
+
+//UI DISPLAY METHODS
 function displayItemData(data){
 	var $tbody = $('#view-table').find('tbody');
 	$tbody.empty();
@@ -99,17 +127,6 @@ function displayItemData(data){
 	paginate();
 }
 
-function viewModal(id){
-	$('#view-order-modal').modal('toggle');
-	var url = getOrderItemUrl()+'/'+id;
-	getItemList(url);
-}
-
-function downloadPdf(id){
-	// var pdfName = "invoice "+id;
-	var url = getBaseUrl()+"/api/order/download/"+id;
-	window.location.href = url;
-}
 function displayOrderList(data){
 	$('#order-table').DataTable().destroy();
 	var $tbody = $('#order-table').find('tbody');
@@ -130,27 +147,6 @@ function displayOrderList(data){
 	}
 	paginate();
 }
-
-
-var itemList=[];
-function displayCreateItemModal(){
-	displayItemList();
-	itemList=[];
-	deleteList=[];
-	productMap = new Map();
-	var $tbody = $('#items-table').find('tbody');
-	$tbody.empty();
-	$('#edit-order-modal').modal('toggle');
-}
-var deleteList=[]
-function deleteItem(id){
-	deleteList.push(id);
-	let barcode = JSON.parse(itemList[id]).barcode;
-	productMap.delete(barcode);
-	displayItemList();
-}
-
-productMap = new Map();
 
 function displayItemList(){
 	$('#items-table').DataTable().destroy();
@@ -181,6 +177,38 @@ function displayItemList(){
 	paginate();
 }
 
+//MODAL TOGGLING METHODS
+function viewModal(id){
+	$('#view-order-modal').modal('toggle');
+	var url = getOrderItemUrl()+'/'+id;
+	getItemList(url);
+}
+
+function displayCreateItemModal(){
+	displayItemList();
+	itemList=[];
+	deleteList=[];
+	productMap = new Map();
+	var $tbody = $('#items-table').find('tbody');
+	$tbody.empty();
+	$('#edit-order-modal').modal('toggle');
+}
+
+//DOWNLOAD ACTIONS
+function downloadPdf(id){
+	// var pdfName = "invoice "+id;
+	var url = getBaseUrl()+"/api/order/download/"+id;
+	window.location.href = url;
+}
+
+//UTIL FUNCTIONS
+function deleteItem(id){
+	deleteList.push(id);
+	let barcode = JSON.parse(itemList[id]).barcode;
+	productMap.delete(barcode);
+	displayItemList();
+}
+
 function editItem(id){
 	var $form = $("#row"+id);
 	var json = toJson($form);
@@ -195,6 +223,18 @@ function addItem(){
 	var $form = $("#item-form");
 	var json = toJson($form);
 	var e =JSON.parse(json);
+	if(e.quantity=="" || e.barcode=="" || e.sellingPrice==""){
+		swal("Oops!", "The fields cannot be empty", "error");
+		return;
+	}
+	if(e.quantity<=0 ){
+		swal("Oops!", "Please enter valid quantity", "error");
+		return;
+	}
+	if(e.sellingPrice<0 ){
+		swal("Oops!", "Please enter valid price", "error");
+		return;
+	}
 	if(productMap.get(e.barcode)!=undefined){
 		let id = productMap.get(e.barcode);
 		let  q = parseInt(JSON.parse(itemList[id]).quantity);
@@ -215,6 +255,9 @@ function addItem(){
 	$("#item-form").reset();
 
 }
+
+
+//ARRAY CONVERSION FUNCTION
 function convertArrayToJson(){
 	let json = [];
 	for(s in itemList){
@@ -227,30 +270,7 @@ function convertArrayToJson(){
 	}
 	return JSON.stringify(json);
 }
-function submitOrder(){
-	var url = getOrderItemUrl();
-	let form = convertArrayToJson();
-	if(itemList.length-deleteList.length==0){
-		swal("Oops!","Cart cannot be empty", "error");
-		return;
-	}
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: form,
-		headers: {
-			'Content-Type': 'application/json'
-		},	   
-		success: function(response) {
-				swal("Hurray", "Order added successfully", "success");
-				$('#edit-order-modal').modal('toggle');
-				getOrderList();  
-		},
-		error: function(response){
-				swal("Oops!", response.responseJSON.message, "error");
-		}
-	 });
-}
+
 //INITIALIZATION CODE
 function init(){
 	$('#create-order').click(displayCreateItemModal);

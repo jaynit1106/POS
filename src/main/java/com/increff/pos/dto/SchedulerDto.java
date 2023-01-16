@@ -3,6 +3,7 @@ package com.increff.pos.dto;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,13 @@ import com.increff.pos.util.TimestampUtil;
 public class SchedulerDto {
 	
 	@Autowired
-	SchedulerService schedulerService;
+	private final SchedulerService schedulerService = new SchedulerService();
 	
 	public void add(SchedulerForm form) throws ApiException{
 		form.setDate(TimestampUtil.getTimestamp().substring(0,10));
 		SchedulerPojo p = new SchedulerPojo();
 		SchedulerPojo data = schedulerService.get(form.getDate());
-		if(data==null) {
+		if(Objects.isNull(data)) {
 			p.setDate(form.getDate());
 			p.setInvoiced_orders_count(1);
 			p.setInvoiced_items_count(form.getItems_count());
@@ -46,7 +47,7 @@ public class SchedulerDto {
 	
 	public List<SchedulerData> getAll() {
 		List<SchedulerPojo> list = schedulerService.getAll();
-		List<SchedulerData> list2 = new ArrayList<SchedulerData>();
+		List<SchedulerData> list2 = new ArrayList<>();
 		for (SchedulerPojo p : list) {
 			list2.add(ConvertUtil.objectMapper(p, SchedulerData.class));
 		}

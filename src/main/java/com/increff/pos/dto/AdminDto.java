@@ -16,7 +16,7 @@ import com.increff.pos.service.UserService;
 public class AdminDto {
 	
 	@Autowired
-	private UserService userService;
+	private final UserService userService = new UserService();
 	
 	public void addUser(UserForm form) throws ApiException {
 		UserPojo p = convert(form);
@@ -25,7 +25,7 @@ public class AdminDto {
 	
 	public List<UserData> getAllUser() {
 		List<UserPojo> list = userService.getAll();
-		List<UserData> list2 = new ArrayList<UserData>();
+		List<UserData> list2 = new ArrayList<>();
 		for (UserPojo p : list) {
 			list2.add(convert(p));
 		}
