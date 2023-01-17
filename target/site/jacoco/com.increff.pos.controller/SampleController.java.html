@@ -23,7 +23,7 @@ import com.increff.pos.util.IOUtil;
 		// get your file as InputStream
 <span class="nc" id="L24">		response.setContentType(&quot;text/csv&quot;);</span>
 <span class="nc" id="L25">		response.addHeader(&quot;Content-disposition:&quot;, &quot;attachment; filename=&quot; + fileName);</span>
-<span class="nc" id="L26">		String fileClasspath = &quot;/com/increff/employee/&quot; + fileName;</span>
+<span class="nc" id="L26">		String fileClasspath = &quot;/com/increff/pos/&quot; + fileName;</span>
 <span class="nc" id="L27">		System.out.println(fileClasspath);</span>
 <span class="nc" id="L28">		InputStream is = SampleController.class.getResourceAsStream(fileClasspath);</span>
 		// copy it to response's OutputStream
@@ -37,6 +37,26 @@ import com.increff.pos.util.IOUtil;
 		}
 
 <span class="nc" id="L39">	}</span>
+	
+	@RequestMapping(value = &quot;/pdf/{fileName:.+}&quot;, method = RequestMethod.GET)
+	public void getPdf(@PathVariable(&quot;fileName&quot;) String fileName, HttpServletResponse response) throws IOException {
+		// get your file as InputStream
+<span class="nc" id="L44">		response.setContentType(&quot;application/pdf&quot;);</span>
+<span class="nc" id="L45">		response.addHeader(&quot;Content-disposition:&quot;, &quot;attachment; filename=&quot; + fileName);</span>
+<span class="nc" id="L46">		String fileClasspath = &quot;/com/increff/pos/pdf/&quot; + fileName;</span>
+<span class="nc" id="L47">		System.out.println(fileClasspath);</span>
+<span class="nc" id="L48">		InputStream is = SampleController.class.getResourceAsStream(fileClasspath);</span>
+		// copy it to response's OutputStream
+		try {
+<span class="nc" id="L51">			IOUtils.copy(is, response.getOutputStream());</span>
+<span class="nc" id="L52">			response.flushBuffer();</span>
+<span class="nc" id="L53">		} catch (IOException e) {</span>
+<span class="nc" id="L54">			throw e;</span>
+		} finally {
+<span class="nc" id="L56">			IOUtil.closeQuietly(is);</span>
+		}
+
+<span class="nc" id="L59">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

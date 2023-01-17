@@ -1,4 +1,11 @@
 com\increff\pos\service\QaConfig.class
-com\increff\pos\service\AboutAppServiceTest.class
+com\increff\pos\dto\AbstractUnitTest.class
+com\increff\pos\dto\TestOrderItemDto.class
 com\increff\pos\service\SampleTest.class
+com\increff\pos\dto\TestProductDto.class
+com\increff\pos\util\PojoUtil.class
+com\increff\pos\dto\TestOrderDto.class
+com\increff\pos\dto\TestInventoryDto.class
+com\increff\pos\dto\TestBrandDto.class
+com\increff\pos\service\AboutAppServiceTest.class
 com\increff\pos\service\AbstractUnitTest.class

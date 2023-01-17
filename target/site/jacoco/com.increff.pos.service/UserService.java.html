@@ -4,46 +4,49 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.increff.pos.model.InfoData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.UserDao;
 import com.increff.pos.pojo.UserPojo;
-
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 @Service
-<span class="fc" id="L14">public class UserService {</span>
+<span class="fc" id="L16">public class UserService {</span>
+
+<span class="fc" id="L18">	@Autowired</span>
+	private final UserDao dao = new UserDao();
 
 	@Autowired
-	private UserDao dao;
+	private InfoData info;
 
 	@Transactional
-	public void add(UserPojo p) throws ApiException {
-<span class="nc" id="L21">		normalize(p);</span>
-<span class="nc" id="L22">		UserPojo existing = dao.select(p.getEmail());</span>
-<span class="nc bnc" id="L23" title="All 2 branches missed.">		if (existing != null) {</span>
-<span class="nc" id="L24">			throw new ApiException(&quot;User with given email already exists&quot;);</span>
+	public ModelAndView add(UserPojo p) throws ApiException {
+<span class="nc" id="L26">		normalize(p);</span>
+<span class="nc" id="L27">		UserPojo existing = dao.select(p.getEmail());</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">		if (existing != null) {</span>
+<span class="nc" id="L29">			info.setMessage(&quot;email id already exists&quot;);</span>
+<span class="nc" id="L30">			return new ModelAndView(&quot;redirect:/site/signup&quot;);</span>
 		}
-<span class="nc" id="L26">		dao.insert(p);</span>
-<span class="nc" id="L27">	}</span>
+<span class="nc" id="L32">		dao.insert(p);</span>
+<span class="nc" id="L33">		info.setMessage(&quot;None&quot;);</span>
+<span class="nc" id="L34">		return  new ModelAndView(&quot;redirect:/site/login&quot;);</span>
+	}
 
 	@Transactional(rollbackOn = ApiException.class)
 	public UserPojo get(String email) throws ApiException {
-<span class="nc" id="L31">		return dao.select(email);</span>
+<span class="nc" id="L39">		return dao.select(email);</span>
 	}
 
 	@Transactional
 	public List&lt;UserPojo&gt; getAll() {
-<span class="nc" id="L36">		return dao.selectAll();</span>
+<span class="nc" id="L44">		return dao.selectAll();</span>
 	}
 
-	@Transactional
-	public void delete(int id) {
-<span class="nc" id="L41">		dao.delete(id);</span>
-<span class="nc" id="L42">	}</span>
-
 	protected static void normalize(UserPojo p) {
-<span class="nc" id="L45">		p.setEmail(p.getEmail().toLowerCase().trim());</span>
-<span class="nc" id="L46">		p.setRole(p.getRole().toLowerCase().trim());</span>
-<span class="nc" id="L47">	}</span>
+<span class="nc" id="L48">		p.setEmail(p.getEmail().toLowerCase().trim());</span>
+<span class="nc" id="L49">		p.setRole(p.getRole().toLowerCase().trim());</span>
+<span class="nc" id="L50">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

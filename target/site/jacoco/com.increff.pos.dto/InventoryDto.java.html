@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-spring</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">InventoryDto.java</span></div><h1>InventoryDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.increff.pos.model.InventoryData;
+import com.increff.pos.model.InventoryForm;
+import com.increff.pos.pojo.InventoryPojo;
+import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.service.ApiException;
+import com.increff.pos.service.InventoryService;
+import com.increff.pos.service.ProductService;
+import com.increff.pos.util.ConvertUtil;
+
+@Component
+<span class="fc" id="L21">public class InventoryDto {</span>
+
+<span class="fc" id="L23">	@Autowired</span>
+	private final InventoryService inventoryService = new InventoryService();
+	
+	
+<span class="fc" id="L27">	@Autowired</span>
+	private final ProductService productService = new ProductService();
+	
+	public void add(@RequestBody InventoryForm form) throws ApiException {
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		if(form.getQuantity()&lt;0)throw new ApiException(&quot;Quantity cannot be Negative&quot;);</span>
+<span class="fc" id="L32">		InventoryPojo p = ConvertUtil.objectMapper(form, InventoryPojo.class);</span>
+
+<span class="fc" id="L34">		ProductPojo product = productService.getProductByBarcode(form.getBarcode());</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">		if(Objects.isNull(product))throw new ApiException(&quot;Product Does Not Exist&quot;);</span>
+<span class="fc" id="L36">		p.setId(product.getId());</span>
+		
+<span class="fc" id="L38">		InventoryPojo inventory = inventoryService.get(p.getId()); </span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">		if(!Objects.isNull(inventory)) {</span>
+<span class="fc" id="L40">			inventory.setQuantity(inventory.getQuantity()+form.getQuantity());</span>
+<span class="fc" id="L41">			inventoryService.update(inventory.getId(), inventory);</span>
+<span class="fc" id="L42">			return;</span>
+		}
+<span class="nc" id="L44">		inventoryService.add(p);</span>
+<span class="nc" id="L45">	}</span>
+	
+	public InventoryData get(int id) throws ApiException {
+<span class="fc" id="L48">		InventoryPojo p = inventoryService.get(id);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">		if(Objects.isNull(p))throw new ApiException(&quot;Inventory does not exist&quot;);</span>
+<span class="fc" id="L50">		InventoryData data =  ConvertUtil.objectMapper(p, InventoryData.class);</span>
+<span class="fc" id="L51">		ProductPojo product = productService.get(id);</span>
+<span class="fc" id="L52">		data.setBarcode(product.getBarcode());</span>
+<span class="fc" id="L53">		data.setName(product.getName());</span>
+<span class="fc" id="L54">		return  data;</span>
+	}
+	
+	public List&lt;InventoryData&gt; getAll() throws ApiException {
+<span class="fc" id="L58">		List&lt;InventoryPojo&gt; list = inventoryService.getAll();</span>
+<span class="fc" id="L59">		List&lt;InventoryData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		for (InventoryPojo p : list) {</span>
+<span class="fc" id="L61">			InventoryData data =  ConvertUtil.objectMapper(p,InventoryData.class);</span>
+<span class="fc" id="L62">			ProductPojo product = productService.get(p.getId());</span>
+<span class="fc" id="L63">			data.setBarcode(product.getBarcode());</span>
+<span class="fc" id="L64">			data.setName(product.getName());</span>
+<span class="fc" id="L65">			list2.add(data);</span>
+<span class="fc" id="L66">		}</span>
+<span class="fc" id="L67">		return list2;</span>
+	}
+	
+	public void update(int id,InventoryForm form) throws ApiException {
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">		if(form.getQuantity()&lt;0)throw new ApiException(&quot;Quantity cannot be Negative&quot;);</span>
+<span class="fc" id="L72">		InventoryPojo inventory = ConvertUtil.objectMapper(form, InventoryPojo.class);</span>
+<span class="fc" id="L73">		inventoryService.update(id, inventory);</span>
+<span class="fc" id="L74">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

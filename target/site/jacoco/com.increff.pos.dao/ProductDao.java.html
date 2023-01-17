@@ -2,77 +2,43 @@
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
 import com.increff.pos.pojo.ProductPojo;
 
 @Repository
-<span class="fc" id="L16">public class ProductDao extends AbstractDao {</span>
-<span class="fc" id="L17">	private static String delete_id = &quot;delete from ProductPojo p where id=:id&quot;;</span>
-<span class="fc" id="L18">	private static String delete_brandId = &quot;delete from ProductPojo p where brandId=:brandId&quot;;</span>
-<span class="fc" id="L19">	private static String select_id = &quot;select p from ProductPojo p where id=:id&quot;;</span>
-<span class="fc" id="L20">	private static String select_all = &quot;select p from ProductPojo p&quot;;</span>
-<span class="fc" id="L21">	private static String select_all_products = &quot;select p from ProductPojo p where brandId=:brandId&quot;;</span>
-<span class="fc" id="L22">	private static String check_barcode=&quot;select p from ProductPojo p where barcode=:barcode&quot;;</span>
-<span class="fc" id="L23">	private static String product_exist=&quot;select p from ProductPojo p where brandId=:brandId and name=:name&quot;;</span>
-	@PersistenceContext
-	private EntityManager em;
-
-	@Transactional
-	public void insert(ProductPojo p) {
-<span class="nc" id="L29">		em.persist(p);</span>
-<span class="nc" id="L30">	}</span>
-	
-	public int delete(int id) {
-<span class="nc" id="L33">		Query query = em.createQuery(delete_id);</span>
-<span class="nc" id="L34">		query.setParameter(&quot;id&quot;, id);</span>
-<span class="nc" id="L35">		return query.executeUpdate();</span>
-	}
-	
-	public int deleteProducts(int brandId) {
-<span class="nc" id="L39">		Query query = em.createQuery(delete_brandId);</span>
-<span class="nc" id="L40">		query.setParameter(&quot;brandId&quot;, brandId);</span>
-<span class="nc" id="L41">		return query.executeUpdate();</span>
-	}
+<span class="fc" id="L12">public class ProductDao extends AbstractDao {</span>
+	private static final String select_id = &quot;select p from ProductPojo p where id=:id&quot;;
+	private static final String select_all = &quot;select p from ProductPojo p&quot;;
+	private static final String check_barcode=&quot;select p from ProductPojo p where barcode=:barcode&quot;;
+	private static final String product_exist=&quot;select p from ProductPojo p where brandId=:brandId and name=:name&quot;;
 	
 	
 	public ProductPojo select(int id) {
-<span class="nc" id="L46">		TypedQuery&lt;ProductPojo&gt; query = getQuery(select_id, ProductPojo.class);</span>
-<span class="nc" id="L47">		query.setParameter(&quot;id&quot;, id);</span>
-<span class="nc" id="L48">		return getSingle(query);</span>
+<span class="fc" id="L20">		TypedQuery&lt;ProductPojo&gt; query = getQuery(select_id, ProductPojo.class);</span>
+<span class="fc" id="L21">		query.setParameter(&quot;id&quot;, id);</span>
+<span class="fc" id="L22">		return getSingle(query);</span>
 	}
 	
 	public List&lt;ProductPojo&gt; selectAll() {
-<span class="nc" id="L52">		TypedQuery&lt;ProductPojo&gt; query = getQuery(select_all, ProductPojo.class);</span>
-<span class="nc" id="L53">		return query.getResultList();</span>
-	}
-	
-	public List&lt;ProductPojo&gt; selectAllProducts(int brandId) {
-<span class="nc" id="L57">		TypedQuery&lt;ProductPojo&gt; query = getQuery(select_all_products, ProductPojo.class);</span>
-<span class="nc" id="L58">		query.setParameter(&quot;brandId&quot;, brandId);</span>
-<span class="nc" id="L59">		return query.getResultList();</span>
+<span class="fc" id="L26">		TypedQuery&lt;ProductPojo&gt; query = getQuery(select_all, ProductPojo.class);</span>
+<span class="fc" id="L27">		return query.getResultList();</span>
 	}
 	
 	public ProductPojo barcodeExist(String barcode) {
-<span class="nc" id="L63">		TypedQuery&lt;ProductPojo&gt; query = getQuery(check_barcode, ProductPojo.class);</span>
-<span class="nc" id="L64">		query.setParameter(&quot;barcode&quot;, barcode);</span>
-<span class="nc" id="L65">		return getSingle(query);</span>
+<span class="fc" id="L31">		TypedQuery&lt;ProductPojo&gt; query = getQuery(check_barcode, ProductPojo.class);</span>
+<span class="fc" id="L32">		query.setParameter(&quot;barcode&quot;, barcode);</span>
+<span class="fc" id="L33">		return getSingle(query);</span>
 	}
 	
 	public ProductPojo productExist(int brandId,String name) {
-<span class="nc" id="L69">		TypedQuery&lt;ProductPojo&gt; query = getQuery(product_exist, ProductPojo.class);</span>
-<span class="nc" id="L70">		query.setParameter(&quot;brandId&quot;, brandId);</span>
-<span class="nc" id="L71">		query.setParameter(&quot;name&quot;, name);</span>
-<span class="nc" id="L72">		return getSingle(query);</span>
+<span class="fc" id="L37">		TypedQuery&lt;ProductPojo&gt; query = getQuery(product_exist, ProductPojo.class);</span>
+<span class="fc" id="L38">		query.setParameter(&quot;brandId&quot;, brandId);</span>
+<span class="fc" id="L39">		query.setParameter(&quot;name&quot;, name);</span>
+<span class="fc" id="L40">		return getSingle(query);</span>
 	}
-	
-	public void update(ProductPojo p) {
-<span class="nc" id="L76">	}</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

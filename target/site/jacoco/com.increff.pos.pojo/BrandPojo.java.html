@@ -5,38 +5,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
-<span class="fc" id="L9">public class BrandPojo {</span>
+<span class="pc" id="L12">@Getter @Setter</span>
+<span class="fc" id="L13">public class BrandPojo {</span>
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String brand;
-	private String category;
-
-	public int getId() {
-<span class="nc" id="L18">		return id;</span>
-	}
-
-	public void setId(int id) {
-<span class="nc" id="L22">		this.id = id;</span>
-<span class="nc" id="L23">	}</span>
-
-	public String getBrand() {
-<span class="nc" id="L26">		return brand;</span>
-	}
-
-	public void setBrand(String brand) {
-<span class="nc" id="L30">		this.brand = brand;</span>
-<span class="nc" id="L31">	}</span>
-
-	public String getCategory() {
-<span class="nc" id="L34">		return category;</span>
-	}
-
-	public void setCategory(String category) {
-<span class="nc" id="L38">		this.category = category;</span>
-<span class="nc" id="L39">	}</span>
+<span class="fc" id="L17">	 private  int id;</span>
+<span class="fc" id="L18">	 private String brand;</span>
+<span class="fc" id="L19">	 private String category;</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

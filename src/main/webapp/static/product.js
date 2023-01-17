@@ -1,6 +1,6 @@
 var editProductId=null;
 
-
+//URL FUNCTIONS
 function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
@@ -12,7 +12,7 @@ function getBrandUrl(){
 }
 
 
-//BUTTON ACTIONS
+//API CALLING FUNCTIONS
 function addProduct(event){
 	//Set the values to update
 	var $form = $("#product-form");
@@ -36,30 +36,6 @@ function addProduct(event){
 	});
 
 	return false;
-}
-
-function addBrandCategoryDropdown(data){
-	let mapBrand = new Map();
-	let mapCategory = new Map();
-	var brandSelect = document.getElementById("brands");
-	var categorySelect = document.getElementById("category");
-	for(var i in data){
-		var e = data[i];
-		if(mapBrand.get(e.brand)==undefined){
-			mapBrand.set(e.brand,1);
-			var brandOption = document.createElement('option');
-			brandOption.text = brandOption.value = e.brand;
-			brandSelect.add(brandOption, 1);
-		}
-        
-		if(mapCategory.get(e.category)==undefined){
-			mapCategory.set(e.category,1);
-			var categoryOption = document.createElement('option');
-        	categoryOption.text = categoryOption.value = e.category;
-        	categorySelect.add(categoryOption, 1);
-		}
-        
-	}
 }
 
 function getBrandList(){
@@ -261,7 +237,30 @@ function toggleAddProduct(id){
 	return;
 }
 
-
+//UTIL METHODS
+function addBrandCategoryDropdown(data){
+	let mapBrand = new Map();
+	let mapCategory = new Map();
+	var brandSelect = document.getElementById("brands");
+	var categorySelect = document.getElementById("category");
+	for(var i in data){
+		var e = data[i];
+		if(mapBrand.get(e.brand)==undefined){
+			mapBrand.set(e.brand,1);
+			var brandOption = document.createElement('option');
+			brandOption.text = brandOption.value = e.brand;
+			brandSelect.add(brandOption, 1);
+		}
+        
+		if(mapCategory.get(e.category)==undefined){
+			mapCategory.set(e.category,1);
+			var categoryOption = document.createElement('option');
+        	categoryOption.text = categoryOption.value = e.category;
+        	categorySelect.add(categoryOption, 1);
+		}
+        
+	}
+}
 
 
 //INITIALIZATION CODE

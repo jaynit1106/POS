@@ -1,4 +1,9 @@
 
+//INITIALIZING VARIABLES
+var editBrandId=null;
+
+
+//URL FUNCTIONS 
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
@@ -29,17 +34,6 @@ function addBrand(event){
 	return false;
 }
 
-var editBrandId=null;
-function displayUpdateDialog(ids){
-	// data = JSON.parse(data);
-	document.getElementById("brand-edit-form").reset();
-	$('#edit-brand-modal').modal('toggle');
-	document.getElementById('editBrand').value = brandData[ids].brand;
-	document.getElementById('editCategory').value = brandData[ids].category;
-	//Get the ID
-	window.editBrandId = brandData[ids].id;	
-	return false;
-}
 
 function updateBrand(){
 	var url = getBrandUrl() + "/" + editBrandId;
@@ -160,6 +154,18 @@ function paginate() {
 
 //UI DISPLAY METHODS
 var brandData = [];
+
+function displayUpdateDialog(ids){
+	// data = JSON.parse(data);
+	document.getElementById("brand-edit-form").reset();
+	$('#edit-brand-modal').modal('toggle');
+	document.getElementById('editBrand').value = brandData[ids].brand;
+	document.getElementById('editCategory').value = brandData[ids].category;
+	//Get the ID
+	window.editBrandId = brandData[ids].id;	
+	return false;
+}
+
 function displayBrandList(data){
 	// brandData=data;
 	$('#brand-table').DataTable().destroy();
@@ -215,10 +221,6 @@ function displayBrandData(){
  	resetUploadDialog(); 	
 	$('#upload-brand-modal').modal('toggle');
 }
-
-
-
-
 
 
 //INITIALIZATION CODE

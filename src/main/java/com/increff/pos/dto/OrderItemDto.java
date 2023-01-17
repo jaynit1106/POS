@@ -55,6 +55,7 @@ public class OrderItemDto {
 		items = orderItemService.getOrderItemByOrderId(orderId);
 		List<OrderItemData> list = new ArrayList<>();
 		double total = 0;
+		Integer totalItems = 0;
 		for(OrderItemPojo p : items) {
 			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
 			ProductPojo product = productService.get(p.getProductId());
@@ -62,12 +63,13 @@ public class OrderItemDto {
 			item.setName(product.getName());
 			total += (item.getSellingPrice()*item.getQuantity());
 			list.add(item);
+			totalItems+=p.getQuantity();
 		}
 		generateInvoiceXML.createXml(list);
 		generateInvoicePdf.createPdf("Invoice "+ orderId);
 		
 		SchedulerForm sform = new SchedulerForm();
-		sform.setItems_count(list.size());
+		sform.setItems_count(totalItems);
 		sform.setRevenue(total);
 		schedulerDto.add(sform);
 		

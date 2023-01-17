@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-spring</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">ProductDto.java</span></div><h1>ProductDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.increff.pos.model.ProductData;
+import com.increff.pos.model.ProductForm;
+import com.increff.pos.pojo.BrandPojo;
+import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.service.ApiException;
+import com.increff.pos.service.BrandService;
+import com.increff.pos.service.ProductService;
+import com.increff.pos.util.ConvertUtil;
+import com.increff.pos.util.StringUtil;
+
+@Component
+<span class="fc" id="L23">public class ProductDto {</span>
+<span class="fc" id="L24">	@Autowired</span>
+	private final ProductService productService = new ProductService();
+	
+<span class="fc" id="L27">	@Autowired</span>
+	private final BrandService brandService = new BrandService();
+	
+	public void add(ProductForm form) throws ApiException {
+<span class="fc" id="L31">		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);</span>
+<span class="fc" id="L32">		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+		
+<span class="fc bfc" id="L34" title="All 2 branches covered.">		if(form.getBarcode().length()!=8)throw new ApiException(&quot;Barcode Should be of 8 characters&quot;);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">		if(form.getMrp()&lt;0)throw new ApiException(&quot;MRP should be positive&quot;);</span>
+		
+<span class="fc" id="L37">		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		if(Objects.isNull(brand))throw new ApiException(&quot;Brand and Category does not exist&quot;);</span>
+		
+<span class="fc" id="L40">		p.setBrandId(brand.getId());</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		if(!Objects.isNull(productService.productExist(p.getBrandId(), p.getName())))throw new ApiException(&quot;Product already exists&quot;);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">		if(!Objects.isNull(productService.getProductByBarcode(form.getBarcode())))throw new ApiException(&quot;Barcode already exists&quot;);</span>
+		
+		
+<span class="nc" id="L45">		productService.add(p);</span>
+<span class="nc" id="L46">	}</span>
+	
+	public ProductData get(int id) throws ApiException {
+<span class="fc" id="L49">		ProductPojo product = productService.get(id);</span>
+<span class="fc" id="L50">		ProductData data = ConvertUtil.objectMapper(product, ProductData.class);</span>
+<span class="fc" id="L51">		data.setMrp(StringUtil.convertMrp(product.getMrp()));</span>
+		
+<span class="fc" id="L53">		BrandPojo brand = brandService.get(product.getBrandId());</span>
+<span class="fc" id="L54">		data.setCategory(brand.getCategory());</span>
+<span class="fc" id="L55">		data.setBrand(brand.getBrand());</span>
+<span class="fc" id="L56">		return data;</span>
+	}
+	
+	public List&lt;ProductData&gt; getAll() throws ApiException{
+<span class="fc" id="L60">		List&lt;ProductPojo&gt; list = productService.getAll();</span>
+<span class="fc" id="L61">		List&lt;ProductData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		for (ProductPojo p : list) {</span>
+			
+<span class="fc" id="L64">			ProductData data = ConvertUtil.objectMapper(p, ProductData.class);</span>
+<span class="fc" id="L65">			data.setMrp(StringUtil.convertMrp(p.getMrp()));</span>
+			
+<span class="fc" id="L67">			BrandPojo brand = brandService.get(p.getBrandId());</span>
+<span class="fc" id="L68">			data.setCategory(brand.getCategory());</span>
+<span class="fc" id="L69">			data.setBrand(brand.getBrand());</span>
+<span class="fc" id="L70">			list2.add(data);</span>
+<span class="fc" id="L71">		}</span>
+<span class="fc" id="L72">		return list2;</span>
+	}
+	
+	public void update(int id,ProductForm form) throws ApiException {
+<span class="fc" id="L76">		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);</span>
+<span class="fc" id="L77">		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+		
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">		if(form.getBarcode().length()!=8)throw new ApiException(&quot;Barcode Should be of 8 characters&quot;);</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">		if(form.getMrp()&lt;0)throw new ApiException(&quot;MRP should be positive&quot;);</span>
+		
+<span class="fc" id="L82">		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">		if(Objects.isNull(brand))throw new ApiException(&quot;Brand and Category does not exist&quot;);</span>
+<span class="fc" id="L84">		p.setBrandId(brand.getId());</span>
+
+<span class="fc" id="L86">		ProductPojo prod = productService.productExist(p.getBrandId(), p.getName());</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">		if(!Objects.isNull(prod)){</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">			if(!Objects.equals(prod.getId(),id))throw new ApiException(&quot;Product already exists&quot;);</span>
+		}
+
+<span class="fc" id="L91">		ProductPojo product = productService.getProductByBarcode(form.getBarcode());</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">		if(!Objects.isNull(product)) {</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">			if(!Objects.equals(product.getId(),id))throw new ApiException(&quot;Barcode already exists&quot;);</span>
+		}
+		
+<span class="fc" id="L96">		productService.update(id,p);</span>
+<span class="fc" id="L97">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

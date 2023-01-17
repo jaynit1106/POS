@@ -4,7 +4,11 @@ import java.time.Instant;
 
 <span class="nc" id="L5">public class TimestampUtil {</span>
 	public static String getTimestamp() {
-<span class="nc" id="L7">		return Instant.now().toString();</span>
+<span class="nc" id="L7">		String ts = Instant.now().toString();</span>
+<span class="nc" id="L8">		ts=ts.replace('T', ' ');</span>
+<span class="nc" id="L9">		ts=ts.replace('Z',' ');</span>
+<span class="nc" id="L10">		ts = ts.substring(0, 16);</span>
+<span class="nc" id="L11">		return ts;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

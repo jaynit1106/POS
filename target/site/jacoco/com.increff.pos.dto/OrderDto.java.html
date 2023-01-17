@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-spring</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">OrderDto.java</span></div><h1>OrderDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.increff.pos.model.OrderData;
+import com.increff.pos.pojo.OrderPojo;
+import com.increff.pos.service.ApiException;
+import com.increff.pos.service.OrderService;
+import com.increff.pos.util.ConvertUtil;
+import com.increff.pos.util.TimestampUtil;
+
+@Component
+<span class="fc" id="L22">public class OrderDto {</span>
+
+<span class="fc" id="L24">	@Autowired</span>
+	private final OrderService orderService = new OrderService();
+	
+	public OrderData add() throws ApiException {
+<span class="nc" id="L28">		OrderPojo p = new OrderPojo();</span>
+<span class="nc" id="L29">		p.setTimestamp(TimestampUtil.getTimestamp());</span>
+<span class="nc" id="L30">		orderService.add(p);</span>
+<span class="nc" id="L31">		OrderData data = new OrderData();</span>
+<span class="nc" id="L32">		data.setId(p.getId());</span>
+<span class="nc" id="L33">		data.setTimestamp(p.getTimestamp());</span>
+<span class="nc" id="L34">		return data;</span>
+	}
+	
+	public OrderData get(@PathVariable int id) throws ApiException {
+<span class="nc" id="L38">		return ConvertUtil.objectMapper(orderService.get(id),OrderData.class);</span>
+	}
+	
+	public List&lt;OrderData&gt; getAll() {
+<span class="fc" id="L42">		List&lt;OrderPojo&gt; list = orderService.getAll();</span>
+<span class="fc" id="L43">		List&lt;OrderData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		for (OrderPojo p : list) {</span>
+<span class="fc" id="L45">			list2.add(ConvertUtil.objectMapper(p, OrderData.class));</span>
+<span class="fc" id="L46">		}</span>
+<span class="fc" id="L47">		Collections.reverse(list2);</span>
+<span class="fc" id="L48">		return list2;</span>
+	}
+	
+	public void downloadPdf(int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
+<span class="nc" id="L52">		orderService.downloadPdf(id, request, response);	</span>
+<span class="nc" id="L53">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

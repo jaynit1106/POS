@@ -36,7 +36,7 @@ public class InventoryDto {
 		p.setId(product.getId());
 		
 		InventoryPojo inventory = inventoryService.get(p.getId()); 
-		if(Objects.isNull(inventory)) {
+		if(!Objects.isNull(inventory)) {
 			inventory.setQuantity(inventory.getQuantity()+form.getQuantity());
 			inventoryService.update(inventory.getId(), inventory);
 			return;

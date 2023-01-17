@@ -1,50 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderItemDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-spring</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dao</a> &gt; <span class="el_source">OrderItemDao.java</span></div><h1>OrderItemDao.java</h1><pre class="source lang-java linenums">package com.increff.pos.dao;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
 import com.increff.pos.pojo.OrderItemPojo;
 
 @Repository
-<span class="fc" id="L15">public class OrderItemDao extends AbstractDao {</span>
-
-<span class="fc" id="L17">	private static String delete_id = &quot;delete from OrderItemPojo p where id=:id&quot;;</span>
-<span class="fc" id="L18">	private static String select_id = &quot;select p from OrderItemPojo p where id=:id&quot;;</span>
-<span class="fc" id="L19">	private static String select_all = &quot;select p from OrderItemPojo p&quot;;</span>
+<span class="fc" id="L11">public class OrderItemDao extends AbstractDao {</span>
 	
-	@PersistenceContext
-	private EntityManager em;
+<span class="fc" id="L13">	private static String select_id = &quot;select p from OrderItemPojo p where id=:id&quot;;</span>
+<span class="fc" id="L14">	private static String select_all = &quot;select p from OrderItemPojo p&quot;;</span>
+<span class="fc" id="L15">	private static String select_by_order_id = &quot;select p from OrderItemPojo p where orderid=:orderId&quot;;</span>
 
-	@Transactional
-	public void insert(OrderItemPojo p) {
-<span class="nc" id="L26">		em.persist(p);</span>
-<span class="nc" id="L27">	}</span>
-
-	public int delete(int id) {
-<span class="nc" id="L30">		Query query = em.createQuery(delete_id);</span>
-<span class="nc" id="L31">		query.setParameter(&quot;id&quot;, id);</span>
-<span class="nc" id="L32">		return query.executeUpdate();</span>
-	}
-
+	
 	public OrderItemPojo select(int id) {
-<span class="nc" id="L36">		TypedQuery&lt;OrderItemPojo&gt; query = getQuery(select_id, OrderItemPojo.class);</span>
-<span class="nc" id="L37">		query.setParameter(&quot;id&quot;, id);</span>
-<span class="nc" id="L38">		return getSingle(query);</span>
+<span class="nc" id="L19">		TypedQuery&lt;OrderItemPojo&gt; query = getQuery(select_id, OrderItemPojo.class);</span>
+<span class="nc" id="L20">		query.setParameter(&quot;id&quot;, id);</span>
+<span class="nc" id="L21">		return getSingle(query);</span>
 	}
 
 	public List&lt;OrderItemPojo&gt; selectAll() {
-<span class="nc" id="L42">		TypedQuery&lt;OrderItemPojo&gt; query = getQuery(select_all, OrderItemPojo.class);</span>
-<span class="nc" id="L43">		return query.getResultList();</span>
+<span class="fc" id="L25">		TypedQuery&lt;OrderItemPojo&gt; query = getQuery(select_all, OrderItemPojo.class);</span>
+<span class="fc" id="L26">		return query.getResultList();</span>
+	}
+	
+	public List&lt;OrderItemPojo&gt; selectByOrderId(int orderId) {
+<span class="nc" id="L30">		TypedQuery&lt;OrderItemPojo&gt; query = getQuery(select_by_order_id, OrderItemPojo.class);</span>
+<span class="nc" id="L31">		query.setParameter(&quot;orderId&quot;, orderId);</span>
+<span class="nc" id="L32">		return query.getResultList();</span>
 	}
 
 	public void update(OrderItemPojo p) {
-<span class="nc" id="L47">	}</span>
+<span class="nc" id="L36">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

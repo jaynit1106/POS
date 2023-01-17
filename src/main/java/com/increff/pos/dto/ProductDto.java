@@ -38,8 +38,8 @@ public class ProductDto {
 		if(Objects.isNull(brand))throw new ApiException("Brand and Category does not exist");
 		
 		p.setBrandId(brand.getId());
-		if(Objects.isNull(productService.productExist(p.getBrandId(), p.getName())))throw new ApiException("Product already exists");
-		if(Objects.isNull(productService.getProductByBarcode(form.getBarcode())))throw new ApiException("Barcode already exists");
+		if(!Objects.isNull(productService.productExist(p.getBrandId(), p.getName())))throw new ApiException("Product already exists");
+		if(!Objects.isNull(productService.getProductByBarcode(form.getBarcode())))throw new ApiException("Barcode already exists");
 		
 		
 		productService.add(p);
@@ -84,13 +84,13 @@ public class ProductDto {
 		p.setBrandId(brand.getId());
 
 		ProductPojo prod = productService.productExist(p.getBrandId(), p.getName());
-		if(Objects.isNull(prod)){
-			if(!Objects.equals(prod.getBarcode(), form.getBarcode()))throw new ApiException("Product already exists");
+		if(!Objects.isNull(prod)){
+			if(!Objects.equals(prod.getId(),id))throw new ApiException("Product already exists");
 		}
 
 		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
-		if(Objects.isNull(product)) {
-			if(product.getId()!=id)throw new ApiException("Barcode already exists");
+		if(!Objects.isNull(product)) {
+			if(!Objects.equals(product.getId(),id))throw new ApiException("Barcode already exists");
 		}
 		
 		productService.update(id,p);

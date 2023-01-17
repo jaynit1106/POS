@@ -1,18 +1,24 @@
 var editProductId=null;
 
-
+//URL FUNCTIONS
 function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
 
-//BUTTON ACTIONS
+function getBrandUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/brand";
+}
+
+
+//API CALLING FUNCTIONS
 function addProduct(event){
 	//Set the values to update
 	var $form = $("#product-form");
 	var json = toJson($form);
 	var url = getProductUrl();
-
+	
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -21,12 +27,29 @@ function addProduct(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		getProductList();    
+	   		getProductList();
+	   		swal("Hurray", "Product added successfully", "success");  
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
 	});
 
 	return false;
+}
+
+function getBrandList(){
+	var url = getBrandUrl();
+	$.ajax({
+	   url: url,
+	   type: 'GET',
+	   success: function(data) {
+			addBrandCategoryDropdown(data);   		   
+	   },
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
+	});
 }
 
 function getProductList(){
@@ -37,20 +60,9 @@ function getProductList(){
 	   success: function(data) {
 	   		displayProductList(data);   
 	   },
-	   error: handleAjaxError
-	});
-}
-
-function deleteProduct(id){
-	var url = getProductUrl() + "/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getProductList();    
-	   },
-	   error: handleAjaxError
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
 	});
 }
 
@@ -58,8 +70,6 @@ function updateProduct(){
 	var url = getProductUrl() + "/" + editProductId;
 	var $form = $("#product-edit-form");
 	var json = toJson($form);
-	console.log(json);
-	console.log(url);
 	
 	$.ajax({
 	   url: url,
@@ -69,10 +79,13 @@ function updateProduct(){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		$('#edit-product-modal').modal('toggle');
-	   		getProductList();   
+	   		getProductList();
+	   		swal("Hurray", "Product updated successfully", "success");
+			$('#edit-product-modal').modal('toggle');
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
 	});
 	return false;
 }
@@ -99,18 +112,20 @@ function uploadRows(){
 	
 	//To avoid large files
 	if(fileData.length>5000){
-		alert("Size too large");
+		swal("Oops!","File size too large", "error");
 		return;
 	}
 	
 	//To avoid empty files
 	if(fileData.length==0){
-		alert("File is empty");
+		swal("Oops!","File is empty", "error");
 		return;
 	}
 	
 	//If everything processed then return
 	if(processCount==fileData.length){
+		getProductList();
+		swal("Hurray", "Upload successfull", "success");
 		return;
 	}
 	
@@ -146,7 +161,38 @@ function downloadErrors(){
 }
 
 
+// PAGINATION METHODS
+function paginate() {
+	$('#product-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
+}
+
 //UI DISPLAY METHODS
+productData=[]
+function displayProductList(data){
+	$('#product-table').DataTable().destroy();
+	var $tbody = $('#product-table').find('tbody');
+	$tbody.empty();
+	productData=[];
+	var counter=1;
+	for(var i in data){
+		var e = data[i];
+		let id = counter-1;
+		productData.push(e);
+		var buttonHtml = '<button class="btn btn-dark" onclick="toggleEditProduct(' + id + ')">edit</button>';
+		var row = '<tr>'
+		+ '<td style="text-align:center">' + counter + '</td>'
+		+ '<td style="text-align:center">' + e.brand + '</td>'
+		+ '<td style="text-align:center">'  + e.category + '</td>'
+		+ '<td style="text-align:center">'  + e.name + '</td>'
+		+ '<td style="text-align:right">'  + e.mrp + '</td>'
+		+ '<td style="text-align:center">' + buttonHtml + '</td>'
+		+ '</tr>';
+        $tbody.append(row);
+        counter++;
+	}
+	paginate();
+}
 
 function resetUploadDialog(){
 	//Reset file name
@@ -170,12 +216,18 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#productFile');
 	var fileName = $file.val();
-	$('#productFileName').html(fileName);
+	$('#productFileName').html(String(fileName).split(/(\\|\/)/g).pop());
 }
 
-function toggleEditProduct(id){
+function toggleEditProduct(ids){
 	$('#edit-product-modal').modal('toggle');
-	window.editProductId=id;
+	document.getElementById('product-edit-form').reset();
+	document.getElementById('editBrand').value = productData[ids].brand;
+	document.getElementById('editCategory').value = productData[ids].category;
+	document.getElementById('editName').value = productData[ids].name;
+	document.getElementById('editBarcode').value = productData[ids].barcode;
+	document.getElementById('editMrp').value = productData[ids].mrp;
+	window.editProductId=productData[ids].id;
 	return;
 }
 
@@ -185,22 +237,28 @@ function toggleAddProduct(id){
 	return;
 }
 
-function displayProductList(data){
-	console.log('Printing user data');
-	var $tbody = $('#product-table').find('tbody');
-	$tbody.empty();
-	
+//UTIL METHODS
+function addBrandCategoryDropdown(data){
+	let mapBrand = new Map();
+	let mapCategory = new Map();
+	var brandSelect = document.getElementById("brands");
+	var categorySelect = document.getElementById("category");
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteProduct(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="toggleEditProduct(' + e.id + ')">edit</button>'
-		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.name + '</td>'
-		+ '<td>' + e.mrp + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
+		if(mapBrand.get(e.brand)==undefined){
+			mapBrand.set(e.brand,1);
+			var brandOption = document.createElement('option');
+			brandOption.text = brandOption.value = e.brand;
+			brandSelect.add(brandOption, 1);
+		}
+        
+		if(mapCategory.get(e.category)==undefined){
+			mapCategory.set(e.category,1);
+			var categoryOption = document.createElement('option');
+        	categoryOption.text = categoryOption.value = e.category;
+        	categorySelect.add(categoryOption, 1);
+		}
+        
 	}
 }
 
@@ -208,7 +266,6 @@ function displayProductList(data){
 //INITIALIZATION CODE
 function init(){
 	$('#add-product').click(addProduct);
-	$('#refresh-data').click(getProductList);
 	$('#update-product').click(updateProduct);
 	$('#upload-data').click(toggleAddProduct);
 	$('#process-data').click(processData);
@@ -219,4 +276,4 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getProductList);
-
+$(document).ready(getBrandList);

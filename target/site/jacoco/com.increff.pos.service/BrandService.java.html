@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BrandService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-spring</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.service</a> &gt; <span class="el_source">BrandService.java</span></div><h1>BrandService.java</h1><pre class="source lang-java linenums">package com.increff.pos.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -8,86 +9,75 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.BrandDao;
-import com.increff.pos.dao.InventoryDao;
-import com.increff.pos.dao.ProductDao;
 import com.increff.pos.pojo.BrandPojo;
-import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.StringUtil;
 
 
 @Service
-<span class="fc" id="L19">public class BrandService {</span>
+<span class="fc" id="L17">public class BrandService {</span>
 
-	@Autowired
-	private BrandDao dao;
-	
-	@Autowired
-	private ProductDao productDao;
-	
-	@Autowired
-	private InventoryDao inventoryDao;
+<span class="fc" id="L19">	@Autowired</span>
+	private final BrandDao dao = new BrandDao();
+
 
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandPojo p) throws ApiException {
-<span class="nc" id="L32">		normalize(p);</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">		if(StringUtil.isEmpty(p.getBrand())) {</span>
-<span class="nc" id="L34">			throw new ApiException(&quot;Brand cannot be empty&quot;);</span>
+<span class="nc" id="L25">		normalize(p);</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">		if(StringUtil.isEmpty(p.getBrand())) {</span>
+<span class="nc" id="L27">			throw new ApiException(&quot;Brand cannot be empty&quot;);</span>
 		}
-<span class="nc bnc" id="L36" title="All 2 branches missed.">		if(StringUtil.isEmpty(p.getCategory())) {</span>
-<span class="nc" id="L37">			throw new ApiException(&quot;Category cannot be empty&quot;);</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">		if(StringUtil.isEmpty(p.getCategory())) {</span>
+<span class="nc" id="L30">			throw new ApiException(&quot;Category cannot be empty&quot;);</span>
 		}
-<span class="nc" id="L39">		dao.insert(p);</span>
-<span class="nc" id="L40">	}</span>
-
-	@Transactional
-	public void delete(int id) throws ApiException{
-<span class="nc" id="L44">		List&lt;ProductPojo&gt; products = productDao.selectAllProducts(id);</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">		for(ProductPojo p : products) {</span>
-<span class="nc" id="L46">			inventoryDao.delete(p.getId());</span>
-<span class="nc" id="L47">		}</span>
-<span class="nc" id="L48">		productDao.deleteProducts(id);</span>
-<span class="nc" id="L49">		dao.delete(id);</span>
-<span class="nc" id="L50">	}</span>
+<span class="nc" id="L32">		dao.insert(p);</span>
+<span class="nc" id="L33">	}</span>
 
 	@Transactional(rollbackOn = ApiException.class)
 	public BrandPojo get(int id) throws ApiException {
-<span class="nc" id="L54">		return getCheck(id);</span>
+<span class="fc" id="L37">		return getCheck(id);</span>
 	}
 
 	@Transactional
 	public List&lt;BrandPojo&gt; getAll() {
-<span class="nc" id="L59">		return dao.selectAll();</span>
+<span class="fc" id="L42">		return dao.selectAll();</span>
 	}
 
 	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, BrandPojo p) throws ApiException {
-<span class="nc" id="L64">		normalize(p);</span>
-<span class="nc" id="L65">		BrandPojo ex = getCheck(id);</span>
-<span class="nc" id="L66">		ex. setCategory(p.getCategory());</span>
-<span class="nc" id="L67">		ex. setBrand(p.getBrand());</span>
-<span class="nc" id="L68">		dao.update(ex);</span>
-<span class="nc" id="L69">	}</span>
+<span class="fc" id="L47">		normalize(p);</span>
+<span class="fc" id="L48">		BrandPojo ex = getCheck(id);</span>
+<span class="fc" id="L49">		ex. setCategory(p.getCategory());</span>
+<span class="fc" id="L50">		ex. setBrand(p.getBrand());</span>
+<span class="fc" id="L51">		dao.update(ex);</span>
+<span class="fc" id="L52">	}</span>
 
 	@Transactional
 	public BrandPojo getCheck(int id) throws ApiException {
-<span class="nc" id="L73">		BrandPojo p = dao.select(id);</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">		if (p == null) {</span>
-<span class="nc" id="L75">			throw new ApiException(&quot;Brand with given ID does not exit, id: &quot; + id);</span>
+<span class="fc" id="L56">		BrandPojo p = dao.select(id);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">		if (Objects.isNull(p)) {</span>
+<span class="nc" id="L58">			throw new ApiException(&quot;Brand with given ID does not exit, id: &quot; + id);</span>
 		}
-<span class="nc" id="L77">		return p;</span>
+<span class="fc" id="L60">		return p;</span>
 	}
 	
 	@Transactional
-	public boolean checkRepeat(String brand,String category) throws ApiException {
-<span class="nc" id="L82">		BrandPojo p = dao.checkRepeat(brand, category);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">		if(p==null)return true;</span>
-<span class="nc" id="L84">		throw new ApiException(&quot;Brand and Category already exists&quot;);</span>
-		
+	public BrandPojo getBrandId(String brand,String category){
+<span class="fc" id="L65">		return dao.checkRepeat(brand, category);</span>
+	}
+	
+	@Transactional
+	public List&lt;BrandPojo&gt; getByBrand(String brand){
+<span class="nc" id="L70">		return dao.selectByBrand(brand);</span>
+	}
+	
+	@Transactional
+	public List&lt;BrandPojo&gt; getByCategory(String category){
+<span class="nc" id="L75">		return dao.selectByBrand(category);</span>
 	}
 
 	protected static void normalize(BrandPojo p) {
-<span class="nc" id="L89">		p. setBrand(StringUtil.toLowerCase(p. getBrand()));</span>
-<span class="nc" id="L90">		p. setCategory(StringUtil.toLowerCase(p.getCategory()));</span>
-<span class="nc" id="L91">	}</span>
+<span class="fc" id="L79">		p. setBrand(StringUtil.toLowerCase(p. getBrand()));</span>
+<span class="fc" id="L80">		p. setCategory(StringUtil.toLowerCase(p.getCategory()));</span>
+<span class="fc" id="L81">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

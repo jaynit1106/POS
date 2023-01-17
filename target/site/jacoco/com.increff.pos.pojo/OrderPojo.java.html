@@ -2,6 +2,9 @@
 
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,27 +12,14 @@ import javax.persistence.Id;
 
 
 @Entity
-<span class="fc" id="L12">public class OrderPojo {</span>
+<span class="nc" id="L15">@Getter @Setter</span>
+<span class="fc" id="L16">public class OrderPojo {</span>
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String timestamp;
-	
-	
-	public int getId() {
-<span class="nc" id="L21">		return id;</span>
-	}
-	public void setId(int id) {
-<span class="nc" id="L24">		this.id = id;</span>
-<span class="nc" id="L25">	}</span>
-	public String getTimestamp() {
-<span class="nc" id="L27">		return timestamp;</span>
-	}
-	public void setTimestamp(String timestamp) {
-<span class="nc" id="L30">		this.timestamp = timestamp;</span>
-<span class="nc" id="L31">	}</span>
-	
+<span class="fc" id="L20">	private int id;</span>
+<span class="fc" id="L21">	private String timestamp;</span>
+
 	
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

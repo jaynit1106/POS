@@ -1,4 +1,9 @@
 
+//INITIALIZING VARIABLES
+var editBrandId=null;
+
+
+//URL FUNCTIONS 
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
@@ -18,21 +23,17 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		getBrandList();  
+	   		getBrandList();
+	   		swal("Hurray", "Brand added successfully", "success");  
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
 	});
 
 	return false;
 }
 
-var editBrandId=null;
-function displayUpdateDialog(id){
-	$('#edit-brand-modal').modal('toggle');
-	//Get the ID
-	window.editBrandId = id	
-	return false;
-}
 
 function updateBrand(){
 	var url = getBrandUrl() + "/" + editBrandId;
@@ -47,10 +48,13 @@ function updateBrand(){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+	   		swal("Hurray", "Brand updated successfully", "success");
 	   		$('#edit-brand-modal').modal('toggle');
 	   		getBrandList();   
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
 	});
 	return false;
 }
@@ -64,20 +68,9 @@ function getBrandList(){
 	   success: function(data) {
 	   		displayBrandList(data);  
 	   },
-	   error: handleAjaxError
-	});
-}
-
-function deleteBrand(id){
-	var url = getBrandUrl() + "/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getBrandList();  
-	   },
-	   error: handleAjaxError
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
 	});
 }
 
@@ -115,6 +108,8 @@ function uploadRows(){
 	
 	//If everything processed then return
 	if(processCount==fileData.length){
+		getBrandList();
+	   	swal("Hurray", "Brand upload successfull", "success");
 		return;
 	}
 	
@@ -149,24 +144,53 @@ function downloadErrors(){
 	writeFileData(errorData);
 }
 
+// PAGINATION METHODS
+
+function paginate() {
+	$('#brand-table').DataTable();
+	
+	// $('.dataTables_length').addClass('bs-select');
+}
+
 //UI DISPLAY METHODS
+var brandData = [];
+
+function displayUpdateDialog(ids){
+	// data = JSON.parse(data);
+	document.getElementById("brand-edit-form").reset();
+	$('#edit-brand-modal').modal('toggle');
+	document.getElementById('editBrand').value = brandData[ids].brand;
+	document.getElementById('editCategory').value = brandData[ids].category;
+	//Get the ID
+	window.editBrandId = brandData[ids].id;	
+	return false;
+}
 
 function displayBrandList(data){
+	// brandData=data;
+	$('#brand-table').DataTable().destroy();
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
+	var counter=1;
+	brandData=[];
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteBrand(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayUpdateDialog(' + e.id + ')">edit</button>'
+		brandData.push(e);
+		let id = counter-1;
+		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id +')">edit</button>';
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
+		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>'  + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
+        counter++;
 	}
+	paginate();
+	
 }
+
 function resetUploadDialog(){
 	//Reset file name
 	var $file = $('#brandFile');
@@ -189,7 +213,8 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#brandFile');
 	var fileName = $file.val();
-	$('#brandFileName').html(fileName);
+
+	$('#brandFileName').html(String(fileName).split(/(\\|\/)/g).pop());
 }
 
 function displayBrandData(){
@@ -197,11 +222,11 @@ function displayBrandData(){
 	$('#upload-brand-modal').modal('toggle');
 }
 
+
 //INITIALIZATION CODE
 function init(){
 	$('#add-brand').click(addBrand);
 	$('#update-brand').click(updateBrand);
-	$('#refresh-data').click(getBrandList);
 	$('#upload-data').click(displayBrandData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
