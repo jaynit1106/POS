@@ -5,10 +5,8 @@ package com.increff.pos.pojo;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.Instant;
 
 
 @Entity
@@ -18,7 +16,12 @@ public class OrderPojo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String timestamp;
+	private Instant timestamp;
 
+	@PrePersist
+	private void onCreate(){
+		Instant it = Instant.now();
+		timestamp = it;
+	}
 	
 }

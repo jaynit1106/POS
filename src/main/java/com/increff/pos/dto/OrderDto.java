@@ -1,8 +1,11 @@
 package com.increff.pos.dto;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,23 +29,29 @@ public class OrderDto {
 	
 	public OrderData add() throws ApiException {
 		OrderPojo p = new OrderPojo();
-		p.setTimestamp(TimestampUtil.getTimestamp());
 		orderService.add(p);
 		OrderData data = new OrderData();
 		data.setId(p.getId());
-		data.setTimestamp(p.getTimestamp());
+		data.setTimestamp(p.getTimestamp().toString());
 		return data;
 	}
 	
 	public OrderData get(@PathVariable int id) throws ApiException {
-		return ConvertUtil.objectMapper(orderService.get(id),OrderData.class);
+		OrderPojo p = orderService.get(id);
+		OrderData data = new OrderData();
+		data.setTimestamp(p.getTimestamp().toString());
+		data.setId(p.getId());
+		return  data;
 	}
 	
 	public List<OrderData> getAll() {
 		List<OrderPojo> list = orderService.getAll();
 		List<OrderData> list2 = new ArrayList<>();
 		for (OrderPojo p : list) {
-			list2.add(ConvertUtil.objectMapper(p, OrderData.class));
+			OrderData data = new OrderData();
+			data.setId(p.getId());
+			data.setTimestamp(p.getTimestamp().toString());
+			list2.add(data);
 		}
 		Collections.reverse(list2);
 		return list2;

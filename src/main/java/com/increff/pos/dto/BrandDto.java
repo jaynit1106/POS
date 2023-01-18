@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.increff.pos.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,12 @@ public class BrandDto {
 	public void add(BrandForm form) throws ApiException{
 		BrandPojo p = ConvertUtil.objectMapper(form, BrandPojo.class);
 		BrandPojo brand = brandService.getBrandId(p.getBrand(), p.getCategory());
+		if(StringUtil.isEmpty(form.getBrand())) {
+			throw new ApiException("Brand cannot be empty");
+		}
+		if(StringUtil.isEmpty(form.getCategory())) {
+			throw new ApiException("Category cannot be empty");
+		}
 		if(Objects.isNull(brand))brandService.add(p);
 		else throw new ApiException("Brand and Category already exists");
 	}

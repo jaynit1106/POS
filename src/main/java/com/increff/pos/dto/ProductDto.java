@@ -30,7 +30,10 @@ public class ProductDto {
 	public void add(ProductForm form) throws ApiException {
 		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);
 		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
-		
+		if(StringUtil.isEmpty(p.getName())) {
+			throw new ApiException("Name cannot be empty");
+		}
+
 		if(form.getBarcode().length()!=8)throw new ApiException("Barcode Should be of 8 characters");
 		if(form.getMrp()<0)throw new ApiException("MRP should be positive");
 		
@@ -38,7 +41,7 @@ public class ProductDto {
 		if(Objects.isNull(brand))throw new ApiException("Brand and Category does not exist");
 		
 		p.setBrandId(brand.getId());
-		if(!Objects.isNull(productService.productExist(p.getBrandId(), p.getName())))throw new ApiException("Product already exists");
+		if(!Objects.isNull(productService.getProductByNameAndBrandId(p.getBrandId(), p.getName())))throw new ApiException("Product already exists");
 		if(!Objects.isNull(productService.getProductByBarcode(form.getBarcode())))throw new ApiException("Barcode already exists");
 		
 		
@@ -83,7 +86,7 @@ public class ProductDto {
 		if(Objects.isNull(brand))throw new ApiException("Brand and Category does not exist");
 		p.setBrandId(brand.getId());
 
-		ProductPojo prod = productService.productExist(p.getBrandId(), p.getName());
+		ProductPojo prod = productService.getProductByNameAndBrandId(p.getBrandId(), p.getName());
 		if(!Objects.isNull(prod)){
 			if(!Objects.equals(prod.getId(),id))throw new ApiException("Product already exists");
 		}

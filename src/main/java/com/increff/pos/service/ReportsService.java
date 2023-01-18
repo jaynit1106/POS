@@ -1,4 +1,5 @@
 package com.increff.pos.service;
+import java.time.Instant;
 import java.util.*;
 
 import javax.transaction.Transactional;
@@ -65,7 +66,7 @@ public class ReportsService {
 	}
 	
 	@Transactional
-	public List<SalesReportData> getSalesReport(String startDate , String endDate){
+	public List<SalesReportData> getSalesReport(Instant startDate , Instant endDate){
 		// querying the time range
 		List<OrderPojo> list = orderDao.selectRange(startDate, endDate);
 		

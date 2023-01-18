@@ -1,5 +1,6 @@
 package com.increff.pos.dto;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -22,8 +23,7 @@ public class ReportsDto {
 	}
 	
 	public List<SalesReportData> getSalesReport(SalesReportForm form) {
-		form.setStartDate(form.getStartDate()+" 00:00");
-		form.setEndDate(form.getEndDate()+" 23:59");
+
 		return reportService.getSalesReport(form.getStartDate(), form.getEndDate());
 	}
 	

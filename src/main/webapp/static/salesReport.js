@@ -13,17 +13,30 @@ function getReportUrl(){
 	return baseUrl + "/api/report";
 }
 
-
+//JSON Converting function
+function toJsonArr($form){
+    var serialized = $form.serializeArray();
+    console.log(serialized);
+    var s = '';
+    var data = {};
+    let itr = 0;
+    for(s in serialized){
+        if(itr==0)data[serialized[s]['name']] = serialized[s]['value']+"T00:00:00Z";
+        if(itr==1)data[serialized[s]['name']] = serialized[s]['value']+"T23:59:59Z";
+        itr++;
+    }
+    var json = JSON.stringify(data);
+    return json;
+}
 //API CALLING FUNCTIONS
 function getSalesReport(){
     var $form = $("#sales-form");
-	var json = toJson($form);
+	var json = toJsonArr($form);
     var url = getReportUrl()+"/sales";
 	if(JSON.parse(json).startDate>JSON.parse(json).endDate){
 		swal("Oops!","Pls select a valid range", "error");
 		return;
 	}
-    console.log(url);
     $.ajax({
         url: url,
         type: 'POST',

@@ -30,7 +30,7 @@ public class UserService {
 			return new ModelAndView("redirect:/site/signup");
 		}
 		dao.insert(p);
-		info.setMessage("None");
+		info.setMessage("");
 		return  new ModelAndView("redirect:/site/login");
 	}
 

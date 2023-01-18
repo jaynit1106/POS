@@ -95,4 +95,13 @@ public class TestBrandDto extends AbstractUnitTest{
         }
         fail();
     }
+    @Test
+    public void testEmptyExceptions(){
+        try{
+            brandDto.add(PojoUtil.getBrandForm("","category"));
+        }catch (ApiException e){
+            return;
+        }
+        fail();
+    }
 }

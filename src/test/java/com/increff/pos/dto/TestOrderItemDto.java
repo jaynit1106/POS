@@ -42,7 +42,30 @@ public class TestOrderItemDto extends AbstractUnitTest{
     private final OrderItemDto orderItemDto = new OrderItemDto();
 
     @Test
-    public void testAddAndGetAll() throws ApiException {
+    public void testAdd() throws ApiException, ParserConfigurationException, TransformerException {
+        //create brand
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+        //create product
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        //add inventory
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        //add order
+        orderDao.insert(PojoUtil.getOrderPojo());
+
+        //add order-item
+        List<OrderItemForm> lists = new ArrayList<>();
+        lists.add(PojoUtil.getOrderItemForm(11,"abcdabcd",100.23));
+        orderItemDto.add(lists);
+
+        //checking the order-item
+        List<OrderItemData> list = orderItemDto.getAll();
+        assertEquals(list.get(0).getOrderId(),orderDto.getAll().get(0).getId());
+        assertEquals(list.get(0).getQuantity(),11);
+        assertEquals(list.get(0).getSellingPrice(),(double) 100.23,0);
+        assertEquals(list.get(0).getProductId(),productDto.getAll().get(0).getId());
+    }
+    @Test
+    public void testGetAll() throws ApiException, ParserConfigurationException, TransformerException {
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
@@ -165,6 +188,27 @@ public class TestOrderItemDto extends AbstractUnitTest{
         assertEquals(item.getSellingPrice(),100,0);
         assertEquals(item.getQuantity(),20);
         assertEquals(item.getOrderId(),orderDto.getAll().get(0).getId());
+    }
+
+    @Test
+    public void testGetById() throws ApiException {
+        //create brand
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+        //create product
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        //add inventory
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        //add order
+        orderDao.insert(PojoUtil.getOrderPojo());
+        //add order-item
+        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAll().get(0).getId(),20,productDto.getAll().get(0).getId(),100));
+
+        List<OrderItemData> list = orderItemDto.getAll();
+
+        OrderItemData data = orderItemDto.get(list.get(0).getId());
+        assertEquals(data.getQuantity(),20);
+        assertEquals(data.getSellingPrice(),100,0);
+        assertEquals(data.getId(),list.get(0).getId());
     }
 
 }

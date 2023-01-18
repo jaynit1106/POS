@@ -65,20 +65,10 @@ public class generateInvoiceXML {
 			id++;
 		}
 
-		Element costs = doc.createElement("cost");
+		Element costs = doc.createElement("totalCost");
 		costs.appendChild(doc.createTextNode(String.valueOf(totalCost)));
 		rootElement.appendChild(costs);
-		
-		double gsts = totalCost*(0.18);
-		totalCost+=gsts;
-		
-		Element gst = doc.createElement("gst");
-		gst.appendChild(doc.createTextNode(String.format("%.1f", gsts)));
-		rootElement.appendChild(gst);
-		
-		Element cost = doc.createElement("totalCost");
-		cost.appendChild(doc.createTextNode(String.format("%.1f", totalCost)));
-		rootElement.appendChild(cost);
+
 		
 		Element orderId = doc.createElement("orderId");
 		orderId.appendChild(doc.createTextNode(String.valueOf(orderid)));

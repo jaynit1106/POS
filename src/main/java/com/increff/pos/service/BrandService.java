@@ -23,12 +23,6 @@ public class BrandService {
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandPojo p) throws ApiException {
 		normalize(p);
-		if(StringUtil.isEmpty(p.getBrand())) {
-			throw new ApiException("Brand cannot be empty");
-		}
-		if(StringUtil.isEmpty(p.getCategory())) {
-			throw new ApiException("Category cannot be empty");
-		}
 		dao.insert(p);
 	}
 
@@ -48,7 +42,6 @@ public class BrandService {
 		BrandPojo ex = getCheck(id);
 		ex. setCategory(p.getCategory());
 		ex. setBrand(p.getBrand());
-		dao.update(ex);
 	}
 
 	@Transactional
@@ -63,16 +56,6 @@ public class BrandService {
 	@Transactional
 	public BrandPojo getBrandId(String brand,String category){
 		return dao.checkRepeat(brand, category);
-	}
-	
-	@Transactional
-	public List<BrandPojo> getByBrand(String brand){
-		return dao.selectByBrand(brand);
-	}
-	
-	@Transactional
-	public List<BrandPojo> getByCategory(String category){
-		return dao.selectByBrand(category);
 	}
 
 	protected static void normalize(BrandPojo p) {

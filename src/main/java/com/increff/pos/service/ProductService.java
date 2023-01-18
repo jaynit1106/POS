@@ -22,9 +22,6 @@ public class ProductService {
 	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo p) throws ApiException {
 		normalize(p);
-		if(StringUtil.isEmpty(p.getName())) {
-			throw new ApiException("Name cannot be empty");
-		}
 		dao.insert(p);
 	}
 
@@ -57,8 +54,8 @@ public class ProductService {
 		return p;
 	}
 	@Transactional
-	public ProductPojo productExist(int brandId , String name){
-		return dao.productExist(brandId, name);
+	public ProductPojo getProductByNameAndBrandId(int brandId , String name){
+		return dao.getProductByNameAndBrandId(brandId, name);
 	}
 	
 	@Transactional

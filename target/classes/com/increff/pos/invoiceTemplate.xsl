@@ -231,58 +231,6 @@
 								<fo:table-cell text-align="left"
 									padding-bottom="2px" padding-top="2px"
 									border-bottom="1px solid #eee">
-									<fo:block font-weight="bold">Cost</fo:block>
-								</fo:table-cell>
-								<fo:table-cell text-align="left"
-									padding-bottom="2px" padding-top="2px"
-									border-bottom="1px solid #eee">
-									<fo:block>
-										<xsl:value-of select="cost" />
-									</fo:block>
-								</fo:table-cell>
-							</fo:table-row>
-							<fo:table-row>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell text-align="left"
-									padding-bottom="2px" padding-top="2px"
-									border-bottom="1px solid #eee">
-									<fo:block font-weight="bold">GST</fo:block>
-								</fo:table-cell>
-								<fo:table-cell text-align="left"
-									padding-bottom="2px" padding-top="2px"
-									border-bottom="1px solid #eee">
-									<fo:block>
-										<xsl:value-of select="gst" />
-									</fo:block>
-								</fo:table-cell>
-							</fo:table-row>
-							<fo:table-row>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block></fo:block>
-								</fo:table-cell>
-								<fo:table-cell text-align="left"
-									padding-bottom="2px" padding-top="2px"
-									border-bottom="1px solid #eee">
 									<fo:block font-weight="bold">Total Cost</fo:block>
 								</fo:table-cell>
 								<fo:table-cell text-align="left"

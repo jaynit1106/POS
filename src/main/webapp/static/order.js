@@ -142,10 +142,13 @@ function displayOrderList(data){
 		var e = data[i];
 		var buttonHtml = '<button class="btn btn-dark" onclick="viewModal(' + e.id + ')">view</button>';
 		var downloadPdf = '<button class="btn btn-primary" onclick="downloadPdf(' + e.id + ')">Download</button>';
+		var date = new Date(e.timestamp).toLocaleString().replace(",","");
+		var arr = date.split("/")
+		date = arr[1]+'/'+arr[0]+'/'+arr[2];
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.timestamp + '</td>'
+		+ '<td>' + date + '</td>'
 		+ '<td>' + buttonHtml + "  " + downloadPdf + '</td>'
 		+ '</tr>';
         $tbody.append(row);

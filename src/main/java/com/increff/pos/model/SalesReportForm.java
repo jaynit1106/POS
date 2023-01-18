@@ -3,11 +3,13 @@ package com.increff.pos.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 public class SalesReportForm {
-	private String startDate;
-	private String endDate;
+	private Instant startDate;
+	private Instant endDate;
 
 	
 	

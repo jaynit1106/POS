@@ -1,5 +1,6 @@
 package com.increff.pos.dao;
 
+import java.time.Instant;
 import java.util.List;
 import javax.persistence.TypedQuery;
 
@@ -25,7 +26,7 @@ public class OrderDao extends AbstractDao {
 		return query.getResultList();
 	}
 	
-	public List<OrderPojo> selectRange(String startDate , String endDate){
+	public List<OrderPojo> selectRange(Instant startDate , Instant endDate){
 		TypedQuery<OrderPojo> query = getQuery(select_range, OrderPojo.class);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);

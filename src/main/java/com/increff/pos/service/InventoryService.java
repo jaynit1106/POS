@@ -11,7 +11,6 @@ import com.increff.pos.dao.InventoryDao;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
-import com.increff.pos.util.TimestampUtil;
 
 
 @Service
@@ -68,7 +67,6 @@ public class InventoryService {
 		}
 		
 		OrderPojo p = new OrderPojo();
-		p.setTimestamp(TimestampUtil.getTimestamp());
 		orderService.add(p);
 
 		for (OrderItemPojo item : items) {

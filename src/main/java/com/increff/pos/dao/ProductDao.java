@@ -33,7 +33,7 @@ public class ProductDao extends AbstractDao {
 		return getSingle(query);
 	}
 	
-	public ProductPojo productExist(int brandId,String name) {
+	public ProductPojo getProductByNameAndBrandId(int brandId,String name) {
 		TypedQuery<ProductPojo> query = getQuery(product_exist, ProductPojo.class);
 		query.setParameter("brandId", brandId);
 		query.setParameter("name", name);
