@@ -138,4 +138,15 @@ public class TestProductService extends AbstractUnitTest{
         ProductPojo pojo = productService.getProductByNameAndBrandId(list.get(0).getId(),"name");
         assertNotNull(pojo);
     }
+
+    @Test
+    public void testGetAllBarcode(){
+        //adding multiple products
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandService.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name1","abcdabce",20,brandService.getAll().get(0).getId()));
+
+        //checking for the list of barcodes
+        assertEquals(2,productService.getBarcodeList().size());
+    }
 }

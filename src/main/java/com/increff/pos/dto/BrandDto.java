@@ -57,4 +57,12 @@ public class BrandDto {
 		if(Objects.isNull(brand))brandService.update(id, p);
 		else throw new ApiException("Brand and Category already exists");
 	}
+
+	public List<String> getBrandList(){
+		return brandService.getBrandList();
+	}
+
+	public List<String> getCategoryList(String brand){
+		return brandService.getCategoryList(brand);
+	}
 }

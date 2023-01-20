@@ -3,11 +3,7 @@ package com.increff.pos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.dto.BrandDto;
 import com.increff.pos.model.BrandData;
@@ -34,6 +30,18 @@ public class BrandApiController {
 	@RequestMapping(path = "/api/brand/{id}", method = RequestMethod.GET)
 	public BrandData get(@PathVariable int id) throws ApiException {
 		return dto.get(id);
+	}
+
+	@ApiOperation(value = "gets all unique brand list")
+	@GetMapping(path = "/api/brand/unique")
+	public List<String> getBrandList(){
+		return dto.getBrandList();
+	}
+
+	@ApiOperation(value = "gets all unique category list")
+	@PostMapping(path = "/api/brand/unique")
+	public List<String> getCategoryList(@RequestBody BrandForm f){
+		return dto.getCategoryList(f.getBrand());
 	}
 
 	@ApiOperation(value = "Gets list of all Brands")

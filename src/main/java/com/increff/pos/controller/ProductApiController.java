@@ -3,11 +3,7 @@ package com.increff.pos.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.dto.ProductDto;
 import com.increff.pos.model.ProductData;
@@ -46,6 +42,12 @@ public class ProductApiController {
 	@RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody ProductForm form) throws ApiException {
 		dto.update(id, form);
+	}
+
+	@ApiOperation(value = "Get Barcode List")
+	@GetMapping(path = "/api/product/barcode")
+	public List<String> getBarcodeList(){
+		return dto.getBarcodeList();
 	}
 	
 

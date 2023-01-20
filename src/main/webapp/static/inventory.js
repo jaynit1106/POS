@@ -6,6 +6,11 @@ function getInventoryUrl(){
 	return baseUrl + "/api/inventory";
 }
 
+function getProductUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/product";
+}
+
 //API CALLING FUNCTIONS
 function addInventory(event){
 	//Set the values to update
@@ -29,6 +34,20 @@ function addInventory(event){
 	});
 
 	return false;
+}
+
+function getBarcodeList(){
+	var url = getProductUrl()+"/barcode";
+	$.ajax({
+	   url: url,
+	   type: 'GET',
+	   success: function(data) {
+			addBarcodeDropdown(data);
+	   },
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
+	});
 }
 
 function updateInventory(){
@@ -157,7 +176,7 @@ function displayInventoryList(data){
 		var e = data[i];
 		inventoryData.push(e)
 		let id =counter-1;
-		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id + ')">edit</button>';
+		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.name + '</td>'
@@ -210,7 +229,16 @@ function displayinventoryData(){
 	$('#upload-inventory-modal').modal('toggle');
 }
 
-
+//UTIL METHODS
+function addBarcodeDropdown(data){
+	var barcodeSelect = document.getElementById("barcodes");
+	for(var i in data){
+		var e = data[i];
+        var barcodeOption = document.createElement('option');
+        barcodeOption.text = barcodeOption.value = e;
+        barcodeSelect.add(barcodeOption, 1);
+	}
+}
 
 
 //INITIALIZATION CODE
@@ -225,4 +253,5 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getInventoryList);
+$(document).ready(getBarcodeList);
 

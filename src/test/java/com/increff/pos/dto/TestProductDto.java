@@ -28,7 +28,7 @@ public class TestProductDto extends AbstractUnitTest{
     private  final BrandDto brandDto = new BrandDto();
 
     @Test
-    public void testAddAndGetById() throws ApiException {
+    public void testAddAndGetAll() throws ApiException {
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand","category");
         brandDao.insert(brand);
@@ -159,5 +159,16 @@ public class TestProductDto extends AbstractUnitTest{
            return;
         }
         fail();
+    }
+
+    @Test
+    public void testGetAllBarcode(){
+        //adding multiple products
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name1","abcdabce",20,brandDto.getAll().get(0).getId()));
+
+        //checking for the list of barcodes
+        assertEquals(2,productDto.getBarcodeList().size());
     }
 }

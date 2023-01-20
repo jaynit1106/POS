@@ -1,5 +1,6 @@
 package com.increff.pos.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,6 +52,20 @@ public class BrandService {
 			throw new ApiException("Brand with given ID does not exit, id: " + id);
 		}
 		return p;
+	}
+	@Transactional
+	public List<String> getBrandList(){
+		List<String> list = dao.getBrandList();
+		Collections.sort(list);
+		Collections.reverse(list);
+		return list;
+	}
+	@Transactional
+	public List<String> getCategoryList(String brand){
+		List<String> list = dao.getCategoryList(brand);
+		Collections.sort(list);
+		Collections.reverse(list);
+		return list;
 	}
 	
 	@Transactional

@@ -104,4 +104,28 @@ public class TestBrandDto extends AbstractUnitTest{
         }
         fail();
     }
+
+    @Test
+    public void testGetUniqueBrands(){
+        //adding multiple brands
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+        brandDao.insert(PojoUtil.getBrandPojo("brand1","category1"));
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category2"));
+
+        //checking for unique brands
+        assertEquals(2,brandDto.getBrandList().size());
+
+    }
+    @Test
+    public void testUniqueCategoryList(){
+        //adding multiple brands
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+        brandDao.insert(PojoUtil.getBrandPojo("brand1","category1"));
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category2"));
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category3"));
+
+        //checking for unique brands
+        assertEquals(3,brandDto.getCategoryList("brand").size());
+    }
+
 }

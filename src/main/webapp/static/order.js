@@ -9,6 +9,11 @@ function getOrderUrl(){
 	return baseUrl + "/api/order";
 }
 
+function getProductUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/product";
+}
+
 function getSchedulerUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/scheduler";
@@ -45,6 +50,20 @@ function addOrder(event){
 	});
 
 	return false;
+}
+
+function getBarcodeList(){
+	var url = getProductUrl()+"/barcode";
+	$.ajax({
+	   url: url,
+	   type: 'GET',
+	   success: function(data) {
+			addBarcodeDropdown(data);
+	   },
+	   error: function(response){
+	   		swal("Oops!", response.responseJSON.message, "error");
+	   }
+	});
 }
 
 function getOrderList(){
@@ -140,8 +159,8 @@ function displayOrderList(data){
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="btn btn-dark" onclick="viewModal(' + e.id + ')">view</button>';
-		var downloadPdf = '<button class="btn btn-primary" onclick="downloadPdf(' + e.id + ')">Download</button>';
+		var buttonHtml = '<button class="btn btn-dark" onclick="viewModal(' + e.id + ')"><i class="fa-solid fa-eye"></i></button>';
+		var downloadPdf = '<button class="btn btn-primary" onclick="downloadPdf(' + e.id + ')"><i class="fa-solid fa-download"></i></button>';
 		var date = new Date(e.timestamp).toLocaleString().replace(",","");
 		var arr = date.split("/")
 		date = arr[1]+'/'+arr[0]+'/'+arr[2];
@@ -170,13 +189,13 @@ function displayItemList(){
 		}
 		var e = JSON.parse(itemList[i]);
 		productMap.set(e.barcode,itr);
-		var buttonHtml = '<button class="btn btn-dark" onclick="editItem(' + itr + ')">edit</button>';
-		var deleteButton = '<button class="btn btn-danger" onclick="deleteItem(' + itr + ')">delete</button>';
+		var buttonHtml = '<button id="button'+itr+'"class="btn btn-dark" onclick="editItem(' + itr + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
+		var deleteButton = '<button class="btn btn-danger" onclick="deleteItem(' + itr + ')"><i class="fa-solid fa-trash"></i></button>';
 		var row = '<tr>'
 		+'<td><form id="row'+ itr +'">'+serialId+'</form>'
-		+ '<td><input type="text" class="form-control" form="row'+itr+'" name="barcode" id="barcode" value="'+e.barcode+'" disabled></td>'
-		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity" value="'+e.quantity+'"></td>'
-		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price" value="'+e.sellingPrice+'"></td>'
+		+ '<td><label for="barcode" class="form-control" form="row'+itr+'" name="barcode" id="barcode'+itr+'">'+e.barcode+'</label></td>'
+		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity'+itr+'" value="'+e.quantity+'" disabled></td>'
+		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+e.sellingPrice+'" disabled></td>'
 		+ '<td>' + buttonHtml +"   "+ deleteButton + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -211,6 +230,16 @@ function downloadPdf(id){
 }
 
 //UTIL FUNCTIONS
+function addBarcodeDropdown(data){
+	var barcodeSelect = document.getElementById("barcodes");
+	for(var i in data){
+		var e = data[i];
+        var barcodeOption = document.createElement('option');
+        barcodeOption.text = barcodeOption.value = e;
+        barcodeSelect.add(barcodeOption, 1);
+	}
+}
+
 function deleteItem(id){
 	deleteList.push(id);
 	let barcode = JSON.parse(itemList[id]).barcode;
@@ -219,13 +248,23 @@ function deleteItem(id){
 }
 
 function editItem(id){
-	var $form = $("#row"+id);
-	var json = toJson($form);
-	json = JSON.parse(json);
-	json.barcode = JSON.parse(itemList[id]).barcode;
-	json = JSON.stringify(json);
-	itemList[id]=json;
-	displayItemList();
+    document.getElementById('price'+id).disabled=false;
+    document.getElementById('quantity'+id).disabled=false;
+    document.getElementById('button'+id).innerHTML = "Save";
+    document.getElementById('button'+id).onclick = function(){edits(id);}
+}
+function edits(id){
+    var $form = $("#row"+id);
+    var json = toJson($form);
+    json = JSON.parse(json);
+    json.barcode = JSON.parse(itemList[id]).barcode;
+    json = JSON.stringify(json);
+    itemList[id]=json;
+    document.getElementById('price'+id).disabled=true;
+    document.getElementById('quantity'+id).disabled=true;
+    document.getElementById('button'+id).innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
+    document.getElementById('button'+id).onclick = function(){editItem(id);}
+    displayItemList();
 }
 
 function addItem(){
@@ -284,8 +323,10 @@ function init(){
 	$('#create-order').click(displayCreateItemModal);
 	$('#add-item').click(addItem);
 	$('#submit-order').click(submitOrder);
+	$('#refresh-order').click(getOrderList);
 }
 
 $(document).ready(init);
 $(document).ready(getOrderList);
+$(document).ready(getBarcodeList);
 

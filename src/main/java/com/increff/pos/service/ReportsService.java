@@ -1,6 +1,7 @@
 package com.increff.pos.service;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -78,7 +79,7 @@ public class ReportsService {
 		}
 		
 		//generate product revenues
-		HashMap<Integer,Integer> quantityProducts = getProductsQuantity(orders);
+		HashMap<Integer,Integer> quantityProducts = (HashMap<Integer, Integer>)orders.stream().collect(Collectors.toMap(OrderItemPojo::getProductId,OrderItemPojo::getQuantity,(s,a)->s+a));
 		HashMap<Integer,Double> revenueProducts = getProductsRevenue(orders);
 		List<ProductPojo> products = new ArrayList<>();
 		for(int id : revenueProducts.keySet()) {
@@ -143,18 +144,4 @@ public class ReportsService {
 		
 		return revenueProducts;
 	}
-	
-	private HashMap<Integer,Integer> getProductsQuantity(List<OrderItemPojo> orders){
-		
-		HashMap<Integer,Integer> quantityProducts = new HashMap<>();
-		for(OrderItemPojo item : orders) {
-			Integer quant = 0;
-			int productId = item.getProductId();
-			if(quantityProducts.get(productId)!=null)quant = quantityProducts.get(productId);
-			quantityProducts.put(productId, quant + item.getQuantity());
-		}
-		
-		return quantityProducts;
-	}
-	
 }

@@ -3,6 +3,8 @@ package com.increff.pos.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -42,6 +44,13 @@ public class generateInvoicePdf {
 				Result res = new SAXResult(fop.getDefaultHandler());
 				
 				transformer.transform(src, res);
+//				System.out.println("created");
+//				System.out.println("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\pdf\\"+name+".pdf");
+				byte[] inFileBytes = Files.readAllBytes(Paths.get("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\pdf\\"+name+".pdf"));
+				byte[] encoded = java.util.Base64.getEncoder().encode(inFileBytes);
+				String encodePdf = new String(encoded);
+//				System.out.println(encodePdf);
+
 			} catch (Exception e) {
 				// TODO: handle exception
 			} finally {

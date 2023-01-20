@@ -98,4 +98,6 @@ public class ProductDto {
 		
 		productService.update(id,p);
 	}
+
+	public List<String> getBarcodeList(){return productService.getBarcodeList();}
 }

@@ -177,7 +177,7 @@ function displayBrandList(data){
 		var e = data[i];
 		brandData.push(e);
 		let id = counter-1;
-		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id +')">edit</button>';
+		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id +')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.brand + '</td>'

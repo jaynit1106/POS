@@ -1,5 +1,6 @@
 package com.increff.pos.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +63,14 @@ public class ProductService {
 	public ProductPojo getProductByBarcode(String barcode){
 		return dao.barcodeExist(barcode);
 	}
-	
+
+	@Transactional
+	public List<String> getBarcodeList(){
+		List<String> list = dao.getBarcodeList();
+		Collections.sort(list);
+		Collections.reverse(list);
+		return list;
+	}
 
 	
 	protected static void normalize(ProductPojo p) {
