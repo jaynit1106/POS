@@ -35,7 +35,7 @@ public class OrderItemService {
 
 	@Transactional
 	public List<OrderItemPojo> getAll() {
-		return dao.selectAll();
+		return dao.selectAll(OrderItemPojo.class);
 	}
 
 	@Transactional(rollbackOn  = ApiException.class)
@@ -49,7 +49,7 @@ public class OrderItemService {
 
 	@Transactional
 	public OrderItemPojo getCheck(int id) throws ApiException {
-		OrderItemPojo p = dao.select(id);
+		OrderItemPojo p = dao.select(id,OrderItemPojo.class);
 		if (Objects.isNull(p)) {
 			throw new ApiException("OrderItem with given ID does not exit, id: " + id);
 		}

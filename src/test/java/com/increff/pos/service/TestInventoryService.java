@@ -5,6 +5,8 @@ import com.increff.pos.model.InventoryData;
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
+import com.increff.pos.pojo.OrderPojo;
+import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.PojoUtil;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -96,7 +98,7 @@ public class TestInventoryService extends AbstractUnitTest{
         orderDao.insert(PojoUtil.getOrderPojo());
 
         List<OrderItemPojo> list = new ArrayList<>();
-        OrderItemPojo pojo = PojoUtil.getOrderItemPojo(orderDao.selectAll().get(0).getId(),20,productDao.selectAll().get(0).getId(),20.22);
+        OrderItemPojo pojo = PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(),20,productDao.selectAll(ProductPojo.class).get(0).getId(),20.22);
         list.add(pojo);
 
         inventoryService.checkAndCreateOrder(list);

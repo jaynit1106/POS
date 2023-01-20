@@ -12,20 +12,12 @@ public class SchedulerDao extends AbstractDao {
 
 	
 	private static String select_date = "select p from SchedulerPojo p where date=:date";
-	private static String select_all = "select p from SchedulerPojo p";
-	
+
 	
 	public SchedulerPojo select(String date) {
 		TypedQuery<SchedulerPojo> query = getQuery(select_date, SchedulerPojo.class);
 		query.setParameter("date", date);
 		return getSingle(query);
 	}
-
-	public List<SchedulerPojo> selectAll() {
-		TypedQuery<SchedulerPojo> query = getQuery(select_all, SchedulerPojo.class);
-		return query.getResultList();
-	}
-	
-
 
 }

@@ -41,7 +41,7 @@ public class UserService {
 
 	@Transactional
 	public List<UserPojo> getAll() {
-		return dao.selectAll();
+		return dao.selectAll(UserPojo.class);
 	}
 
 	protected static void normalize(UserPojo p) {

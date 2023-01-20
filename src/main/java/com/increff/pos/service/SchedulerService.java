@@ -29,7 +29,7 @@ public class SchedulerService {
 
 	@Transactional
 	public List<SchedulerPojo> getAll() {
-		return dao.selectAll();
+		return dao.selectAll(SchedulerPojo.class);
 	}
 
 	@Transactional(rollbackOn  = ApiException.class)

@@ -39,12 +39,12 @@ public class OrderService {
 
 	@Transactional
 	public List<OrderPojo> getAll() {
-		return dao.selectAll();
+		return dao.selectAll(OrderPojo.class);
 	}
 
 	@Transactional
 	public OrderPojo getCheck(int id) throws ApiException {
-		OrderPojo p = dao.select(id);
+		OrderPojo p = dao.select(id,OrderPojo.class);
 		if (Objects.isNull(p)) {
 			throw new ApiException("Order with given ID does not exit, id: " + id);
 		}

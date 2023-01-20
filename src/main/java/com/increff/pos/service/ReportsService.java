@@ -43,10 +43,10 @@ public class ReportsService {
 
 	@Transactional
 	public List<InventoryReportData> getInventoryReport(){
-		List<InventoryPojo> list = inventoryDao.selectAll();
+		List<InventoryPojo> list = inventoryDao.selectAll(InventoryPojo.class);
 		HashMap<Integer,Integer> inventory = new HashMap<>();
 		for(InventoryPojo p : list) {
-			ProductPojo product = productDao.select(p.getId());
+			ProductPojo product = productDao.select(p.getId(),ProductPojo.class);
 			int quant = 0;
 			int brandId = product.getBrandId();
 			
@@ -55,7 +55,7 @@ public class ReportsService {
 		}
 		List<InventoryReportData> list2 = new ArrayList<>();
 		for(Integer id : inventory.keySet()) {
-			BrandPojo brand = brandDao.select(id);
+			BrandPojo brand = brandDao.select(id,BrandPojo.class);
 			InventoryReportData data = new InventoryReportData();
 			data.setBrand(brand.getBrand());
 			data.setCategory(brand.getCategory());
@@ -83,7 +83,7 @@ public class ReportsService {
 		HashMap<Integer,Double> revenueProducts = getProductsRevenue(orders);
 		List<ProductPojo> products = new ArrayList<>();
 		for(int id : revenueProducts.keySet()) {
-			products.add(productDao.select(id));
+			products.add(productDao.select(id,ProductPojo.class));
 		}
 		
 		//generate brand revenues
@@ -94,7 +94,7 @@ public class ReportsService {
 		List<SalesReportData> data = new ArrayList<>();
 		for(int id : revenueBrands.keySet()) {
 			SalesReportData item = new SalesReportData();
-			BrandPojo p = brandDao.select(id);
+			BrandPojo p = brandDao.select(id,BrandPojo.class);
 			item.setBrand(p.getBrand());
 			item.setCategory(p.getCategory());
 			item.setRevenue(revenueBrands.get(id));

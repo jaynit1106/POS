@@ -34,7 +34,7 @@ public class BrandService {
 
 	@Transactional
 	public List<BrandPojo> getAll() {
-		return dao.selectAll();
+		return dao.selectAll(BrandPojo.class);
 	}
 
 	@Transactional(rollbackOn  = ApiException.class)
@@ -47,7 +47,7 @@ public class BrandService {
 
 	@Transactional
 	public BrandPojo getCheck(int id) throws ApiException {
-		BrandPojo p = dao.select(id);
+		BrandPojo p = dao.select(id,BrandPojo.class);
 		if (Objects.isNull(p)) {
 			throw new ApiException("Brand with given ID does not exit, id: " + id);
 		}

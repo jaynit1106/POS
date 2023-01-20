@@ -33,7 +33,7 @@ public class ProductService {
 
 	@Transactional
 	public List<ProductPojo> getAll() {
-		return dao.selectAll();
+		return dao.selectAll(ProductPojo.class);
 	}
 
 	@Transactional(rollbackOn  = ApiException.class)
@@ -48,7 +48,7 @@ public class ProductService {
 
 	@Transactional
 	public ProductPojo getCheck(int id) throws ApiException {
-		ProductPojo p = dao.select(id);
+		ProductPojo p = dao.select(id,ProductPojo.class);
 		if (Objects.isNull(p)) {
 			throw new ApiException("Product with given ID does not exit, id: " + id);
 		}

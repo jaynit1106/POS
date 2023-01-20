@@ -40,7 +40,7 @@ public class InventoryService {
 
 	@Transactional
 	public List<InventoryPojo> getAll() {
-		return dao.selectAll();
+		return dao.selectAll(InventoryPojo.class);
 	}
 
 	@Transactional(rollbackOn  = ApiException.class)
@@ -52,13 +52,13 @@ public class InventoryService {
 
 	@Transactional
 	public InventoryPojo getCheck(int id) {
-		return dao.select(id);
+		return dao.select(id,InventoryPojo.class);
 	}
 	
 	@Transactional(rollbackOn = ApiException.class)
 	public int checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
 		for(OrderItemPojo p : items) {
-			InventoryPojo inventory = dao.select(p.getProductId());
+			InventoryPojo inventory = dao.select(p.getProductId(),InventoryPojo.class);
 			int quantity = inventory.getQuantity();
 			if(quantity<p.getQuantity())throw new ApiException("Only "+quantity+" pieces left of " + productService.get(p.getProductId()).getBarcode());
 			quantity=quantity-p.getQuantity();
