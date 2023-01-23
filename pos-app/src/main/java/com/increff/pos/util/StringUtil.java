@@ -6,8 +6,6 @@ import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-import static jdk.nashorn.internal.objects.NativeString.toLowerCase;
-
 public class StringUtil {
 
 	public static boolean isEmpty(String s) {
@@ -23,7 +21,7 @@ public class StringUtil {
 				field.setAccessible(true);
 				try{
 					if(Objects.nonNull(field.get(form))){
-						field.set(form, toLowerCase(field.get(form).toString()));
+						field.set(form,(field.get(form).toString()).toLowerCase());
 					}
 				} catch(IllegalAccessException e){
 					throw new ApiException("Error normalising form");

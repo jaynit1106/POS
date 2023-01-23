@@ -30,7 +30,7 @@ public class TestProductService extends AbstractUnitTest{
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
 
         //adds Product
-        productService.add(PojoUtil.getProductPojo("name","barcode",20,brandService.getAll().get(0).getId()));
+        productService.add(PojoUtil.getProductPojo("name","barcode2",20,brandService.getAll().get(0).getId()));
 
         //checking if the product is added
         List<ProductPojo> list = productService.getAll();
@@ -80,7 +80,7 @@ public class TestProductService extends AbstractUnitTest{
         List<ProductPojo> productDataList = productService.getAll();
 
         //checking the update Operation
-        productService.update(productDataList.get(0).getId(),PojoUtil.getProductPojo("changedName","abcdabcd",290.00,brandService.getAll().get(0).getId()));
+        productService.update(productDataList.get(0).getId(),PojoUtil.getProductPojo("changedname","abcdabcd",290.00,brandService.getAll().get(0).getId()));
         productDataList = productService.getAll();
         assertEquals(productDataList.get(0).getBarcode(),"abcdabcd");
         assertEquals(productDataList.get(0).getMrp(),290,0);

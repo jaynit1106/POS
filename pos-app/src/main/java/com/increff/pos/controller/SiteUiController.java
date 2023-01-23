@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Objects;
+
 @Controller
 public class SiteUiController extends AbstractUiController {
 	@Autowired
@@ -18,15 +20,20 @@ public class SiteUiController extends AbstractUiController {
 	}
 
 	@RequestMapping(value = "/site/login")
-	public ModelAndView login() {return mav("login.html");}
+	public ModelAndView login() {
+
+		return mav("login.html");
+	}
 
 
 	@RequestMapping(value = "/site/signup")
-	public ModelAndView signup() {return mav("signup.html");}
+	public ModelAndView signup() {
+		if(Objects.equals(info.getMessage(),"Invalid username or password"))info.setMessage("");
+		return mav("signup.html");}
 
 	@RequestMapping(value = "/site/logout")
 	public ModelAndView logout() {
-		return mav("logout.html");
+		return mav("login.html");
 	}
 
 }
