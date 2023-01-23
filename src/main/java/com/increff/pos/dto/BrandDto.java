@@ -23,16 +23,9 @@ public class BrandDto {
 	BrandService brandService;
 	
 	public void add(BrandForm form) throws ApiException{
+		StringUtil.normalise(form,BrandForm.class);
 		BrandPojo p = ConvertUtil.objectMapper(form, BrandPojo.class);
-		BrandPojo brand = brandService.getBrandId(p.getBrand(), p.getCategory());
-		if(StringUtil.isEmpty(form.getBrand())) {
-			throw new ApiException("Brand cannot be empty");
-		}
-		if(StringUtil.isEmpty(form.getCategory())) {
-			throw new ApiException("Category cannot be empty");
-		}
-		if(Objects.isNull(brand))brandService.add(p);
-		else throw new ApiException("Brand and Category already exists");
+		brandService.add(p);
 	}
 	
 	public BrandData get(int id) throws ApiException {
@@ -50,12 +43,9 @@ public class BrandDto {
 	}
 	
 	public void update(int id, BrandForm f) throws ApiException {
-
+		StringUtil.normalise(f,BrandForm.class);
 		BrandPojo p = ConvertUtil.objectMapper(f, BrandPojo.class);
-		BrandPojo brand = brandService.getBrandId(p.getBrand(), p.getCategory());
-
-		if(Objects.isNull(brand))brandService.update(id, p);
-		else throw new ApiException("Brand and Category already exists");
+		brandService.update(id,p);
 	}
 
 	public List<String> getBrandList(){

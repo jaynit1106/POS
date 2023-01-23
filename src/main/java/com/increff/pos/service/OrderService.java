@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,27 +23,25 @@ import com.increff.pos.pojo.OrderPojo;
 
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class OrderService {
 
 	@Autowired
 	private final OrderDao dao = new OrderDao();
 
-	@Transactional(rollbackOn = ApiException.class)
+
 	public void add(OrderPojo p) throws ApiException {
 		dao.insert(p);
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
 	public OrderPojo get(int id) throws ApiException {
 		return getCheck(id);
 	}
 
-	@Transactional
 	public List<OrderPojo> getAll() {
 		return dao.selectAll(OrderPojo.class);
 	}
 
-	@Transactional
 	public OrderPojo getCheck(int id) throws ApiException {
 		OrderPojo p = dao.select(id,OrderPojo.class);
 		if (Objects.isNull(p)) {
@@ -50,7 +49,11 @@ public class OrderService {
 		}
 		return p;
 	}
-	
+
+	public List<OrderPojo> selectRange(Instant startDate, Instant endDate){
+		return dao.selectRange(startDate,endDate);
+	}
+
 	public void downloadPdf(@PathVariable int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
 		try {
 		

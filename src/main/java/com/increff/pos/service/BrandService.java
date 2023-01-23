@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.transaction.Transactional;
 
+import javafx.beans.binding.ObjectExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,52 +16,54 @@ import com.increff.pos.util.StringUtil;
 
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class BrandService {
 
 	@Autowired
 	private final BrandDao dao = new BrandDao();
 
 
-	@Transactional(rollbackOn = ApiException.class)
 	public void add(BrandPojo p) throws ApiException {
-		normalize(p);
+		if(StringUtil.isEmpty(p.getBrand())) {
+			throw new ApiException("Brand cannot be empty");
+		}
+		if(StringUtil.isEmpty(p.getCategory())) {
+			throw new ApiException("Category cannot be empty");
+		}
+		if(Objects.nonNull(dao.checkRepeat(p.getBrand(),p.getCategory())))throw new ApiException("Brand and Category already exists");
 		dao.insert(p);
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
 	public BrandPojo get(int id) throws ApiException {
-		return getCheck(id);
+		BrandPojo p = dao.select(id,BrandPojo.class);
+		if(Objects.isNull(p))throw new ApiException("Brand with id-"+id+" does not exist");
+		return p;
 	}
 
-	@Transactional
 	public List<BrandPojo> getAll() {
 		return dao.selectAll(BrandPojo.class);
 	}
 
-	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, BrandPojo p) throws ApiException {
-		normalize(p);
-		BrandPojo ex = getCheck(id);
+		if(StringUtil.isEmpty(p.getBrand())) {
+			throw new ApiException("Brand cannot be empty");
+		}
+		if(StringUtil.isEmpty(p.getCategory())) {
+			throw new ApiException("Category cannot be empty");
+		}
+		if(Objects.nonNull(dao.checkRepeat(p.getBrand(),p.getCategory())))throw new ApiException("Brand and Category already exists");
+		BrandPojo ex = dao.select(id,BrandPojo.class);
+		if(Objects.isNull(ex))throw new ApiException("Brand with id-"+id+" does not exist");
 		ex. setCategory(p.getCategory());
 		ex. setBrand(p.getBrand());
 	}
 
-	@Transactional
-	public BrandPojo getCheck(int id) throws ApiException {
-		BrandPojo p = dao.select(id,BrandPojo.class);
-		if (Objects.isNull(p)) {
-			throw new ApiException("Brand with given ID does not exit, id: " + id);
-		}
-		return p;
-	}
-	@Transactional
 	public List<String> getBrandList(){
 		List<String> list = dao.getBrandList();
 		Collections.sort(list);
 		Collections.reverse(list);
 		return list;
 	}
-	@Transactional
 	public List<String> getCategoryList(String brand){
 		List<String> list = dao.getCategoryList(brand);
 		Collections.sort(list);
@@ -68,13 +71,10 @@ public class BrandService {
 		return list;
 	}
 	
-	@Transactional
-	public BrandPojo getBrandId(String brand,String category){
-		return dao.checkRepeat(brand, category);
+	public BrandPojo getBrandId(String brand,String category) throws ApiException{
+		BrandPojo p = dao.checkRepeat(brand, category);
+		if(Objects.isNull(p))throw new ApiException("Brand And Category Does Not Exist");
+		return p;
 	}
 
-	protected static void normalize(BrandPojo p) {
-		p. setBrand(StringUtil.toLowerCase(p. getBrand()));
-		p. setCategory(StringUtil.toLowerCase(p.getCategory()));
-	}
 }

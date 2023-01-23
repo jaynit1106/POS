@@ -8,6 +8,7 @@ com\increff\pos\pojo\InventoryPojo.class
 com\increff\pos\model\OrderItemForm.class
 com\increff\pos\dto\InventoryDto.class
 com\increff\pos\model\InventoryData.class
+com\increff\pos\util\MapUtil.class
 com\increff\pos\dto\OrderItemDto.class
 com\increff\pos\spring\WebInitializer.class
 com\increff\pos\spring\SpringSecurityInitializer.class
@@ -26,7 +27,6 @@ com\increff\pos\dao\OrderItemDao.class
 com\increff\pos\dto\BrandDto.class
 com\increff\pos\controller\SampleController.class
 com\increff\pos\controller\SiteUiController.class
-com\increff\pos\service\ReportsService.class
 com\increff\pos\pojo\UserPojo.class
 com\increff\pos\util\generatePdf.class
 com\increff\pos\controller\BrandApiController.class

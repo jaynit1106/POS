@@ -13,6 +13,7 @@ import com.increff.pos.pojo.UserPojo;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndView;
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class UserService {
 
 	@Autowired
@@ -21,7 +22,6 @@ public class UserService {
 	@Autowired
 	private InfoData info;
 
-	@Transactional
 	public ModelAndView add(UserPojo p) throws ApiException {
 		normalize(p);
 		UserPojo existing = dao.select(p.getEmail());
@@ -34,12 +34,10 @@ public class UserService {
 		return  new ModelAndView("redirect:/site/login");
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
 	public UserPojo get(String email) throws ApiException {
 		return dao.select(email);
 	}
 
-	@Transactional
 	public List<UserPojo> getAll() {
 		return dao.selectAll(UserPojo.class);
 	}

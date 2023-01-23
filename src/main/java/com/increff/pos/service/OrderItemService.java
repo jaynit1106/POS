@@ -13,13 +13,14 @@ import com.increff.pos.pojo.OrderItemPojo;
 
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class OrderItemService {
 
 	@Autowired
 	private final OrderItemDao dao = new OrderItemDao();
 	
 	
-	@Transactional(rollbackOn = ApiException.class)
+
 	public void add(List<OrderItemPojo> items) throws ApiException {
 		for(OrderItemPojo p : items) {
 			
@@ -28,17 +29,14 @@ public class OrderItemService {
 		
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
 	public OrderItemPojo get(int id) throws ApiException {
 		return getCheck(id);
 	}
 
-	@Transactional
 	public List<OrderItemPojo> getAll() {
 		return dao.selectAll(OrderItemPojo.class);
 	}
 
-	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, OrderItemPojo p) throws ApiException {
 		OrderItemPojo ex = getCheck(id);
 		ex.setQuantity(p.getQuantity());
@@ -47,7 +45,6 @@ public class OrderItemService {
 		dao.update(ex);
 	}
 
-	@Transactional
 	public OrderItemPojo getCheck(int id) throws ApiException {
 		OrderItemPojo p = dao.select(id,OrderItemPojo.class);
 		if (Objects.isNull(p)) {
@@ -56,7 +53,6 @@ public class OrderItemService {
 		return p;
 	}
 	
-	@Transactional
 	public List<OrderItemPojo> getOrderItemByOrderId(int id) {
 		return dao.selectByOrderId(id);
 	}

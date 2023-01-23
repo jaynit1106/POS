@@ -15,30 +15,44 @@ import com.increff.pos.util.StringUtil;
 
 
 @Service
+@Transactional(rollbackOn  = ApiException.class)
 public class ProductService {
 
 	@Autowired
 	private final ProductDao dao = new ProductDao();
 
-	@Transactional(rollbackOn = ApiException.class)
 	public void add(ProductPojo p) throws ApiException {
-		normalize(p);
+		if(StringUtil.isEmpty(p.getName()))throw new ApiException("Name cannot be empty");
+		if(p.getBarcode().length()!=8)throw new ApiException("Barcode Should be of 8 characters");
+		if(p.getMrp()<0)throw new ApiException("MRP should be positive");
+		if(Objects.nonNull(dao.getProductByNameAndBrandId(p.getBrandId(),p.getName())))throw new ApiException("Product already Exists");
+		if(Objects.nonNull(dao.barcodeExist(p.getBarcode())))throw new ApiException("Barcode already Exists");
+
 		dao.insert(p);
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
 	public ProductPojo get(int id) throws ApiException {
 		return getCheck(id);
 	}
 
-	@Transactional
 	public List<ProductPojo> getAll() {
 		return dao.selectAll(ProductPojo.class);
 	}
 
-	@Transactional(rollbackOn  = ApiException.class)
 	public void update(int id, ProductPojo p) throws ApiException {
-		normalize(p);
+		if(p.getBarcode().length()!=8)throw new ApiException("Barcode Should be of 8 characters");
+		if(p.getMrp()<0)throw new ApiException("MRP should be positive");
+
+		ProductPojo prod = dao.getProductByNameAndBrandId(p.getBrandId(), p.getName());
+		if(!Objects.isNull(prod)){
+			if(!Objects.equals(prod.getId(),id))throw new ApiException("Product already exists");
+		}
+
+		ProductPojo product = dao.barcodeExist(p.getBarcode());
+		if(!Objects.isNull(product)) {
+			if(!Objects.equals(product.getId(),id))throw new ApiException("Barcode already exists");
+		}
+
 		ProductPojo ex = getCheck(id);
 		ex.setBrandId(p.getBrandId());
 		ex.setMrp(p.getMrp());
@@ -46,7 +60,6 @@ public class ProductService {
 		ex.setBarcode(p.getBarcode());
 	}
 
-	@Transactional
 	public ProductPojo getCheck(int id) throws ApiException {
 		ProductPojo p = dao.select(id,ProductPojo.class);
 		if (Objects.isNull(p)) {
@@ -54,17 +67,17 @@ public class ProductService {
 		}
 		return p;
 	}
-	@Transactional
+
 	public ProductPojo getProductByNameAndBrandId(int brandId , String name){
 		return dao.getProductByNameAndBrandId(brandId, name);
 	}
 	
-	@Transactional
-	public ProductPojo getProductByBarcode(String barcode){
-		return dao.barcodeExist(barcode);
+	public ProductPojo getProductByBarcode(String barcode)throws ApiException{
+		ProductPojo p = dao.barcodeExist(barcode);
+		if(Objects.isNull(p))throw new ApiException("Product Does Not Exists");
+		return p;
 	}
 
-	@Transactional
 	public List<String> getBarcodeList(){
 		List<String> list = dao.getBarcodeList();
 		Collections.sort(list);
@@ -73,9 +86,6 @@ public class ProductService {
 	}
 
 	
-	protected static void normalize(ProductPojo p) {
-		p. setName(StringUtil.toLowerCase(p. getName()));
-	}
-	
+
 	
 }
