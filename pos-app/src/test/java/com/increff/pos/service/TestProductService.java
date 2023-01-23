@@ -106,7 +106,7 @@ public class TestProductService extends AbstractUnitTest{
         fail();
     }
     @Test
-    public void testGetProductByBarcode(){
+    public void testGetProductByBarcode() throws ApiException {
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand","category");
         brandDao.insert(brand);

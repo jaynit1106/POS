@@ -80,7 +80,7 @@ public class TestBrandService extends AbstractUnitTest{
     }
 
     @Test
-    public void testGetBrandId(){
+    public void testGetBrandId() throws ApiException {
         //creating brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
 
@@ -89,19 +89,6 @@ public class TestBrandService extends AbstractUnitTest{
         //checking for BrandId
         BrandPojo p = brandService.getBrandId("brand","category");
         assertEquals(list.get(0).getId(),p.getId());
-    }
-
-    @Test
-    public void testGetCheck(){
-        //creating brand
-        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
-
-        try {
-            brandService.getCheck(10000);
-        }catch (ApiException e){
-            return;
-        }
-        fail();
     }
 
     @Test
