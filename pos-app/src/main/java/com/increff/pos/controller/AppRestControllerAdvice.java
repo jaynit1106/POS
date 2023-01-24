@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.increff.pos.model.MessageData;
 import com.increff.pos.service.ApiException;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestControllerAdvice
-public class AppRestControllerAdvice {
+public class AppRestControllerAdvice{
 
 	@ExceptionHandler(ApiException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -26,4 +27,7 @@ public class AppRestControllerAdvice {
 		data.setMessage("An unknown error has occurred - " + e.getMessage());
 		return data;
 	}
+
+
+
 }

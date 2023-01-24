@@ -1,5 +1,6 @@
 package com.increff.pos.dto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import javax.xml.transform.TransformerException;
 
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.*;
+import com.increff.pos.util.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +21,6 @@ import com.increff.pos.model.SchedulerForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.ConvertUtil;
-import com.increff.pos.util.generateInvoicePdf;
-import com.increff.pos.util.generateInvoiceXML;
 
 @Component
 public class OrderItemDto {
@@ -41,7 +41,7 @@ public class OrderItemDto {
 	private final OrderService orderService = new OrderService();
 
 	@Transactional(rollbackOn = ApiException.class)
-	public void add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException {
+	public void add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
 		List<OrderItemPojo> items = new ArrayList<>(); 
 		for(OrderItemForm f : form) {
 			OrderItemPojo p =ConvertUtil.objectMapper(f, OrderItemPojo.class);
@@ -76,9 +76,8 @@ public class OrderItemDto {
 			list.add(item);
 			totalItems+=p.getQuantity();
 		}
-		generateInvoiceXML.createXml(list);
-		generateInvoicePdf.createPdf("Invoice "+ order.getId());
-
+		String base64 = Base64Util.getBase64(list);
+		Base64Util.savePdf(base64,"Invoice "+String.valueOf(list.get(0).getOrderId()));
 	}
 	
 	public OrderItemData get(int id) throws ApiException {

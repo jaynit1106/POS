@@ -56,8 +56,8 @@ public class OrderService {
 
 	public void downloadPdf(@PathVariable int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
 		try {
-		
-		File file = new File("C:\\Increff Project\\POS\\src\\main\\resources\\com\\increff\\pos\\pdf\\invoice "+id+".pdf");
+		String path = new File("./src/main/resources/com/increff/pos/pdf/Invoice "+id+".pdf").getAbsolutePath();
+		File file = new File(path);
 		
 		InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
 		String mimeType = URLConnection.guessContentTypeFromStream(inputStream);

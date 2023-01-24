@@ -80,7 +80,7 @@ public class TestProductDto extends AbstractUnitTest{
         List<ProductData> productDataList = productDto.getAll();
 
         //checking the update Operation
-        productDto.update(productDataList.get(0).getId(),PojoUtil.getProductForm("brand","category","changedName","abcdabcd",290));
+        productDto.update(productDataList.get(0).getId(),PojoUtil.getProductForm("brand","category","changedname","abcdabcd",290));
         productDataList = productDto.getAll();
         assertEquals(productDataList.get(0).getBarcode(),"abcdabcd");
         assertEquals(productDataList.get(0).getMrp(),"290.00");
