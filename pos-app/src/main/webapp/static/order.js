@@ -6,12 +6,12 @@ productMap = new Map();
 //URL FUNCTIONS
 function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/order";
+	return baseUrl + "/api/orders";
 }
 
 function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/product";
+	return baseUrl + "/api/products";
 }
 
 function getSchedulerUrl(){
@@ -26,7 +26,7 @@ function getBaseUrl(){
 
 function getOrderItemUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/orderitem";
+	return baseUrl + "/api/orderitems";
 }
 
 //API CALLING FUNCTIONS
@@ -225,7 +225,7 @@ function displayCreateItemModal(){
 //DOWNLOAD ACTIONS
 function downloadPdf(id){
 	// var pdfName = "invoice "+id;
-	var url = getBaseUrl()+"/api/order/download/"+id;
+	var url = getBaseUrl()+"/api/orders/download/"+id;
 	window.location.href = url;
 }
 

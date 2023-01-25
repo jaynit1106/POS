@@ -28,24 +28,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/**")//
 				.antMatchers("/ui/**")//
 				.and().authorizeRequests()//
-				.antMatchers(HttpMethod.GET, "/api/brand/**").hasAnyAuthority("operator","supervisor")//
-				.antMatchers("/api/brand/**").hasAuthority("supervisor")//
-				.antMatchers(HttpMethod.GET, "/api/product/**").hasAnyAuthority("operator","supervisor")//
-				.antMatchers("/api/product/**").hasAuthority("supervisor")//
-				.antMatchers(HttpMethod.GET, "/api/inventory/**").hasAnyAuthority("operator","supervisor")//
-				.antMatchers("/api/inventory/**").hasAuthority("supervisor")//
-				.antMatchers("/api/report/**").hasAuthority("supervisor")//
+				.antMatchers(HttpMethod.GET, "/api/brands/**").hasAnyAuthority("operator","supervisor")//
+				.antMatchers("/api/brands/**").hasAuthority("supervisor")//
+				.antMatchers(HttpMethod.GET, "/api/products/**").hasAnyAuthority("operator","supervisor")//
+				.antMatchers("/api/products/**").hasAuthority("supervisor")//
+				.antMatchers(HttpMethod.GET, "/api/inventorys/**").hasAnyAuthority("operator","supervisor")//
+				.antMatchers("/api/inventorys/**").hasAuthority("supervisor")//
+				.antMatchers("/api/reports/**").hasAuthority("supervisor")//
 				.antMatchers("/api/scheduler/**").hasAuthority("supervisor")//
-				.antMatchers("/api/order/**").hasAnyAuthority("supervisor","operator")//
-				.antMatchers("/api/orderitem/**").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/api/orders/**").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/api/orderitems/**").hasAnyAuthority("supervisor","operator")//
 				// UI Pages
-				.antMatchers("/ui/brand/**").hasAnyAuthority("supervisor","operator")//
-				.antMatchers("/ui/product/**").hasAnyAuthority("supervisor","operator")//
-				.antMatchers("/ui/inventory/**").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/ui/brands/**").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/ui/products/**").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/ui/inventorys/**").hasAnyAuthority("supervisor","operator")//
 				.antMatchers("/ui/reports/**").hasAuthority("supervisor")//
-				.antMatchers("/ui/inventoryReport/**").hasAuthority("supervisor")//
+				.antMatchers("/ui/inventorysReport/**").hasAuthority("supervisor")//
 				.antMatchers("/ui/salesReport/**").hasAuthority("supervisor")//
-				.antMatchers("/ui/order/**").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/ui/orders/**").hasAnyAuthority("supervisor","operator")//
 				.antMatchers("/ui/home/**").hasAnyAuthority("supervisor","operator")//
 				// Ignore CSRF and CORS
 				.and()

@@ -21,37 +21,37 @@ public class BrandApiController {
 	private final BrandDto dto = new BrandDto();
 
 	@ApiOperation(value = "Adds an Brand")
-	@RequestMapping(path = "/api/brand", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/brands", method = RequestMethod.POST)
 	public void add(@RequestBody BrandForm form) throws ApiException {
 		dto.add(form);
 	}
 
 	@ApiOperation(value = "Gets an brand by ID")
-	@RequestMapping(path = "/api/brand/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/brands/{id}", method = RequestMethod.GET)
 	public BrandData get(@PathVariable int id) throws ApiException {
 		return dto.get(id);
 	}
 
 	@ApiOperation(value = "gets all unique brand list")
-	@GetMapping(path = "/api/brand/unique")
+	@GetMapping(path = "/api/brands/unique")
 	public List<String> getBrandList(){
 		return dto.getBrandList();
 	}
 
 	@ApiOperation(value = "gets all unique category list")
-	@PostMapping(path = "/api/brand/unique")
+	@PostMapping(path = "/api/brands/unique")
 	public List<String> getCategoryList(@RequestBody BrandForm f){
 		return dto.getCategoryList(f.getBrand());
 	}
 
 	@ApiOperation(value = "Gets list of all Brands")
-	@RequestMapping(path = "/api/brand", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/brands", method = RequestMethod.GET)
 	public List<BrandData> getAll() {
 		return dto.getAll();
 	}
 
 	@ApiOperation(value = "Updates an Brand")
-	@RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/api/brands/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody BrandForm f) throws ApiException {
 		dto.update(id, f);
 	}

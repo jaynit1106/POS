@@ -25,25 +25,25 @@ public class InventoryApiController {
 	private final InventoryDto dto = new InventoryDto();
 
 	@ApiOperation(value = "Adds a Product Quantity")
-	@RequestMapping(path = "/api/inventory", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/inventorys", method = RequestMethod.POST)
 	public void add(@RequestBody InventoryForm form) throws ApiException {
 		dto.add(form);
 	}
 
 	@ApiOperation(value = "Gets a Product Quantity by ID")
-	@RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/inventorys/{id}", method = RequestMethod.GET)
 	public InventoryData get(@PathVariable int id) throws ApiException {
 		return dto.get(id);
 	}
 
 	@ApiOperation(value = "Gets list of all products Quantity")
-	@RequestMapping(path = "/api/inventory", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/inventorys", method = RequestMethod.GET)
 	public List<InventoryData> getAll() throws ApiException {
 		return dto.getAll();
 	}
 
 	@ApiOperation(value = "Updates a product Quantity")
-	@RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/api/inventorys/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody InventoryForm form) throws ApiException {
 		dto.update(id, form);
 	}

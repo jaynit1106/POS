@@ -25,13 +25,13 @@ public class ReportApiController {
 	private final ReportsDto dto = new ReportsDto();
 
 	@ApiOperation(value = "gives inventory report")
-	@RequestMapping(path = "/api/report/inventory", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/reports/inventory", method = RequestMethod.GET)
 	public List<InventoryReportData> getInventoryReport() throws ApiException {
 		return dto.getInventoryReport();
 	}
 	
 	@ApiOperation(value = "gives sales report")
-	@RequestMapping(path = "/api/report/sales", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/reports/sales", method = RequestMethod.POST)
 	public List<SalesReportData> getSalesReport(@RequestBody SalesReportForm form) throws ApiException{
 		return dto.getSalesReport(form);
 	}

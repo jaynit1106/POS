@@ -29,25 +29,25 @@ public class OrderItemApiController {
 	private final OrderItemDto dto = new OrderItemDto();
 
 	@ApiOperation(value = "Adds a Order Item")
-	@RequestMapping(path = "/api/orderitem", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/orderitems", method = RequestMethod.POST)
 	public void add(@RequestBody List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
 		dto.add(form);
 	}
 
 	@ApiOperation(value = "Gets a Order Item by orderID")
-	@RequestMapping(path = "/api/orderitem/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/orderitems/{id}", method = RequestMethod.GET)
 	public List<OrderItemData> get(@PathVariable int id) throws ApiException, ParserConfigurationException, TransformerException {
 		return dto.getOrderItemByOrderID(id);
 	}
 
 	@ApiOperation(value = "Gets list of all Order Items")
-	@RequestMapping(path = "/api/orderitem", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/orderitems", method = RequestMethod.GET)
 	public List<OrderItemData> getAll() {
 		return dto.getAll();
 	}
 
 	@ApiOperation(value = "Updates a product Quantity")
-	@RequestMapping(path = "/api/orderitem/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/api/orderitems/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody OrderItemForm form) throws ApiException {
 		dto.update(id, form);
 	}

@@ -3,12 +3,12 @@ var editInventoryId=null;
 //URL FUNCTIONS
 function getInventoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/inventory";
+	return baseUrl + "/api/inventorys";
 }
 
 function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/product";
+	return baseUrl + "/api/products";
 }
 
 //API CALLING FUNCTIONS

@@ -26,25 +26,25 @@ public class OrderApiController {
 	private final OrderDto dto = new OrderDto();
 
 	@ApiOperation(value = "Adds a Order")
-	@RequestMapping(path = "/api/order", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/orders", method = RequestMethod.POST)
 	public OrderData add() throws ApiException {
 		return dto.add();
 	}
 
 	@ApiOperation(value = "Gets a Order by ID")
-	@RequestMapping(path = "/api/order/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/orders/{id}", method = RequestMethod.GET)
 	public OrderData get(@PathVariable int id) throws ApiException {
 		return dto.get(id);
 	}
 
 	@ApiOperation(value = "Gets list of all Orders")
-	@RequestMapping(path = "/api/order", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/orders", method = RequestMethod.GET)
 	public List<OrderData> getAll() {
 		return dto.getAll();
 	}
 	
 	@ApiOperation(value = "Gets Pdf")
-	@RequestMapping(path = "/api/order/download/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/orders/download/{id}", method = RequestMethod.GET)
 	public void downloadPdf(@PathVariable int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
 		dto.downloadPdf(id, request, response);
 	}

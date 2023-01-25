@@ -12,6 +12,7 @@
 
 # Properties File
 *.properties
+*.pdf
 
 # Package Files #
 *.jar

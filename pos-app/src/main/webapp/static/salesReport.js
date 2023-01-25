@@ -5,12 +5,12 @@ let salesData = []
 //URL FUNCTIONS
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/api/brands";
 }
 
 function getReportUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/report";
+	return baseUrl + "/api/reports";
 }
 
 //JSON Converting function
