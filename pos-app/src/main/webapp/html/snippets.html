@@ -64,25 +64,37 @@
             <li class="nav-item">
                 <a class="nav-link" style="color:white " th:href="@{/ui/order}">Order</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" style="color:white " th:href="@{/ui/reports}">DailyReports</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" style="color:white " th:href="@{/ui/inventoryReport}">InventoryReport</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" style="color:white " th:href="@{/ui/salesReport}">SalesReport</a>
+            <li class="nav-item dropdown">
+                <a style="color:white;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Reports
+                </a>
+                <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item font-weight-bold" th:href="@{/ui/inventoryReport}">Inventory Report</a>
+                    <a class="dropdown-item txt-white font-weight-bold" th:href="@{/ui/reports}">Daily Report</a>
+                    <a class="dropdown-item txt-white font-weight-bold" th:href="@{/ui/salesReport}">Sales Report</a>
+                </div>
             </li>
         </ul>
 
-        <ul class="navbar-nav ml-auto">
-            <li class="navbar-text"style="color:white ">
-                [[${info.getEmail()}]]
-                &nbsp;&gt;&nbsp;
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" style="color:white "th:href="@{/session/logout}">Logout</a>
-            </li>
+        <ul class="navbar-nav ml-auto btn-group">
+<!--            <div class="btn-group">-->
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-user">&nbsp;&nbsp;</i>[[${info.getEmail()}]]
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-item">[[${info.getRole()}]]</div>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" th:href="@{/session/logout}">Logout</a>
+                </div>
+<!--            </div>-->
+<!--            <li class="navbar-text"style="color:white ">-->
+<!--                [[${info.getEmail()}]]-->
+<!--                ([[${info.getRole()}]])-->
+<!--                &nbsp;&gt;&nbsp;-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" style="color:white "th:href="@{/session/logout}">Logout</a>-->
+<!--            </li>-->
         </ul>
 
 

@@ -15,7 +15,7 @@
 <h3>Brands</h3>
 
  <!-- Top row with form-->
- <div class="row">
+ <div class="row" th:if="${info.getRole()}=='supervisor'">
 	 <div class="col-12">
 			<form class="form-inline" id="brand-form">
 			  <div class="form-group">

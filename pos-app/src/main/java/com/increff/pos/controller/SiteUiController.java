@@ -16,7 +16,12 @@ public class SiteUiController extends AbstractUiController {
 	// WEBSITE PAGES
 	@RequestMapping(value = "")
 	public ModelAndView index() {
-		return mav("index.html");
+		return new ModelAndView("redirect:/site/login");
+	}
+
+	@RequestMapping(value = "/access/denied")
+	public ModelAndView accessDenied(){
+		return new ModelAndView("accessDenied.html");
 	}
 
 	@RequestMapping(value = "/site/login")

@@ -54,7 +54,7 @@ public class OrderService {
 		return dao.selectRange(startDate,endDate);
 	}
 
-	public void downloadPdf(@PathVariable int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
+	public void downloadPdf(int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
 		try {
 		String path = new File("./src/main/resources/com/increff/pos/pdf/Invoice "+id+".pdf").getAbsolutePath();
 		File file = new File(path);

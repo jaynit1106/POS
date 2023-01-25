@@ -53,7 +53,6 @@ public class LoginController {
 		SecurityUtil.createContext(session);
 		// Attach Authentication object to the Security Context
 		SecurityUtil.setAuthentication(authentication);
-
 		return new ModelAndView("redirect:/ui/home");
 
 	}
@@ -69,6 +68,7 @@ public class LoginController {
 		UserPrincipal principal = new UserPrincipal();
 		principal.setEmail(p.getEmail());
 		principal.setId(p.getId());
+		principal.setRole(p.getRole());
 
 		// Create Authorities
 		ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();

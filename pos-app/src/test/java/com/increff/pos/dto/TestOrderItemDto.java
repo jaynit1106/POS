@@ -3,9 +3,12 @@ package com.increff.pos.dto;
 import com.increff.pos.dao.*;
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.pojo.BrandPojo;
+import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
 import io.swagger.annotations.Api;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,6 +18,7 @@ import javax.xml.transform.TransformerException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,7 +46,7 @@ public class TestOrderItemDto extends AbstractUnitTest{
     private final OrderItemDto orderItemDto = new OrderItemDto();
 
     @Test
-    public void testAdd() throws ApiException, ParserConfigurationException, TransformerException {
+    public void testAdd() throws ApiException, ParserConfigurationException, TransformerException, IOException {
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
@@ -109,6 +113,8 @@ public class TestOrderItemDto extends AbstractUnitTest{
 
         } catch (TransformerException e) {
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         if(Objects.equals(flag,false))fail();
 
@@ -124,6 +130,8 @@ public class TestOrderItemDto extends AbstractUnitTest{
 
         } catch (TransformerException e) {
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         if(Objects.equals(flag,false))fail();
         try {
@@ -134,9 +142,11 @@ public class TestOrderItemDto extends AbstractUnitTest{
         }catch (ApiException e){
             return;
         } catch (ParserConfigurationException e) {
-            return;
+            fail();
         } catch (TransformerException e) {
-            return;
+            fail();
+        } catch (IOException e) {
+            fail();
         }
         fail();
     }
@@ -161,9 +171,11 @@ public class TestOrderItemDto extends AbstractUnitTest{
         }catch (ApiException e){
             return;
         } catch (ParserConfigurationException e) {
-            return;
+            fail();
         } catch (TransformerException e) {
-            return;
+            fail();
+        } catch (IOException e) {
+            fail();
         }
         fail();
     }
@@ -209,6 +221,30 @@ public class TestOrderItemDto extends AbstractUnitTest{
         assertEquals(data.getQuantity(),20);
         assertEquals(data.getSellingPrice(),100,0);
         assertEquals(data.getId(),list.get(0).getId());
+    }
+
+    @Test
+    public void testCreatePdf(){
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandDao.selectAll(BrandPojo.class).get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDao.selectAll(ProductPojo.class).get(0).getId()));
+
+        List<OrderItemForm> list = new ArrayList<>();
+        list.add(PojoUtil.getOrderItemForm(20,"abcdabcd",90));
+
+
+        //checking creating the pdf part
+        try {
+            orderItemDto.add(list);
+        } catch (ParserConfigurationException e) {
+            Assert.fail();
+        } catch (IOException e) {
+            Assert.fail();
+        } catch (TransformerException e) {
+            Assert.fail();
+        } catch (ApiException e) {
+            Assert.fail();
+        }
     }
 
 }
