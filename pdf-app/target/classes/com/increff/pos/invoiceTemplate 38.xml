@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><invoice-record><line-item-records><line-item-record><id>1</id><name>testings</name><barcode>testtest</barcode><quantity>90</quantity><price>90.0</price><total>8100.0</total></line-item-record></line-item-records><totalCost>8100.0</totalCost><orderId>38</orderId><dates>25/01/2023</dates><times> 12:45:15</times></invoice-record>

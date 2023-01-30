@@ -1,11 +1,14 @@
 com\increff\pos\dto\TestOrderItemDto.class
+com\increff\pos\dto\TestUserDto.class
 com\increff\pos\service\TestProductService.class
 com\increff\pos\service\TestInventoryService.class
 com\increff\pos\dto\TestOrderDto.class
 com\increff\pos\service\QaConfig.class
 com\increff\pos\dto\AbstractUnitTest.class
 com\increff\pos\service\TestOrderItemService.class
+com\increff\pos\service\TestOrderService.class
 com\increff\pos\service\SampleTest.class
+com\increff\pos\service\TestUserService.class
 com\increff\pos\dto\TestProductDto.class
 com\increff\pos\util\PojoUtil.class
 com\increff\pos\service\TestBrandService.class

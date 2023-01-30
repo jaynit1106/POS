@@ -1,18 +1,19 @@
 package com.increff.pos.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.transaction.Transactional;
 
-import com.increff.pos.dto.InventoryDto;
+import com.increff.pos.util.JSONUTil;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.pos.dao.InventoryDao;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
-import com.increff.pos.pojo.OrderPojo;
 
 
 @Service
@@ -54,20 +55,38 @@ public class InventoryService {
 		return p;
 	}
 	
-	public void checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
-		for(OrderItemPojo p : items) {
-			if(p.getQuantity()<=0)throw new ApiException("Please Enter a Valid Quantity");
-			if(p.getSellingPrice()<0)throw new ApiException("Please Enter a Valid Price");
+	public List<JSONObject> checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
+		List<JSONObject> errors = new ArrayList<>();
 
-			InventoryPojo inventory = dao.select(p.getProductId(),InventoryPojo.class);
+		for(OrderItemPojo p : items) {
+			if(p.getQuantity()<=0){
+				errors.add(JSONUTil.getJSONObject("Please Enter a Valid Quantity for "+p.getBarcode()));
+				continue;
+			}
+			if(p.getSellingPrice()<0) {
+				errors.add(JSONUTil.getJSONObject("Please Enter a Valid Price for "+p.getBarcode()));
+				continue;
+			}
+			InventoryPojo inventory;
+
+			try {
+				inventory = getCheck(p.getProductId());
+			}catch (ApiException e){
+				errors.add(JSONUTil.getJSONObject("Inventory does not exists for " + p.getBarcode()));
+				continue;
+			}
 
 			int quantity = inventory.getQuantity();
-			if(quantity<p.getQuantity())throw new ApiException("Only "+quantity+" pieces left of " + p.getProductId());
+			if(quantity<p.getQuantity()){
+				errors.add(JSONUTil.getJSONObject("Only "+quantity+" pieces left of " + p.getBarcode()));
+				continue;
+			}
 
 			quantity=quantity-p.getQuantity();
 			inventory.setQuantity(quantity);
 			update(inventory.getId(), inventory);
 		}
+		return errors;
 	}
 	
 	

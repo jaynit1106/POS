@@ -92,8 +92,9 @@ function getItemList(url){
 		}
 	 });
 }
-
+errorData = [];
 function submitOrder(){
+	errorData = [];
 	var url = getOrderItemUrl();
 	let form = convertArrayToJson();
 	if(itemList.length-deleteList.length==0){
@@ -113,11 +114,19 @@ function submitOrder(){
 				getOrderList();  
 		},
 		error: function(response){
-				swal("Oops!", response.responseJSON.message, "error");
+		        var json = JSON.parse(response.responseJSON.message);
+		        for(var i in json){
+		            e = json[i];
+		            errorData.push(e);
+		        }
+				swal("Oops!", "There are some errors", "error");
+				downloadErrors();
 		}
 	 });
 }
-
+function downloadErrors(){
+	writeFileData(errorData);
+}
 // PAGINATION METHODS
 function paginateOrder() {
 	$('#order-table').DataTable();
@@ -182,6 +191,9 @@ function displayItemList(){
 	$tbody.empty();
 	var itr = 0;
 	var serialId=1;
+	console.log(itemList);
+	localStorage.items = JSON.stringify(itemList);
+	localStorage.removeItems = JSON.stringify(deleteList);
 	for(var i in itemList){
 		if(deleteList.find(function (element) {return element == i;})!=undefined){
 			itr++;
@@ -213,12 +225,18 @@ function viewModal(id){
 }
 
 function displayCreateItemModal(){
+    if(localStorage.items==undefined)itemList=[]
+    else itemList=JSON.parse(localStorage.items)
+
+    if(localStorage.removeItems==undefined)deleteList=[]
+    else deleteList=JSON.parse(localStorage.removeItems);
+
 	displayItemList();
-	itemList=[];
-	deleteList=[];
+//	itemList=[];
+//	deleteList=[];
 	productMap = new Map();
-	var $tbody = $('#items-table').find('tbody');
-	$tbody.empty();
+//	var $tbody = $('#items-table').find('tbody');
+//	$tbody.empty();
 	$('#edit-order-modal').modal('toggle');
 }
 
@@ -318,12 +336,20 @@ function convertArrayToJson(){
 	return JSON.stringify(json);
 }
 
+function cancelOrder(){
+    itemList=[]
+    deleteList=[]
+    localStorage.clear();
+    $('#edit-order-modal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
 	$('#create-order').click(displayCreateItemModal);
 	$('#add-item').click(addItem);
 	$('#submit-order').click(submitOrder);
 	$('#refresh-order').click(getOrderList);
+	$('#submit-order').click(submitOrder);
+    $('#cancel-order').click(cancelOrder);
 }
 
 $(document).ready(init);
