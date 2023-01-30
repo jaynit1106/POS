@@ -7,8 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="employee-spring-full" />
+        <module name="pos-app" />
+        <module name="pdf-app" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="employee-spring-full" target="1.8" />
+      <module name="POS" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

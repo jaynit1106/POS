@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dao</a> &gt; <span class="el_source">AbstractDao.java</span></div><h1>AbstractDao.java</h1><pre class="source lang-java linenums">package com.increff.pos.dao;
+
+
+import com.increff.pos.pojo.BrandPojo;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
+
+
+<span class="fc" id="L12">public abstract class AbstractDao {</span>
+	
+	@PersistenceContext
+	private EntityManager em;
+
+	protected &lt;T&gt; T getSingle(TypedQuery&lt;T&gt; query) {
+<span class="fc" id="L18">		return query.getResultList().stream().findFirst().orElse(null);</span>
+	}
+	
+	public &lt;T&gt; void insert(T pojo) {
+<span class="fc" id="L22">		em.persist(pojo);</span>
+<span class="fc" id="L23">	}</span>
+	
+	protected &lt;T&gt; TypedQuery&lt;T&gt; getQuery(String jpql, Class&lt;T&gt; clazz) {
+<span class="fc" id="L26">		return em.createQuery(jpql, clazz);</span>
+	}
+
+	public &lt;T&gt; List&lt;T&gt; selectAll(Class&lt;T&gt; clazz){
+<span class="fc" id="L30">		final String SELECT_ALL = &quot;select p from &quot;+clazz.getName()+&quot; p&quot;;</span>
+<span class="fc" id="L31">		TypedQuery&lt;T&gt; query = getQuery(SELECT_ALL, clazz);</span>
+<span class="fc" id="L32">		return query.getResultList();</span>
+	}
+
+	public &lt;T&gt; T select(int id,Class&lt;T&gt; clazz) {
+<span class="fc" id="L36">		final String SELECT_ID= &quot;select p from &quot;+clazz.getName()+&quot; p where id=:id&quot;;</span>
+<span class="fc" id="L37">		TypedQuery&lt;T&gt; query = getQuery(SELECT_ID, clazz);</span>
+<span class="fc" id="L38">		query.setParameter(&quot;id&quot;, id);</span>
+<span class="fc" id="L39">		return getSingle(query);</span>
+	}
+
+	protected EntityManager em() {
+<span class="nc" id="L43">		return em;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

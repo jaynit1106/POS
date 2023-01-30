@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">ProductDto.java</span></div><h1>ProductDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.increff.pos.model.ProductData;
+import com.increff.pos.model.ProductForm;
+import com.increff.pos.pojo.BrandPojo;
+import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.service.ApiException;
+import com.increff.pos.service.BrandService;
+import com.increff.pos.service.ProductService;
+import com.increff.pos.util.ConvertUtil;
+import com.increff.pos.util.StringUtil;
+
+@Component
+<span class="fc" id="L23">public class ProductDto {</span>
+<span class="fc" id="L24">	@Autowired</span>
+	private final ProductService productService = new ProductService();
+	
+<span class="fc" id="L27">	@Autowired</span>
+	private final BrandService brandService = new BrandService();
+	
+	public void add(ProductForm form) throws ApiException {
+<span class="fc" id="L31">		StringUtil.normalise(form,ProductForm.class);</span>
+<span class="fc" id="L32">		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);</span>
+<span class="fc" id="L33">		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+
+<span class="fc" id="L35">		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());</span>
+<span class="fc" id="L36">		p.setBrandId(brand.getId());</span>
+
+<span class="nc" id="L38">		productService.add(p);</span>
+<span class="nc" id="L39">	}</span>
+	
+	public ProductData get(int id) throws ApiException {
+<span class="fc" id="L42">		ProductPojo product = productService.get(id);</span>
+<span class="fc" id="L43">		ProductData data = ConvertUtil.objectMapper(product, ProductData.class);</span>
+<span class="fc" id="L44">		data.setMrp(StringUtil.convertMrp(product.getMrp()));</span>
+		
+<span class="fc" id="L46">		BrandPojo brand = brandService.get(product.getBrandId());</span>
+<span class="fc" id="L47">		data.setCategory(brand.getCategory());</span>
+<span class="fc" id="L48">		data.setBrand(brand.getBrand());</span>
+
+<span class="fc" id="L50">		return data;</span>
+	}
+	
+	public List&lt;ProductData&gt; getAll() throws ApiException{
+<span class="fc" id="L54">		List&lt;ProductPojo&gt; list = productService.getAll();</span>
+<span class="fc" id="L55">		List&lt;ProductData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">		for (ProductPojo p : list) {</span>
+			
+<span class="fc" id="L58">			ProductData data = ConvertUtil.objectMapper(p, ProductData.class);</span>
+<span class="fc" id="L59">			data.setMrp(StringUtil.convertMrp(p.getMrp()));</span>
+			
+<span class="fc" id="L61">			BrandPojo brand = brandService.get(p.getBrandId());</span>
+<span class="fc" id="L62">			data.setCategory(brand.getCategory());</span>
+<span class="fc" id="L63">			data.setBrand(brand.getBrand());</span>
+<span class="fc" id="L64">			list2.add(data);</span>
+<span class="fc" id="L65">		}</span>
+<span class="fc" id="L66">		return list2;</span>
+	}
+	
+	public void update(int id,ProductForm form) throws ApiException {
+<span class="fc" id="L70">		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);</span>
+<span class="fc" id="L71">		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+
+<span class="fc" id="L73">		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());</span>
+<span class="fc" id="L74">		p.setBrandId(brand.getId());</span>
+		
+<span class="fc" id="L76">		productService.update(id,p);</span>
+<span class="fc" id="L77">	}</span>
+
+<span class="fc" id="L79">	public List&lt;String&gt; getBarcodeList(){return productService.getBarcodeList();}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

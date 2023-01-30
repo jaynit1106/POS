@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<organization>
+	<orgname>XYZ</orgname>
+	<branch>
+		<name>abc</name>
+		<city>aaa</city>
+		<startdate>1111</startdate>
+	</branch>
+	<branch>
+		<name>aabc</name>
+		<city>aaa</city>
+		<startdate>1111</startdate>
+	</branch>
+	<branch>
+		<name>abaac</name>
+		<city>aaa</city>
+		<startdate>1111</startdate>
+	</branch>
+</organization>

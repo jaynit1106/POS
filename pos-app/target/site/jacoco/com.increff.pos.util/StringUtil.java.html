@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StringUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.util</a> &gt; <span class="el_source">StringUtil.java</span></div><h1>StringUtil.java</h1><pre class="source lang-java linenums">package com.increff.pos.util;
+
+import com.increff.pos.service.ApiException;
+
+import java.lang.reflect.Field;
+import java.text.DecimalFormat;
+import java.util.Objects;
+
+<span class="nc" id="L9">public class StringUtil {</span>
+
+	public static boolean isEmpty(String s) {
+<span class="pc bpc" id="L12" title="1 of 4 branches missed.">		return s == null || s.trim().length() == 0;</span>
+	}
+
+	public static &lt;T&gt; void normalise(T form, Class&lt;T&gt; type) throws ApiException {
+<span class="fc" id="L16">		Field[] fields = type.getDeclaredFields();</span>
+
+<span class="fc bfc" id="L18" title="All 2 branches covered.">		for(Field field: fields) {</span>
+
+<span class="fc bfc" id="L20" title="All 2 branches covered.">			if(field.getType().getSimpleName().equals(&quot;String&quot;)){</span>
+<span class="fc" id="L21">				field.setAccessible(true);</span>
+				try{
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">					if(Objects.nonNull(field.get(form))){</span>
+<span class="fc" id="L24">						field.set(form,(field.get(form).toString()).toLowerCase());</span>
+					}
+<span class="nc" id="L26">				} catch(IllegalAccessException e){</span>
+<span class="nc" id="L27">					throw new ApiException(&quot;Error normalising form&quot;);</span>
+<span class="fc" id="L28">				}</span>
+			}
+		}
+<span class="fc" id="L31">	}</span>
+
+	public static String convertMrp(double val) {
+<span class="fc" id="L34">		DecimalFormat df = new DecimalFormat(&quot;0.00&quot;);</span>
+<span class="fc" id="L35">	    String mrpFormated = df.format(val);</span>
+<span class="fc" id="L36">	    return mrpFormated;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

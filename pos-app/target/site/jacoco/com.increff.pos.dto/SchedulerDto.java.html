@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SchedulerDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">SchedulerDto.java</span></div><h1>SchedulerDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import com.increff.pos.pojo.OrderItemPojo;
+import com.increff.pos.pojo.OrderPojo;
+import com.increff.pos.service.OrderItemService;
+import com.increff.pos.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.increff.pos.model.SchedulerData;
+import com.increff.pos.model.SchedulerForm;
+import com.increff.pos.pojo.SchedulerPojo;
+import com.increff.pos.service.ApiException;
+import com.increff.pos.service.SchedulerService;
+import com.increff.pos.util.ConvertUtil;
+import com.increff.pos.util.TimestampUtil;
+
+
+@Component
+<span class="fc" id="L27">public class SchedulerDto {</span>
+	
+<span class="fc" id="L29">	@Autowired</span>
+	private final SchedulerService schedulerService = new SchedulerService();
+<span class="fc" id="L31">	@Autowired</span>
+	private final OrderService orderService = new OrderService();
+<span class="fc" id="L33">	@Autowired</span>
+	private final OrderItemService orderItemService = new OrderItemService();
+
+	@Scheduled(cron = &quot;00 00 12 * * *&quot;)
+	public void add() throws ApiException{
+<span class="nc" id="L38">		SchedulerPojo p = new SchedulerPojo();</span>
+<span class="nc" id="L39">		p.setDate(TimestampUtil.getTimestamp().substring(0,10));</span>
+<span class="nc" id="L40">		List&lt;OrderPojo&gt; list = orderService.selectRange(Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T00:00:00Z&quot;),Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T23:59:59Z&quot;));</span>
+<span class="nc" id="L41">		p.setInvoiced_orders_count(list.size());</span>
+<span class="nc" id="L42">		double revenue = 0;</span>
+<span class="nc" id="L43">		Integer totalItems = 0;</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		for(OrderPojo order : list){</span>
+<span class="nc" id="L45">			List&lt;OrderItemPojo&gt; item = orderItemService.getOrderItemByOrderId(order.getId());</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">			for(OrderItemPojo pojo : item){</span>
+<span class="nc" id="L47">				totalItems+=pojo.getQuantity();</span>
+<span class="nc" id="L48">				revenue+=(pojo.getQuantity()*pojo.getSellingPrice());</span>
+<span class="nc" id="L49">			}</span>
+<span class="nc" id="L50">		}</span>
+<span class="nc" id="L51">		p.setTotal_revenue(revenue);</span>
+<span class="nc" id="L52">		p.setInvoiced_items_count(totalItems);</span>
+<span class="nc" id="L53">		schedulerService.add(p);</span>
+<span class="nc" id="L54">	}</span>
+	
+	public SchedulerData get(String date) throws ApiException {
+<span class="nc" id="L57">		SchedulerPojo p = schedulerService.get(date);</span>
+<span class="nc" id="L58">		return ConvertUtil.objectMapper(p, SchedulerData.class);</span>
+	}
+	
+	public List&lt;SchedulerData&gt; getAll() {
+<span class="nc" id="L62">		List&lt;SchedulerPojo&gt; list = schedulerService.getAll();</span>
+<span class="nc" id="L63">		List&lt;SchedulerData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">		for (SchedulerPojo p : list) {</span>
+<span class="nc" id="L65">			list2.add(ConvertUtil.objectMapper(p, SchedulerData.class));</span>
+<span class="nc" id="L66">		}</span>
+<span class="nc" id="L67">		Collections.reverse(list2);</span>
+<span class="nc" id="L68">		return list2;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

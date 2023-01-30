@@ -24,7 +24,9 @@ import com.increff.pos.util.ConvertUtil;
 import org.json.simple.JSONObject;
 @Component
 public class OrderItemDto {
-	
+
+	@Autowired
+	private final PdfDto pdfDto = new PdfDto();
 	@Autowired
 	private final OrderItemService orderItemService = new OrderItemService();
 	
@@ -76,7 +78,7 @@ public class OrderItemDto {
 		}
 
 		try {
-			String base64 = Base64Util.getBase64(list);
+			String base64 = pdfDto.getBase64(list);
 			Base64Util.savePdf(base64,"Invoice "+ list.get(0).getOrderId());
 		}catch (Exception e){
 			errors.add(JSONUTil.getJSONObject("Server error"));

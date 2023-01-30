@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<invoice-record>
+	<line-item-records>
+		<line-item-record>
+			<description>b</description>
+			<quantity>b</quantity>
+			<amount>200005.0</amount>
+		</line-item-record>
+		<line-item-record>
+			<description>zz</description>
+			<quantity>zz</quantity>
+			<amount>121.0</amount>
+		</line-item-record>
+	</line-item-records>
+</invoice-record>

@@ -33,7 +33,7 @@ public class SchedulerDto {
 	@Autowired
 	private final OrderItemService orderItemService = new OrderItemService();
 
-	@Scheduled(cron = "00 36 10 * * *")
+	@Scheduled(cron = "00 00 12 * * *")
 	public void add() throws ApiException{
 		SchedulerPojo p = new SchedulerPojo();
 		p.setDate(TimestampUtil.getTimestamp().substring(0,10));
