@@ -1,4 +1,6 @@
 com\increff\pos\dto\TestOrderItemDto.class
+com\increff\pos\dto\TestSchedulerDto.class
+com\increff\pos\dto\TestAboutAppDto.class
 com\increff\pos\dto\TestUserDto.class
 com\increff\pos\service\TestProductService.class
 com\increff\pos\service\TestInventoryService.class
@@ -10,6 +12,7 @@ com\increff\pos\service\TestOrderService.class
 com\increff\pos\service\SampleTest.class
 com\increff\pos\service\TestUserService.class
 com\increff\pos\dto\TestProductDto.class
+com\increff\pos\dto\TestReportsDto.class
 com\increff\pos\util\PojoUtil.class
 com\increff\pos\service\TestBrandService.class
 com\increff\pos\dto\TestInventoryDto.class

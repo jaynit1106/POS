@@ -15,9 +15,9 @@ import com.increff.pos.pojo.SchedulerPojo;
 
 	
 	public SchedulerPojo select(String date) {
-<span class="nc" id="L18">		TypedQuery&lt;SchedulerPojo&gt; query = getQuery(select_date, SchedulerPojo.class);</span>
-<span class="nc" id="L19">		query.setParameter(&quot;date&quot;, date);</span>
-<span class="nc" id="L20">		return getSingle(query);</span>
+<span class="fc" id="L18">		TypedQuery&lt;SchedulerPojo&gt; query = getQuery(select_date, SchedulerPojo.class);</span>
+<span class="fc" id="L19">		query.setParameter(&quot;date&quot;, date);</span>
+<span class="fc" id="L20">		return getSingle(query);</span>
 	}
 
 }

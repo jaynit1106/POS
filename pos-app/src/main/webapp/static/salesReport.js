@@ -127,7 +127,31 @@ function displaySalesList(){
 
 //PAGINATION UTIL
 function paginate() {
-	$('#sales-table').DataTable();
+	$('#sales-table').DataTable({
+	    dom: 'Bfrtip',
+	    buttons:[
+	        {
+	            extend:'pdf',
+	            customize: function (doc) {
+                    doc.content[1].table.widths =
+                        Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                  },
+	            title:'Sales Report',
+	            filename:'salesReport'
+	        },
+	        {
+                extend:'csv',
+                title:'Sales Report',
+                filename:'salesReport'
+            },
+            {
+                extend:'excel',
+                title:'Sales Report',
+                filename:'salesReport'
+            }
+
+	    ]
+	});
 }
 
 
@@ -179,6 +203,7 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getBrandList);
+$(document).ready(getCategoryList);
 $(document).ready(setDate);
 
 

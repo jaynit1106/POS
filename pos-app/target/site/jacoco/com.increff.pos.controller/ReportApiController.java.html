@@ -2,6 +2,7 @@
 
 import java.util.List;
 
+import com.increff.pos.model.InventoryReportForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,21 +20,21 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-<span class="fc" id="L22">public class ReportApiController {</span>
+<span class="fc" id="L23">public class ReportApiController {</span>
 
-<span class="fc" id="L24">	@Autowired</span>
+<span class="fc" id="L25">	@Autowired</span>
 	private final ReportsDto dto = new ReportsDto();
 
 	@ApiOperation(value = &quot;gives inventory report&quot;)
-	@RequestMapping(path = &quot;/api/reports/inventory&quot;, method = RequestMethod.GET)
-	public List&lt;InventoryReportData&gt; getInventoryReport() throws ApiException {
-<span class="nc" id="L30">		return dto.getInventoryReport();</span>
+	@RequestMapping(path = &quot;/api/reports/inventory&quot;, method = RequestMethod.POST)
+	public List&lt;InventoryReportData&gt; getInventoryReport(@RequestBody InventoryReportForm form) throws ApiException {
+<span class="nc" id="L31">		return dto.getInventoryReport(form);</span>
 	}
 	
 	@ApiOperation(value = &quot;gives sales report&quot;)
 	@RequestMapping(path = &quot;/api/reports/sales&quot;, method = RequestMethod.POST)
 	public List&lt;SalesReportData&gt; getSalesReport(@RequestBody SalesReportForm form) throws ApiException{
-<span class="nc" id="L36">		return dto.getSalesReport(form);</span>
+<span class="nc" id="L37">		return dto.getSalesReport(form);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -3,6 +3,8 @@ package com.increff.pos.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -64,6 +66,14 @@ public class BrandService {
 		return list;
 	}
 	public List<String> getCategoryList(String brand){
+		if(Objects.equals(brand,"All")){
+			List<BrandPojo> brands = dao.selectAll(BrandPojo.class);
+			Set<String> stringSet = brands.stream().map(BrandPojo::getCategory).collect(Collectors.toSet());
+			List<String> list = stringSet.stream().collect(Collectors.toList());
+			Collections.sort(list);
+			Collections.reverse(list);
+			return list;
+		}
 		List<String> list = dao.getCategoryList(brand);
 		Collections.sort(list);
 		Collections.reverse(list);

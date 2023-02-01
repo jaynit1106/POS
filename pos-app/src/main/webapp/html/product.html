@@ -79,7 +79,7 @@
 	      <th scope="col">Category</th>
 	      <th scope="col">name</th>
 	      <th scope="col">MRP</th>
-	      <th scope="col">Actions</th>
+	      <th scope="col" th:if="${info.getRole()}=='supervisor'">Actions</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -186,7 +186,13 @@
 </div> <!-- Container end-->
 
 <footer th:replace="snippets.html :: name_footer"></footer>
+<script th:inline="javascript">
+	/*<![CDATA[*/
 
+		var role = /*[[${info.getRole()}]]*/ 'operator';
+
+	/*]]>*/
+</script>
 <script th:src="@{/static/product.js}"/></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>  
 

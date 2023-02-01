@@ -5,12 +5,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
+import com.increff.pos.model.InventoryReportForm;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
 import com.increff.pos.util.MapUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +35,7 @@ public class ReportsDto {
 	@Autowired
 	private final OrderItemService orderItemService = new OrderItemService();
 	
-	public List<InventoryReportData> getInventoryReport() throws ApiException {
+	public List<InventoryReportData> getInventoryReport(InventoryReportForm form) throws ApiException {
 		List<InventoryPojo> list = inventoryService.getAll();
 		HashMap<Integer,Integer> inventory = new HashMap<>();
 		for(InventoryPojo p : list) {
@@ -44,17 +47,19 @@ public class ReportsDto {
 			inventory.put(brandId , quant + p.getQuantity());
 		}
 
-		List<InventoryReportData> list2 = new ArrayList<>();
+		List<InventoryReportData> finalData = new ArrayList<>();
 		for(Integer id : inventory.keySet()) {
 			BrandPojo brand = brandService.get(id);
+			if(!Objects.equals(form.getBrand(),"All") && !Objects.equals(form.getBrand(),brand.getBrand()))continue;
+			if(!Objects.equals(form.getCategory(),"All") && !Objects.equals(form.getCategory(),brand.getCategory()))continue;
 			InventoryReportData data = new InventoryReportData();
 			data.setBrand(brand.getBrand());
 			data.setCategory(brand.getCategory());
 			data.setQuantity(inventory.get(id));
-			list2.add(data);
+			finalData.add(data);
 		}
 
-		return list2;
+		return finalData;
 	}
 	
 	public List<SalesReportData> getSalesReport(SalesReportForm form) throws ApiException {

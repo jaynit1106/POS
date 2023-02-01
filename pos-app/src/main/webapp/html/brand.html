@@ -52,16 +52,10 @@
 	      <th scope="col">S.No.</th>
 	      <th scope="col">Brand</th>
 	      <th scope="col">Category</th>
-	      <th scope="col">Actions</th>
+	      <th scope="col" th:if="${info.getRole()}=='supervisor'">Actions</th>
 	    </tr>
 	  </thead>
 	  <tbody>
-	    <tr>
-	      <td>1</td>
-	      <td>Test Brand</td>
-	      <td>Test Category</td>
-	      <td>Edit | Delete</td>
-	    </tr>
 	  </tbody>
 	</table>
 	<div class="col">
@@ -143,7 +137,13 @@
 </div> <!-- Container end-->
 
 <footer th:replace="snippets.html :: name_footer"></footer>
+<script th:inline="javascript">
+	/*<![CDATA[*/
 
+		var role = /*[[${info.getRole()}]]*/ 'operator';
+
+	/*]]>*/
+</script>
 <script th:src="@{/static/brand.js}"/></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>  
 

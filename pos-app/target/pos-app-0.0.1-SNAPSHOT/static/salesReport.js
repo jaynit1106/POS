@@ -179,6 +179,7 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getBrandList);
+$(document).ready(getCategoryList);
 $(document).ready(setDate);
 
 

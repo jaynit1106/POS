@@ -110,7 +110,10 @@ public class TestBrandService extends AbstractUnitTest{
         brandDao.insert(PojoUtil.getBrandPojo("brand","category2"));
         brandDao.insert(PojoUtil.getBrandPojo("brand","category3"));
 
-        //checking for unique brands
+        //checking for unique categories
         assertEquals(3,brandService.getCategoryList("brand").size());
+
+        //checking for all category
+        assertEquals(4,brandService.getCategoryList("All").size());
     }
 }

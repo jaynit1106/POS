@@ -181,9 +181,11 @@ function displayBrandList(data){
 		var row = '<tr>'
 		+ '<td>' + counter + '</td>'
 		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+		+ '<td>'  + e.category + '</td>';
+		if(role=='supervisor'){
+		    row+='<td th:if="${info.getRole()}=='+role+'">' + buttonHtml + '</td>';
+		}
+		row += '</tr>';
         $tbody.append(row);
         counter++;
 	}

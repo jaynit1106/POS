@@ -3,6 +3,8 @@
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -16,64 +18,72 @@ import com.increff.pos.util.StringUtil;
 
 @Service
 @Transactional(rollbackOn = ApiException.class)
-<span class="fc" id="L19">public class BrandService {</span>
+<span class="fc" id="L21">public class BrandService {</span>
 
-<span class="fc" id="L21">	@Autowired</span>
+<span class="fc" id="L23">	@Autowired</span>
 	private final BrandDao dao = new BrandDao();
 
 
 	public void add(BrandPojo p) throws ApiException {
-<span class="fc bfc" id="L26" title="All 2 branches covered.">		if(StringUtil.isEmpty(p.getBrand())) {</span>
-<span class="fc" id="L27">			throw new ApiException(&quot;Brand cannot be empty&quot;);</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">		if(StringUtil.isEmpty(p.getBrand())) {</span>
+<span class="fc" id="L29">			throw new ApiException(&quot;Brand cannot be empty&quot;);</span>
 		}
-<span class="pc bpc" id="L29" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(p.getCategory())) {</span>
-<span class="nc" id="L30">			throw new ApiException(&quot;Category cannot be empty&quot;);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(p.getCategory())) {</span>
+<span class="nc" id="L32">			throw new ApiException(&quot;Category cannot be empty&quot;);</span>
 		}
-<span class="fc bfc" id="L32" title="All 2 branches covered.">		if(Objects.nonNull(dao.checkRepeat(p.getBrand(),p.getCategory())))throw new ApiException(&quot;Brand and Category already exists&quot;);</span>
-<span class="fc" id="L33">		dao.insert(p);</span>
-<span class="fc" id="L34">	}</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">		if(Objects.nonNull(dao.checkRepeat(p.getBrand(),p.getCategory())))throw new ApiException(&quot;Brand and Category already exists&quot;);</span>
+<span class="fc" id="L35">		dao.insert(p);</span>
+<span class="fc" id="L36">	}</span>
 
 	public BrandPojo get(int id) throws ApiException {
-<span class="fc" id="L37">		BrandPojo p = dao.select(id,BrandPojo.class);</span>
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">		if(Objects.isNull(p))throw new ApiException(&quot;Brand with id-&quot;+id+&quot; does not exist&quot;);</span>
-<span class="fc" id="L39">		return p;</span>
+<span class="fc" id="L39">		BrandPojo p = dao.select(id,BrandPojo.class);</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">		if(Objects.isNull(p))throw new ApiException(&quot;Brand with id-&quot;+id+&quot; does not exist&quot;);</span>
+<span class="fc" id="L41">		return p;</span>
 	}
 
 	public List&lt;BrandPojo&gt; getAll() {
-<span class="fc" id="L43">		return dao.selectAll(BrandPojo.class);</span>
+<span class="fc" id="L45">		return dao.selectAll(BrandPojo.class);</span>
 	}
 
 	public void update(int id, BrandPojo p) throws ApiException {
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(p.getBrand())) {</span>
-<span class="nc" id="L48">			throw new ApiException(&quot;Brand cannot be empty&quot;);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(p.getBrand())) {</span>
+<span class="nc" id="L50">			throw new ApiException(&quot;Brand cannot be empty&quot;);</span>
 		}
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(p.getCategory())) {</span>
-<span class="nc" id="L51">			throw new ApiException(&quot;Category cannot be empty&quot;);</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(p.getCategory())) {</span>
+<span class="nc" id="L53">			throw new ApiException(&quot;Category cannot be empty&quot;);</span>
 		}
-<span class="fc bfc" id="L53" title="All 2 branches covered.">		if(Objects.nonNull(dao.checkRepeat(p.getBrand(),p.getCategory())))throw new ApiException(&quot;Brand and Category already exists&quot;);</span>
-<span class="fc" id="L54">		BrandPojo ex = dao.select(id,BrandPojo.class);</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">		if(Objects.isNull(ex))throw new ApiException(&quot;Brand with id-&quot;+id+&quot; does not exist&quot;);</span>
-<span class="fc" id="L56">		ex. setCategory(p.getCategory());</span>
-<span class="fc" id="L57">		ex. setBrand(p.getBrand());</span>
-<span class="fc" id="L58">	}</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		if(Objects.nonNull(dao.checkRepeat(p.getBrand(),p.getCategory())))throw new ApiException(&quot;Brand and Category already exists&quot;);</span>
+<span class="fc" id="L56">		BrandPojo ex = dao.select(id,BrandPojo.class);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">		if(Objects.isNull(ex))throw new ApiException(&quot;Brand with id-&quot;+id+&quot; does not exist&quot;);</span>
+<span class="fc" id="L58">		ex. setCategory(p.getCategory());</span>
+<span class="fc" id="L59">		ex. setBrand(p.getBrand());</span>
+<span class="fc" id="L60">	}</span>
 
 	public List&lt;String&gt; getBrandList(){
-<span class="fc" id="L61">		List&lt;String&gt; list = dao.getBrandList();</span>
-<span class="fc" id="L62">		Collections.sort(list);</span>
-<span class="fc" id="L63">		Collections.reverse(list);</span>
-<span class="fc" id="L64">		return list;</span>
+<span class="fc" id="L63">		List&lt;String&gt; list = dao.getBrandList();</span>
+<span class="fc" id="L64">		Collections.sort(list);</span>
+<span class="fc" id="L65">		Collections.reverse(list);</span>
+<span class="fc" id="L66">		return list;</span>
 	}
 	public List&lt;String&gt; getCategoryList(String brand){
-<span class="fc" id="L67">		List&lt;String&gt; list = dao.getCategoryList(brand);</span>
-<span class="fc" id="L68">		Collections.sort(list);</span>
-<span class="fc" id="L69">		Collections.reverse(list);</span>
-<span class="fc" id="L70">		return list;</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">		if(Objects.equals(brand,&quot;All&quot;)){</span>
+<span class="fc" id="L70">			List&lt;BrandPojo&gt; brands = dao.selectAll(BrandPojo.class);</span>
+<span class="fc" id="L71">			Set&lt;String&gt; stringSet = brands.stream().map(BrandPojo::getCategory).collect(Collectors.toSet());</span>
+<span class="fc" id="L72">			List&lt;String&gt; list = stringSet.stream().collect(Collectors.toList());</span>
+<span class="fc" id="L73">			Collections.sort(list);</span>
+<span class="fc" id="L74">			Collections.reverse(list);</span>
+<span class="fc" id="L75">			return list;</span>
+		}
+<span class="fc" id="L77">		List&lt;String&gt; list = dao.getCategoryList(brand);</span>
+<span class="fc" id="L78">		Collections.sort(list);</span>
+<span class="fc" id="L79">		Collections.reverse(list);</span>
+<span class="fc" id="L80">		return list;</span>
 	}
 	
 	public BrandPojo getBrandId(String brand,String category) throws ApiException{
-<span class="fc" id="L74">		BrandPojo p = dao.checkRepeat(brand, category);</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">		if(Objects.isNull(p))throw new ApiException(&quot;Brand And Category Does Not Exist&quot;);</span>
-<span class="fc" id="L76">		return p;</span>
+<span class="fc" id="L84">		BrandPojo p = dao.checkRepeat(brand, category);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">		if(Objects.isNull(p))throw new ApiException(&quot;Brand And Category Does Not Exist&quot;);</span>
+<span class="fc" id="L86">		return p;</span>
 	}
 
 }

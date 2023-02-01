@@ -20,15 +20,15 @@ import com.increff.pos.pojo.SchedulerPojo;
 	
 
 	public void add(SchedulerPojo p) throws ApiException {
-<span class="nc" id="L23">		dao.insert(p); </span>
-<span class="nc" id="L24">	}</span>
+<span class="fc" id="L23">		dao.insert(p); </span>
+<span class="fc" id="L24">	}</span>
 
 	public SchedulerPojo get(String date) throws ApiException {
-<span class="nc" id="L27">		return dao.select(date);</span>
+<span class="fc" id="L27">		return dao.select(date);</span>
 	}
 
 	public List&lt;SchedulerPojo&gt; getAll() {
-<span class="nc" id="L31">		return dao.selectAll(SchedulerPojo.class);</span>
+<span class="fc" id="L31">		return dao.selectAll(SchedulerPojo.class);</span>
 	}
 
 }

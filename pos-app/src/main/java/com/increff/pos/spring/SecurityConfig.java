@@ -27,7 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.requestMatchers()//
 				.antMatchers("/api/**")//
 				.antMatchers("/ui/**")//
+				.antMatchers("/access/denied")//
 				.and().authorizeRequests()//
+				.antMatchers("/access/denied/**").permitAll()//
 				.antMatchers(HttpMethod.GET, "/api/brands/**").hasAnyAuthority("operator","supervisor")//
 				.antMatchers("/api/brands/**").hasAuthority("supervisor")//
 				.antMatchers(HttpMethod.GET, "/api/products/**").hasAnyAuthority("operator","supervisor")//
@@ -45,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/ui/reports/**").hasAuthority("supervisor")//
 				.antMatchers("/ui/inventorysReport/**").hasAuthority("supervisor")//
 				.antMatchers("/ui/salesReport/**").hasAuthority("supervisor")//
+				.antMatchers("/ui/brandReport/**").hasAuthority("supervisor")//
 				.antMatchers("/ui/orders/**").hasAnyAuthority("supervisor","operator")//
 				.antMatchers("/ui/home/**").hasAnyAuthority("supervisor","operator")//
 				// Ignore CSRF and CORS

@@ -211,8 +211,10 @@ function displayProductList(data){
 		+ '<td style="text-align:center">'  + e.category + '</td>'
 		+ '<td style="text-align:center">'  + e.name + '</td>'
 		+ '<td style="text-align:right">'  + e.mrp + '</td>'
-		+ '<td style="text-align:center">' + buttonHtml + '</td>'
-		+ '</tr>';
+		if(role=='supervisor'){
+            row+=' style="text-align:center" <td th:if="${info.getRole()}=='+role+'">' + buttonHtml + '</td>';
+        }
+        row += '</tr>';
         $tbody.append(row);
         counter++;
 	}

@@ -14,7 +14,7 @@ public class AboutAppServiceTest extends AbstractUnitTest {
 
 	@Test
 	public void testServiceApis() {
-		assertEquals("Employee Application", service.getName());
+		assertEquals("Pos Application", service.getName());
 		assertEquals("1.0", service.getVersion());
 	}
 

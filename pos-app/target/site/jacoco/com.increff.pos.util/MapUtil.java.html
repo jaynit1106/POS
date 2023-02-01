@@ -9,43 +9,43 @@ import java.util.List;
 <span class="nc" id="L9">public class MapUtil {</span>
     public static HashMap&lt;Integer,Double&gt; getBrandsRevenue(HashMap&lt;Integer,Double&gt; revenueProducts, List&lt;ProductPojo&gt; products){
 
-<span class="nc" id="L12">        HashMap&lt;Integer,Double&gt; revenueBrands = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L13" title="All 2 branches missed.">        for(ProductPojo product : products) {</span>
-<span class="nc" id="L14">            double price = 0;</span>
-<span class="nc" id="L15">            int brandId = product.getBrandId();</span>
-<span class="nc" id="L16">            int productId = product.getId();</span>
-<span class="nc bnc" id="L17" title="All 2 branches missed.">            if(revenueBrands.get(brandId)!=null)price = revenueBrands.get(brandId);</span>
-<span class="nc" id="L18">            revenueBrands.put(brandId, price + revenueProducts.get(productId));</span>
-<span class="nc" id="L19">        }</span>
+<span class="fc" id="L12">        HashMap&lt;Integer,Double&gt; revenueBrands = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">        for(ProductPojo product : products) {</span>
+<span class="fc" id="L14">            double price = 0;</span>
+<span class="fc" id="L15">            int brandId = product.getBrandId();</span>
+<span class="fc" id="L16">            int productId = product.getId();</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">            if(revenueBrands.get(brandId)!=null)price = revenueBrands.get(brandId);</span>
+<span class="fc" id="L18">            revenueBrands.put(brandId, price + revenueProducts.get(productId));</span>
+<span class="fc" id="L19">        }</span>
 
-<span class="nc" id="L21">        return revenueBrands;</span>
+<span class="fc" id="L21">        return revenueBrands;</span>
     }
 
     public static HashMap&lt;Integer,Integer&gt; getBrandsQuantity(HashMap&lt;Integer,Integer&gt; quantityProducts,List&lt;ProductPojo&gt; products){
 
-<span class="nc" id="L26">        HashMap&lt;Integer,Integer&gt; quantityBrands = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L27" title="All 2 branches missed.">        for(ProductPojo product : products) {</span>
-<span class="nc" id="L28">            Integer quant = 0;</span>
-<span class="nc" id="L29">            int brandId = product.getBrandId();</span>
-<span class="nc" id="L30">            int productId = product.getId();</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">            if(quantityBrands.get(brandId)!=null)quant = quantityBrands.get(brandId);</span>
-<span class="nc" id="L32">            quantityBrands.put(brandId, quant + quantityProducts.get(productId));</span>
-<span class="nc" id="L33">        }</span>
+<span class="fc" id="L26">        HashMap&lt;Integer,Integer&gt; quantityBrands = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        for(ProductPojo product : products) {</span>
+<span class="fc" id="L28">            Integer quant = 0;</span>
+<span class="fc" id="L29">            int brandId = product.getBrandId();</span>
+<span class="fc" id="L30">            int productId = product.getId();</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">            if(quantityBrands.get(brandId)!=null)quant = quantityBrands.get(brandId);</span>
+<span class="fc" id="L32">            quantityBrands.put(brandId, quant + quantityProducts.get(productId));</span>
+<span class="fc" id="L33">        }</span>
 
-<span class="nc" id="L35">        return quantityBrands;</span>
+<span class="fc" id="L35">        return quantityBrands;</span>
     }
 
     public static HashMap&lt;Integer,Double&gt; getProductsRevenue(List&lt;OrderItemPojo&gt; orders){
 
-<span class="nc" id="L40">        HashMap&lt;Integer,Double&gt; revenueProducts = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        for(OrderItemPojo item : orders) {</span>
-<span class="nc" id="L42">            double price = 0;</span>
-<span class="nc" id="L43">            int productId = item.getProductId();</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">            if(revenueProducts.get(productId)!=null)price = revenueProducts.get(productId);</span>
-<span class="nc" id="L45">            revenueProducts.put(productId, price + item.getQuantity()*item.getSellingPrice());</span>
-<span class="nc" id="L46">        }</span>
+<span class="fc" id="L40">        HashMap&lt;Integer,Double&gt; revenueProducts = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        for(OrderItemPojo item : orders) {</span>
+<span class="fc" id="L42">            double price = 0;</span>
+<span class="fc" id="L43">            int productId = item.getProductId();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if(revenueProducts.get(productId)!=null)price = revenueProducts.get(productId);</span>
+<span class="fc" id="L45">            revenueProducts.put(productId, price + item.getQuantity()*item.getSellingPrice());</span>
+<span class="fc" id="L46">        }</span>
 
-<span class="nc" id="L48">        return revenueProducts;</span>
+<span class="fc" id="L48">        return revenueProducts;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

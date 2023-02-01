@@ -182,8 +182,10 @@ function displayInventoryList(data){
 		+ '<td>' + e.name + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+		if(role=='supervisor'){
+            row+='<td th:if="${info.getRole()}=='+role+'">' + buttonHtml + '</td>';
+        }
+        row += '</tr>';
         $tbody.append(row);
         counter++;
 	}

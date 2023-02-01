@@ -37,25 +37,5 @@ public class SampleController {
 		}
 
 	}
-	
-	@RequestMapping(value = "/pdf/{fileName:.+}", method = RequestMethod.GET)
-	public void getPdf(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
-		// get your file as InputStream
-		response.setContentType("application/pdf");
-		response.addHeader("Content-disposition:", "attachment; filename=" + fileName);
-		String fileClasspath = "/com/increff/pos/pdf/" + fileName;
-		System.out.println(fileClasspath);
-		InputStream is = SampleController.class.getResourceAsStream(fileClasspath);
-		// copy it to response's OutputStream
-		try {
-			IOUtils.copy(is, response.getOutputStream());
-			response.flushBuffer();
-		} catch (IOException e) {
-			throw e;
-		} finally {
-			IOUtil.closeQuietly(is);
-		}
-
-	}
 
 }

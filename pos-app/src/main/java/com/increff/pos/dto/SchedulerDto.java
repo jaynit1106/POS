@@ -15,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.increff.pos.model.SchedulerData;
-import com.increff.pos.model.SchedulerForm;
 import com.increff.pos.pojo.SchedulerPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.SchedulerService;

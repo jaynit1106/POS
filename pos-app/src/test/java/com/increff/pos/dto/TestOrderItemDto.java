@@ -4,6 +4,7 @@ import com.increff.pos.dao.*;
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.model.OrderItemForm;
 import com.increff.pos.pojo.BrandPojo;
+import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
@@ -12,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -246,6 +248,25 @@ public class TestOrderItemDto extends AbstractUnitTest{
             Assert.fail();
         }
     }
+//    @Test
+//    @Transactional(rollbackOn =ApiException.class)
+//    public void testRollback(){
+//        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
+//        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandDao.selectAll(BrandPojo.class).get(0).getId()));
+//        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDao.selectAll(ProductPojo.class).get(0).getId()));
+//
+//        List<OrderItemForm> list = new ArrayList<>();
+//        list.add(PojoUtil.getOrderItemForm(20,"abcdabcd",90));
+//        list.add(PojoUtil.getOrderItemForm(80,"abcdabcd",90));
+//        list.add(PojoUtil.getOrderItemForm(100,"abcdabcd",90));
+//
+//        try {
+//            orderItemDto.add(list);
+//            fail();
+//        }catch (ApiException | ParserConfigurationException | TransformerException | IOException e){
+//            Assert.assertEquals(100,inventoryDao.selectAll(InventoryPojo.class).get(0).getQuantity());
+//        }
+//    }
 
 }
 
