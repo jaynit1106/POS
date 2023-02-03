@@ -11,7 +11,9 @@ import com.increff.pos.util.PojoUtil;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -90,7 +92,7 @@ public class TestProductDto extends AbstractUnitTest{
     }
 
     @Test
-    public void testForUniquenessExceptions() {
+    public void testForProductUniqueness() throws ApiException {
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
@@ -100,65 +102,71 @@ public class TestProductDto extends AbstractUnitTest{
         ProductPojo p = PojoUtil.getProductPojo("name", "abcdabcd", 29, list.get(0).getId());
         productDao.insert(p);
 
-        boolean flag=false;
-
         //checking same brand category name exception
-        try {
-            productDto.add(PojoUtil.getProductForm("brand", "category", "name", "abcdabce", 290));
-        }catch (ApiException e){
-            flag=true;
-        }
-        if(Objects.equals(flag,false))fail();
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Product already Exists");
+        productDto.add(PojoUtil.getProductForm("brand", "category", "name", "abcdabce", 290));
+
+    }
+
+    @Test
+    public void testForBarcodeUniqueness() throws ApiException {
+        //create a brand
+        BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
+        brandDao.insert(brand);
+        List<BrandData> list = brandDto.getAll();
+
+        //create a product
+        ProductPojo p = PojoUtil.getProductPojo("name", "abcdabcd", 29, list.get(0).getId());
+        productDao.insert(p);
 
         //Checking same barcode exception
-        try {
-            //checking if API exception are thrown
-            productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcdabcd", 290));
-        }catch (ApiException e){
-            return;
-        }
-        fail();
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Barcode already Exists");
+        productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcdabcd", 290));
+
     }
 
     @Test
-    public void testForBrandAndCategoryExists(){
+    public void testForBrandAndCategoryExists() throws ApiException {
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
         List<BrandData> list = brandDto.getAll();
 
-        try{
-            //checking if API exception is thrown when brand and category does not exist
-            productDto.add(PojoUtil.getProductForm("brand1", "category1", "names", "abcdabcd", 290));
-        }catch (ApiException e){
-            return;
-        }
-        fail();
+        //checking if API exception is thrown when brand and category does not exist
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Brand And Category Does Not Exist");
+        productDto.add(PojoUtil.getProductForm("brand1", "category1", "names", "abcdabcd", 290));
+
     }
 
     @Test
-    public void testForFormats(){
+    public void testForIncorrectBarcode() throws ApiException {
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
         List<BrandData> list = brandDto.getAll();
 
-        boolean flag = false;
+
         //checks for incorrect barcode format
-        try {
-            productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcd", 290));
-        } catch (ApiException e) {
-            flag = true;
-        }
-        if(Objects.equals(flag,false))fail();
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Barcode Should be of 8 characters");
+        productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcd", 290));
+
+    }
+    @Test
+    public void testForIncorrectMrp() throws ApiException {
+        //create a brand
+        BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
+        brandDao.insert(brand);
+        List<BrandData> list = brandDto.getAll();
 
         //check for negative mrp
-        try {
-            productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcdabcf", -290));
-        } catch (ApiException e) {
-           return;
-        }
-        fail();
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("MRP should be positive");
+        productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcdabcf", -290));
+
     }
 
     @Test

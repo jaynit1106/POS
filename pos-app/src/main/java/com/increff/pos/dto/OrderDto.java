@@ -1,5 +1,6 @@
 package com.increff.pos.dto;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -9,31 +10,95 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
+import com.increff.pos.model.OrderItemData;
+import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.pojo.OrderItemPojo;
+import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.service.*;
+import com.increff.pos.util.Base64Util;
+import com.increff.pos.util.JSONUTil;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.increff.pos.model.OrderData;
 import com.increff.pos.pojo.OrderPojo;
-import com.increff.pos.service.ApiException;
-import com.increff.pos.service.OrderService;
 import com.increff.pos.util.ConvertUtil;
 import com.increff.pos.util.TimestampUtil;
 
 @Component
 public class OrderDto {
+	@Autowired
+	private final PdfDto pdfDto = new PdfDto();
+	@Autowired
+	private final OrderItemService orderItemService = new OrderItemService();
 
 	@Autowired
+	private final ProductService productService = new ProductService();
+
+	@Autowired
+	private final InventoryService inventoryService = new InventoryService();
+	@Autowired
 	private final OrderService orderService = new OrderService();
-	
-	public OrderData add() throws ApiException {
-		OrderPojo p = new OrderPojo();
-		orderService.add(p);
-		OrderData data = new OrderData();
-		data.setId(p.getId());
-		data.setTimestamp(p.getTimestamp().toString());
-		return data;
+
+	@Transactional(rollbackOn = ApiException.class)
+	public void add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
+		List<JSONObject> errors = new ArrayList<>();
+		List<OrderItemPojo> items = new ArrayList<>();
+		for(OrderItemForm f : form) {
+			OrderItemPojo p =ConvertUtil.objectMapper(f, OrderItemPojo.class);
+			p.setOrderId(1);
+			ProductPojo product;
+			try {
+				product = productService.getProductByBarcode(f.getBarcode());
+			}catch (ApiException e){
+				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Product "+f.getBarcode()+" Does Not exists"));
+				continue;
+			}
+			p.setProductId(product.getId());
+			items.add(p);
+		}
+
+
+		List<JSONObject> inventoryErrors = inventoryService.checkAndCreateOrder(items);
+		errors.addAll(inventoryErrors);
+		if(errors.size()>0){
+			throw new ApiException(JSONValue.toJSONString(errors));
+		}
+
+
+		OrderPojo order = new OrderPojo();
+		orderService.add(order);
+		for (OrderItemPojo item : items) {
+			item.setOrderId(order.getId());
+		}
+
+		orderItemService.add(items);
+
+
+		List<OrderItemData> list = new ArrayList<>();
+		for(OrderItemPojo p : items) {
+			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
+			ProductPojo product = productService.get(p.getProductId());
+			item.setBarcode(product.getBarcode());
+			item.setName(product.getName());
+			list.add(item);
+		}
+
+		try {
+			String base64 = pdfDto.getBase64(list);
+			Base64Util.savePdf(base64,"Invoice "+ list.get(0).getOrderId());
+		}catch (Exception e){
+			errors.add(JSONUTil.getJSONObject("server","Server error"));
+		}
+
+		if(errors.size()>0)throw new ApiException(JSONValue.toJSONString(errors));
 	}
 	
 	public OrderData get(@PathVariable int id) throws ApiException {

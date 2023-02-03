@@ -1,6 +1,5 @@
 package com.increff.pos.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,12 +26,6 @@ public class OrderItemApiController {
 
 	@Autowired
 	private final OrderItemDto dto = new OrderItemDto();
-
-	@ApiOperation(value = "Adds a Order Item")
-	@RequestMapping(path = "/api/orderitems", method = RequestMethod.POST)
-	public void add(@RequestBody List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-		dto.add(form);
-	}
 
 	@ApiOperation(value = "Gets a Order Item by orderID")
 	@RequestMapping(path = "/api/orderitems/{id}", method = RequestMethod.GET)

@@ -6,8 +6,11 @@ import com.increff.pos.model.BrandForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -19,6 +22,8 @@ public class TestBrandDto extends AbstractUnitTest{
     private final BrandDao brandDao = new BrandDao();
     @Autowired
     private  final BrandDto brandDto = new BrandDto();
+
+
     //Testing The CRUD Operations
     @Test
     public void testAddAndGetAll() throws ApiException {
@@ -72,37 +77,36 @@ public class TestBrandDto extends AbstractUnitTest{
 
     //To check if brand and category can be unique
     @Test
-    public void testBrandCategoryUniqueness(){
+    public void testBrandCategoryUniquenessAtAdd() throws ApiException {
         BrandPojo p = PojoUtil.getBrandPojo("brand","category");
         brandDao.insert(p);
+
         //Check Uniqueness at time of add
-        boolean flag = false;
-        try {
-            BrandForm f = PojoUtil.getBrandForm("brand","category");
-            brandDto.add(f);
-        }catch (ApiException e){
-            flag=true;
-        }
-        if(Objects.equals(flag,false))fail();
+        BrandForm f = PojoUtil.getBrandForm("brand","category");
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Brand and Category already exists");
+        brandDto.add(f);
+
+    }
+
+    @Test
+    public void testBrandCategoryUniquenessAtUpdate() throws ApiException {
+        BrandPojo p = PojoUtil.getBrandPojo("brand","category");
+        brandDao.insert(p);
 
         //Check Uniqueness at the time of update
-        try {
-            List<BrandData> list = brandDto.getAll();
-            BrandForm f = PojoUtil.getBrandForm("brand","category");
-            brandDto.update(list.get(0).getId(),f);
-        }catch (ApiException e){
-            return;
-        }
-        fail();
+        List<BrandData> list = brandDto.getAll();
+        BrandForm form = PojoUtil.getBrandForm("brand","category");
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Brand and Category already exists");
+        brandDto.update(list.get(0).getId(),form);
     }
     @Test
-    public void testEmptyExceptions(){
-        try{
-            brandDto.add(PojoUtil.getBrandForm("","category"));
-        }catch (ApiException e){
-            return;
-        }
-        fail();
+    public void testEmptyExceptions() throws ApiException {
+        //checking for empty constraints
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Brand cannot be empty");
+        brandDto.add(PojoUtil.getBrandForm("","category"));
     }
 
     @Test

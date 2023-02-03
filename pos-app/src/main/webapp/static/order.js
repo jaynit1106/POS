@@ -96,7 +96,7 @@ errorData = [];
 errorName = new Map();
 function submitOrder(){
 	errorData = [];
-	var url = getOrderItemUrl();
+	var url = getOrderUrl();
 	let form = convertArrayToJson();
 	if(itemList.length-deleteList.length==0){
 		swal("Oops!","Cart cannot be empty", "error");

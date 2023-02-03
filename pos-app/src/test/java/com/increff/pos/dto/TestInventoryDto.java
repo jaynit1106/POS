@@ -7,7 +7,9 @@ import com.increff.pos.model.InventoryData;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.InventoryService;
 import com.increff.pos.util.PojoUtil;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -90,19 +92,17 @@ public class TestInventoryDto extends AbstractUnitTest{
     }
 
     @Test
-    public void testForNegativeQuantity(){
+    public void testForNegativeQuantity() throws ApiException {
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
         productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
 
         //Negative Quantity API exception
-        try {
-            inventoryDto.add(PojoUtil.getInventoryForm(-100,"abcdabcd"));
-        }catch (ApiException e){
-            return;
-        }
-        fail();
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Quantity cannot be Negative");
+        inventoryDto.add(PojoUtil.getInventoryForm(-100,"abcdabcd"));
+
     }
     @Test
     public void testForAdditionOfInventory() throws ApiException {
@@ -126,17 +126,15 @@ public class TestInventoryDto extends AbstractUnitTest{
     }
 
     @Test
-    public void testForProductDoesNotExist(){
+    public void testForProductDoesNotExist() throws ApiException {
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
         productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
 
-        try{
-            inventoryDto.add(PojoUtil.getInventoryForm(100,"abcdabce"));
-        }catch (ApiException e){
-            return;
-        }
-        fail();
+        exceptionRule.expect(ApiException.class);
+        exceptionRule.expectMessage("Product Does Not Exists");
+        inventoryDto.add(PojoUtil.getInventoryForm(100,"abcdabce"));
+
     }
 
 }

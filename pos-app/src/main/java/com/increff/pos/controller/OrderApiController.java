@@ -1,15 +1,16 @@
 package com.increff.pos.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
+import com.increff.pos.model.OrderItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.dto.OrderDto;
 import com.increff.pos.model.OrderData;
@@ -27,8 +28,8 @@ public class OrderApiController {
 
 	@ApiOperation(value = "Adds a Order")
 	@RequestMapping(path = "/api/orders", method = RequestMethod.POST)
-	public OrderData add() throws ApiException {
-		return dto.add();
+	public void add(@RequestBody List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
+		dto.add(form);
 	}
 
 	@ApiOperation(value = "Gets a Order by ID")

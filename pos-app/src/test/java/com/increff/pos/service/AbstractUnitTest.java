@@ -2,6 +2,8 @@ package com.increff.pos.service;
 
 import javax.transaction.Transactional;
 
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -13,5 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration("src/test/webapp")
 @Transactional
 public abstract class AbstractUnitTest {
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
 }
