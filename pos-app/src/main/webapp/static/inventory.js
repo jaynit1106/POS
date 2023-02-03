@@ -178,12 +178,12 @@ function displayInventoryList(data){
 		let id =counter-1;
 		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.name + '</td>'
-		+ '<td>' + e.barcode + '</td>'
-		+ '<td>'  + e.quantity + '</td>'
+		+ '<td style="text-align:center;">' + counter + '</td>'
+		+ '<td style="text-align:center;">' + e.name + '</td>'
+		+ '<td style="text-align:center;">' + e.barcode + '</td>'
+		+ '<td style="text-align:center;">'  + e.quantity + '</td>'
 		if(role=='supervisor'){
-            row+='<td th:if="${info.getRole()}=='+role+'">' + buttonHtml + '</td>';
+            row+='<td style="text-align:center;" th:if="${info.getRole()}=='+role+'">' + buttonHtml + '</td>';
         }
         row += '</tr>';
         $tbody.append(row);

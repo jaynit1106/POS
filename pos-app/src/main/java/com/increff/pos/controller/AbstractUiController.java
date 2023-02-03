@@ -21,9 +21,6 @@ public abstract class AbstractUiController {
 	@Value("${app.baseUrl}")
 	private String baseUrl;
 
-//	@Autowired
-//	private final UserService userService = new UserService();
-
 	protected ModelAndView mav(String page) {
 		// Get current user
 		UserPrincipal principal = SecurityUtil.getPrincipal();

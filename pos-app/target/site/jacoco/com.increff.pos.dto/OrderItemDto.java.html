@@ -24,98 +24,42 @@ import com.increff.pos.util.ConvertUtil;
 import org.json.simple.JSONObject;
 @Component
 <span class="fc" id="L26">public class OrderItemDto {</span>
-
-<span class="fc" id="L28">	@Autowired</span>
-	private final PdfDto pdfDto = new PdfDto();
-<span class="fc" id="L30">	@Autowired</span>
+<span class="fc" id="L27">	@Autowired</span>
 	private final OrderItemService orderItemService = new OrderItemService();
 	
-<span class="fc" id="L33">	@Autowired</span>
+<span class="fc" id="L30">	@Autowired</span>
 	private final ProductService productService = new ProductService();
-	
-<span class="fc" id="L36">	@Autowired</span>
-	private final InventoryService inventoryService = new InventoryService();
-
-<span class="fc" id="L39">	@Autowired</span>
-	private final OrderService orderService = new OrderService();
-
-	@Transactional(rollbackOn = ApiException.class)
-	public void add(List&lt;OrderItemForm&gt; form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-<span class="fc" id="L44">		List&lt;JSONObject&gt; errors = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L45">		List&lt;OrderItemPojo&gt; items = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">		for(OrderItemForm f : form) {</span>
-<span class="fc" id="L47">			OrderItemPojo p =ConvertUtil.objectMapper(f, OrderItemPojo.class);</span>
-<span class="fc" id="L48">			p.setOrderId(1);</span>
-			ProductPojo product;
-			try {
-<span class="fc" id="L51">				product = productService.getProductByBarcode(f.getBarcode());</span>
-<span class="fc" id="L52">			}catch (ApiException e){</span>
-<span class="fc" id="L53">				errors.add(JSONUTil.getJSONObject(&quot;Product &quot;+f.getBarcode()+&quot; Does Not exists&quot;));</span>
-<span class="fc" id="L54">				continue;</span>
-<span class="fc" id="L55">			}</span>
-<span class="fc" id="L56">			p.setProductId(product.getId());</span>
-<span class="fc" id="L57">			items.add(p);</span>
-<span class="fc" id="L58">		}</span>
-
-<span class="fc" id="L60">		List&lt;JSONObject&gt; inventoryErrors = inventoryService.checkAndCreateOrder(items);</span>
-<span class="fc" id="L61">		errors.addAll(inventoryErrors);</span>
-<span class="fc" id="L62">		OrderPojo order = new OrderPojo();</span>
-<span class="fc" id="L63">		orderService.add(order);</span>
-<span class="fc bfc" id="L64" title="All 2 branches covered.">		for (OrderItemPojo item : items) {</span>
-<span class="fc" id="L65">			item.setOrderId(order.getId());</span>
-<span class="fc" id="L66">		}</span>
-
-<span class="fc" id="L68">		orderItemService.add(items);</span>
 
 
-<span class="fc" id="L71">		List&lt;OrderItemData&gt; list = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">		for(OrderItemPojo p : items) {</span>
-<span class="fc" id="L73">			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);</span>
-<span class="fc" id="L74">			ProductPojo product = productService.get(p.getProductId());</span>
-<span class="fc" id="L75">			item.setBarcode(product.getBarcode());</span>
-<span class="fc" id="L76">			item.setName(product.getName());</span>
-<span class="fc" id="L77">			list.add(item);</span>
-<span class="fc" id="L78">		}</span>
-
-		try {
-<span class="fc" id="L81">			String base64 = pdfDto.getBase64(list);</span>
-<span class="fc" id="L82">			Base64Util.savePdf(base64,&quot;Invoice &quot;+ list.get(0).getOrderId());</span>
-<span class="fc" id="L83">		}catch (Exception e){</span>
-<span class="fc" id="L84">			errors.add(JSONUTil.getJSONObject(&quot;Server error&quot;));</span>
-<span class="fc" id="L85">		}</span>
-
-<span class="fc bfc" id="L87" title="All 2 branches covered.">		if(errors.size()&gt;0)throw new ApiException(JSONValue.toJSONString(errors));</span>
-<span class="fc" id="L88">	}</span>
-	
 	public OrderItemData get(int id) throws ApiException {
-<span class="fc" id="L91">		return ConvertUtil.objectMapper(orderItemService.get(id),OrderItemData.class);</span>
+<span class="fc" id="L35">		return ConvertUtil.objectMapper(orderItemService.get(id),OrderItemData.class);</span>
 	}
 	
 	public List&lt;OrderItemData&gt; getAll() {
-<span class="fc" id="L95">		List&lt;OrderItemPojo&gt; list = orderItemService.getAll();</span>
-<span class="fc" id="L96">		List&lt;OrderItemData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L97" title="All 2 branches covered.">		for (OrderItemPojo p : list) {</span>
-<span class="fc" id="L98">			list2.add(ConvertUtil.objectMapper(p,OrderItemData.class));</span>
-<span class="fc" id="L99">		}</span>
-<span class="fc" id="L100">		return list2;</span>
+<span class="fc" id="L39">		List&lt;OrderItemPojo&gt; list = orderItemService.getAll();</span>
+<span class="fc" id="L40">		List&lt;OrderItemData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		for (OrderItemPojo p : list) {</span>
+<span class="fc" id="L42">			list2.add(ConvertUtil.objectMapper(p,OrderItemData.class));</span>
+<span class="fc" id="L43">		}</span>
+<span class="fc" id="L44">		return list2;</span>
 	}
 	
 	public void update(int id,OrderItemForm form) throws ApiException {
-<span class="nc" id="L104">		OrderItemPojo p = ConvertUtil.objectMapper(form,OrderItemPojo.class);</span>
-<span class="nc" id="L105">		orderItemService.update(id, p);</span>
-<span class="nc" id="L106">	}</span>
+<span class="nc" id="L48">		OrderItemPojo p = ConvertUtil.objectMapper(form,OrderItemPojo.class);</span>
+<span class="nc" id="L49">		orderItemService.update(id, p);</span>
+<span class="nc" id="L50">	}</span>
 	
 	public List&lt;OrderItemData&gt; getOrderItemByOrderID(int id) throws ApiException {
-<span class="fc" id="L109">		List&lt;OrderItemPojo&gt; list = orderItemService.getOrderItemByOrderId(id);</span>
-<span class="fc" id="L110">		List&lt;OrderItemData&gt; items = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">		for(OrderItemPojo p : list) {</span>
-<span class="fc" id="L112">			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);</span>
-<span class="fc" id="L113">			ProductPojo product = productService.get(p.getProductId());</span>
-<span class="fc" id="L114">			item.setBarcode(product.getBarcode());</span>
-<span class="fc" id="L115">			item.setName(product.getName());</span>
-<span class="fc" id="L116">			items.add(item);</span>
-<span class="fc" id="L117">		}</span>
-<span class="fc" id="L118">		return items;</span>
+<span class="fc" id="L53">		List&lt;OrderItemPojo&gt; list = orderItemService.getOrderItemByOrderId(id);</span>
+<span class="fc" id="L54">		List&lt;OrderItemData&gt; items = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		for(OrderItemPojo p : list) {</span>
+<span class="fc" id="L56">			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);</span>
+<span class="fc" id="L57">			ProductPojo product = productService.get(p.getProductId());</span>
+<span class="fc" id="L58">			item.setBarcode(product.getBarcode());</span>
+<span class="fc" id="L59">			item.setName(product.getName());</span>
+<span class="fc" id="L60">			items.add(item);</span>
+<span class="fc" id="L61">		}</span>
+<span class="fc" id="L62">		return items;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -95,7 +95,31 @@ function displayInventoryReportList(data){
 
 //PAGINATE METHODS
 function paginate() {
-	$('#InventoryReport-table').DataTable();
+	$('#InventoryReport-table').DataTable({
+        dom: 'Bfrtip',
+        buttons:[
+            {
+                extend:'pdf',
+                customize: function (doc) {
+                      doc.content[1].table.widths =
+                          Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                title:'Inventory Report',
+                filename:'inventoryReport'
+            },
+            {
+                  extend:'csv',
+                  title:'Inventory Report',
+                  filename:'inventoryReport'
+              },
+              {
+                  extend:'excel',
+                  title:'Inventory Report',
+                  filename:'inventoryReport'
+              }
+
+        ]
+    });
 }
 
 //UTIL METHODS

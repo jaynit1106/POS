@@ -71,28 +71,18 @@ function getBrandList(){
 }
 
 function getCategoryList(){
-	//Set the values to update
-	var url = getBrandUrl() + "/unique"
-	var data = {}
-	data["brand"]=document.getElementById('brands').value;
-	data["category"]="";
-	var json = JSON.stringify(data);
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		addCategoryDropdown(response)
-	   },
-	   error: function(response){
-	   		swal("Oops!", response.responseJSON.message, "error");
-	   }
-	});
-
-	return false;
+	var url = getBrandUrl() + "/unique/"+document.getElementById('brands').value;
+    	$.ajax({
+           url: url,
+           type: 'GET',
+           success: function(data) {
+                addCategoryDropdown(data);
+           },
+           error: function(response){
+                swal("Oops!", response.responseJSON.message, "error");
+           }
+        });
+    	return false;
 }
 //CREATING TABLES
 function displaySalesList(){
@@ -112,11 +102,11 @@ function displaySalesList(){
         }
 
 		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.brand+ '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>'  + e.quantity + '</td>'
-		+ '<td>'  + e.revenue + '</td>'
+		+ '<td style="text-align:center;">' + counter + '</td>'
+		+ '<td style="text-align:center;">' + e.brand+ '</td>'
+		+ '<td style="text-align:center;">'  + e.category + '</td>'
+		+ '<td style="text-align:center;">'  + e.quantity + '</td>'
+		+ '<td style="text-align:center;">'  + e.revenue + '</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
@@ -186,11 +176,24 @@ function setDate(){
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
+    var prevYear = new Date().getFullYear()-1;
+
+    //for 7 days range
+    var days=7;
+    var date = new Date();
+    var last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
+    var day =String(last.getDate()).padStart(2, '0');
+    var month=String(last.getMonth()+1).padStart(2, '0');
+    var year=last.getFullYear();
+    var beforeWeek = year+"-"+month+"-"+day;
 
     today = yyyy+"-"+mm+"-"+dd;
+    minDate = prevYear+"-"+mm+"-"+dd;
     document.getElementById('startDate').max = today;
+    document.getElementById('startDate').min = minDate;
     document.getElementById('endDate').max = today;
-    document.getElementById('startDate').value = today;
+    document.getElementById('endDate').min = minDate;
+    document.getElementById('startDate').value = beforeWeek;
     document.getElementById('endDate').value = today;
 }
 

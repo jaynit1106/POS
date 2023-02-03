@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="7" failures="0" name="com.increff.pos.dto.TestProductDto" time="0.088" errors="0" skipped="0">
+<testsuite tests="9" failures="0" name="com.increff.pos.dto.TestProductDto" time="0.094" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_202\jre\bin"/>
@@ -65,11 +65,13 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForBrandAndCategoryExists" time="0.007"/>
-  <testcase classname="com.increff.pos.dto.TestProductDto" name="testGetAllBarcode" time="0.012"/>
-  <testcase classname="com.increff.pos.dto.TestProductDto" name="testGetById" time="0.014"/>
-  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForFormats" time="0.011"/>
-  <testcase classname="com.increff.pos.dto.TestProductDto" name="testAddAndGetAll" time="0.008"/>
-  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForUniquenessExceptions" time="0.014"/>
-  <testcase classname="com.increff.pos.dto.TestProductDto" name="testUpdate" time="0.022"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForProductUniqueness" time="0.015"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForBrandAndCategoryExists" time="0"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testGetAllBarcode" time="0.016"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testGetById" time="0.016"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForBarcodeUniqueness" time="0.015"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testAddAndGetAll" time="0.016"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForIncorrectBarcode" time="0"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testForIncorrectMrp" time="0"/>
+  <testcase classname="com.increff.pos.dto.TestProductDto" name="testUpdate" time="0.016"/>
 </testsuite>

@@ -62,7 +62,6 @@ com\increff\pos\model\UserForm.class
 com\increff\pos\dto\OrderDto.class
 com\increff\pos\pojo\OrderItemPojo.class
 com\increff\pos\service\OrderService.class
-com\increff\pos\controller\InitApiController.class
 com\increff\pos\service\InventoryService.class
 com\increff\pos\controller\AccessDeniedController.class
 com\increff\pos\controller\AboutApiController.class

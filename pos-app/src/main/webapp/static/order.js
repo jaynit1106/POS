@@ -153,11 +153,11 @@ function displayItemData(data){
 	for(var i in data){
 		var e = data[i];
 		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.name + '</td>'
-		+ '<td>' + e.barcode + '</td>'
-		+ '<td>' + e.quantity + '</td>'
-		+ '<td>' + e.sellingPrice +'</td>'
+		+ '<td style="text-align:center;">' + counter + '</td>'
+		+ '<td style="text-align:center;">' + e.name + '</td>'
+		+ '<td style="text-align:center;">' + e.barcode + '</td>'
+		+ '<td style="text-align:center;">' + e.quantity + '</td>'
+		+ '<td style="text-align:center;">' + e.sellingPrice +'</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
@@ -178,10 +178,10 @@ function displayOrderList(data){
 		var arr = date.split("/")
 		date = arr[1]+'/'+arr[0]+'/'+arr[2];
 		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.id + '</td>'
-		+ '<td>' + date + '</td>'
-		+ '<td>' + buttonHtml + "  " + downloadPdf + '</td>'
+		+ '<td style="text-align:center;">' + counter + '</td>'
+		+ '<td style="text-align:center;">' + e.id + '</td>'
+		+ '<td style="text-align:center;">' + date + '</td>'
+		+ '<td style="text-align:center;">' + buttonHtml + "  " + downloadPdf + '</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;

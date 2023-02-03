@@ -39,9 +39,9 @@ public class BrandApiController {
 	}
 
 	@ApiOperation(value = "gets all unique category list")
-	@PostMapping(path = "/api/brands/unique")
-	public List<String> getCategoryList(@RequestBody BrandForm f){
-		return dto.getCategoryList(f.getBrand());
+	@GetMapping(path = "/api/brands/unique/{brand}")
+	public List<String> getCategoryList(@PathVariable String brand){
+		return dto.getCategoryList(brand);
 	}
 
 	@ApiOperation(value = "Gets list of all Brands")
