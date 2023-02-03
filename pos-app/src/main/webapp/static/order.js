@@ -93,6 +93,7 @@ function getItemList(url){
 	 });
 }
 errorData = [];
+errorName = new Map();
 function submitOrder(){
 	errorData = [];
 	var url = getOrderItemUrl();
@@ -116,12 +117,14 @@ function submitOrder(){
 		},
 		error: function(response){
 		        var json = JSON.parse(response.responseJSON.message);
+		        errorName.clear()
 		        for(var i in json){
 		            e = json[i];
+		            errorName.set(Object.keys(e)[0],e[Object.keys(e)[0]]);
 		            errorData.push(e);
 		        }
-				swal("Oops!", "There are some errors", "error");
-				downloadErrors();
+				swal("Oops!", "There are "+errorData.length+" errors", "error");
+				displayItemList();
 		}
 	 });
 }
@@ -204,13 +207,25 @@ function displayItemList(){
 		productMap.set(e.barcode,itr);
 		var buttonHtml = '<button id="button'+itr+'"class="btn btn-dark" onclick="editItem(' + itr + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var deleteButton = '<button class="btn btn-danger" onclick="deleteItem(' + itr + ')"><i class="fa-solid fa-trash"></i></button>';
-		var row = '<tr>'
-		+'<td><form id="row'+ itr +'">'+serialId+'</form>'
-		+ '<td><label for="barcode" class="form-control" form="row'+itr+'" name="barcode" id="barcode'+itr+'">'+e.barcode+'</label></td>'
-		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity'+itr+'" value="'+e.quantity+'" disabled></td>'
-		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+e.sellingPrice+'" disabled></td>'
-		+ '<td>' + buttonHtml +"   "+ deleteButton + '</td>'
-		+ '</tr>';
+		var row;
+		if(errorName.get(e.barcode)==undefined){
+		    row = '<tr>'
+            		+'<td><form id="row'+ itr +'">'+serialId+'</form>'
+            		+ '<td><label for="barcode" class="form-control" form="row'+itr+'" name="barcode" id="barcode'+itr+'">'+e.barcode+'</label></td>'
+            		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity'+itr+'" value="'+e.quantity+'" disabled></td>'
+            		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+e.sellingPrice+'" disabled></td>'
+            		+ '<td>' + buttonHtml +"   "+ deleteButton + '</td>'
+            		+ '</tr>';
+		}else{
+		    var infoButton = '<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="'+ errorName.get(e.barcode) +'"><i class="fa-sharp fa-solid fa-circle-info"></i></button>';
+            row = '<tr>'
+            +'<td><form style="color:red" id="row'+ itr +'">'+serialId+'</form>'
+            + '<td><label style="color:red" for="barcode" class="form-control" form="row'+itr+'" name="barcode" id="barcode'+itr+'">'+e.barcode+'</label></td>'
+            + '<td><input style="color:red" type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity'+itr+'" value="'+e.quantity+'" disabled></td>'
+            + '<td><input style="color:red" type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+e.sellingPrice+'" disabled></td>'
+            + '<td>' + buttonHtml +"   "+ deleteButton + "   " + infoButton + '</td>'
+            + '</tr>';
+		}
         $tbody.append(row);
 		itr++;
 		serialId++;
@@ -263,6 +278,7 @@ function deleteItem(id){
 	deleteList.push(id);
 	let barcode = JSON.parse(itemList[id]).barcode;
 	productMap.delete(barcode);
+	errorName.delete(barcode);
 	displayItemList();
 }
 
@@ -340,6 +356,7 @@ function convertArrayToJson(){
 function cancelOrder(){
     itemList=[]
     deleteList=[]
+    errorName.clear();
     localStorage.clear();
     $('#edit-order-modal').modal('toggle');
 }

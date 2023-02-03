@@ -57,14 +57,13 @@ public class InventoryService {
 	
 	public List<JSONObject> checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
 		List<JSONObject> errors = new ArrayList<>();
-
 		for(OrderItemPojo p : items) {
 			if(p.getQuantity()<=0){
-				errors.add(JSONUTil.getJSONObject("Please Enter a Valid Quantity for "+p.getBarcode()));
+				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Please Enter a Valid Quantity for "+p.getBarcode()));
 				continue;
 			}
 			if(p.getSellingPrice()<0) {
-				errors.add(JSONUTil.getJSONObject("Please Enter a Valid Price for "+p.getBarcode()));
+				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Please Enter a Valid Price for "+p.getBarcode()));
 				continue;
 			}
 			InventoryPojo inventory;
@@ -72,13 +71,13 @@ public class InventoryService {
 			try {
 				inventory = getCheck(p.getProductId());
 			}catch (ApiException e){
-				errors.add(JSONUTil.getJSONObject("Inventory does not exists for " + p.getBarcode()));
+				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Inventory does not exists for " + p.getBarcode()));
 				continue;
 			}
 
 			int quantity = inventory.getQuantity();
 			if(quantity<p.getQuantity()){
-				errors.add(JSONUTil.getJSONObject("Only "+quantity+" pieces left of " + p.getBarcode()));
+				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Only "+quantity+" pieces left of " + p.getBarcode()));
 				continue;
 			}
 

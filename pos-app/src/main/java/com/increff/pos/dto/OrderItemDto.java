@@ -50,7 +50,7 @@ public class OrderItemDto {
 			try {
 				product = productService.getProductByBarcode(f.getBarcode());
 			}catch (ApiException e){
-				errors.add(JSONUTil.getJSONObject("Product "+f.getBarcode()+" Does Not exists"));
+				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Product "+f.getBarcode()+" Does Not exists"));
 				continue;
 			}
 			p.setProductId(product.getId());
@@ -85,7 +85,7 @@ public class OrderItemDto {
 			String base64 = pdfDto.getBase64(list);
 			Base64Util.savePdf(base64,"Invoice "+ list.get(0).getOrderId());
 		}catch (Exception e){
-			errors.add(JSONUTil.getJSONObject("Server error"));
+			errors.add(JSONUTil.getJSONObject("server","Server error"));
 		}
 
 		if(errors.size()>0)throw new ApiException(JSONValue.toJSONString(errors));

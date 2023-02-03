@@ -67,7 +67,7 @@
             <li class="nav-item">
                 <a class="nav-link" style="color:white " th:href="@{/ui/orders}">Order</a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" th:if="${info.getRole()}=='supervisor'">
                 <a style="color:white;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Reports
                 </a>
