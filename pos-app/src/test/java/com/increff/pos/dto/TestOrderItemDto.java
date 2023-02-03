@@ -249,11 +249,11 @@ public class TestOrderItemDto extends AbstractUnitTest{
         }
     }
 //    @Test
-//    @Transactional(rollbackOn =ApiException.class)
-//    public void testRollback(){
+//    public void testRollback() {
 //        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
 //        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandDao.selectAll(BrandPojo.class).get(0).getId()));
 //        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDao.selectAll(ProductPojo.class).get(0).getId()));
+//        Assert.assertEquals(100,inventoryDao.selectAll(InventoryPojo.class).get(0).getQuantity());
 //
 //        List<OrderItemForm> list = new ArrayList<>();
 //        list.add(PojoUtil.getOrderItemForm(20,"abcdabcd",90));
@@ -263,11 +263,20 @@ public class TestOrderItemDto extends AbstractUnitTest{
 //        try {
 //            orderItemDto.add(list);
 //            fail();
-//        }catch (ApiException | ParserConfigurationException | TransformerException | IOException e){
+//        }catch (ParserConfigurationException | TransformerException | IOException | RuntimeException e){
+//            Assert.assertEquals(100,inventoryDao.selectAll(InventoryPojo.class).get(0).getQuantity());
+//        } catch (ApiException e){
 //            Assert.assertEquals(100,inventoryDao.selectAll(InventoryPojo.class).get(0).getQuantity());
 //        }
 //    }
-
+//    @Transactional(rollbackOn = ApiException.class)
+//    public void createOrder(List<OrderItemForm> list) throws ParserConfigurationException, IOException, TransformerException, ApiException {
+//        try {
+//            orderItemDto.add(list);
+//        }catch (ApiException e){
+//            throw new ApiException("Rollback");
+//        }
+//    }
 }
 
 

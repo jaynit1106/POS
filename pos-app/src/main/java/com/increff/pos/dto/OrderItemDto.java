@@ -57,8 +57,12 @@ public class OrderItemDto {
 			items.add(p);
 		}
 
+
 		List<JSONObject> inventoryErrors = inventoryService.checkAndCreateOrder(items);
 		errors.addAll(inventoryErrors);
+		if(errors.size()>0){
+			throw new ApiException(JSONValue.toJSONString(errors));
+		}
 		OrderPojo order = new OrderPojo();
 		orderService.add(order);
 		for (OrderItemPojo item : items) {
