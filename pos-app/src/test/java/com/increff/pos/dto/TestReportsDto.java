@@ -1,7 +1,12 @@
 package com.increff.pos.dto;
 
 import com.increff.pos.dao.*;
-import com.increff.pos.model.*;
+import com.increff.pos.model.data.BrandReportData;
+import com.increff.pos.model.data.InventoryReportData;
+import com.increff.pos.model.data.SalesReportData;
+import com.increff.pos.model.form.BrandReportForm;
+import com.increff.pos.model.form.InventoryReportForm;
+import com.increff.pos.model.form.SalesReportForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
@@ -12,7 +17,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestReportsDto extends AbstractUnitTest{

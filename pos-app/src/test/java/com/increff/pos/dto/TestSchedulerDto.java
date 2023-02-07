@@ -1,21 +1,17 @@
 package com.increff.pos.dto;
 
 import com.increff.pos.dao.*;
-import com.increff.pos.model.SchedulerData;
+import com.increff.pos.model.data.SchedulerData;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
-import com.increff.pos.pojo.SchedulerPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
-import com.increff.pos.util.TimestampUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.Time;
 import java.time.Instant;
-import java.util.List;
 
 public class TestSchedulerDto extends AbstractUnitTest{
     @Autowired

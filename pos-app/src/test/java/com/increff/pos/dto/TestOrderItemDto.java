@@ -1,29 +1,19 @@
 package com.increff.pos.dto;
 
 import com.increff.pos.dao.*;
-import com.increff.pos.model.OrderItemData;
-import com.increff.pos.model.OrderItemForm;
-import com.increff.pos.pojo.BrandPojo;
-import com.increff.pos.pojo.InventoryPojo;
-import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
-import io.swagger.annotations.Api;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.transaction.Transactional;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TestOrderItemDto extends AbstractUnitTest{
 

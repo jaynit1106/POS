@@ -26,6 +26,7 @@ function getBrandReport(){
        },
        success: function(data) {
             displayBrandsList(data);
+            $('#filterModal').modal('toggle');
        },
        error: function(response){
             swal("Oops!", response.responseJSON.message, "error");
@@ -136,10 +137,14 @@ function addCategoryDropdown(data){
 	}
 }
 
+function toggleFilters(){
+    $('#filterModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
     document.getElementById('brands').addEventListener("change",getCategoryList);
-    $('#submit-filter').click(getBrandReport);
+    $('#submit-filter').click(toggleFilters);
+    $('#add').click(getBrandReport);
 }
 
 $(document).ready(init);

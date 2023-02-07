@@ -10,16 +10,14 @@ import com.increff.pos.pojo.OrderItemPojo;
 @Repository
 <span class="fc" id="L11">public class OrderItemDao extends AbstractDao {</span>
 
-<span class="fc" id="L13">	private static String select_by_order_id = &quot;select p from OrderItemPojo p where orderid=:orderId&quot;;</span>
+<span class="fc" id="L13">	private static String SELECT_BY_ORDER_ID = &quot;select p from OrderItemPojo p where orderid=:orderId&quot;;</span>
 
 	public List&lt;OrderItemPojo&gt; selectByOrderId(int orderId) {
-<span class="fc" id="L16">		TypedQuery&lt;OrderItemPojo&gt; query = getQuery(select_by_order_id, OrderItemPojo.class);</span>
+<span class="fc" id="L16">		TypedQuery&lt;OrderItemPojo&gt; query = getQuery(SELECT_BY_ORDER_ID, OrderItemPojo.class);</span>
 <span class="fc" id="L17">		query.setParameter(&quot;orderId&quot;, orderId);</span>
 <span class="fc" id="L18">		return query.getResultList();</span>
 	}
 
-	public void update(OrderItemPojo p) {
-<span class="nc" id="L22">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

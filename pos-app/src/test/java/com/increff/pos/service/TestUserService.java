@@ -1,6 +1,5 @@
 package com.increff.pos.service;
 
-import com.increff.pos.model.UserForm;
 import com.increff.pos.pojo.UserPojo;
 import org.junit.Assert;
 import org.junit.Test;

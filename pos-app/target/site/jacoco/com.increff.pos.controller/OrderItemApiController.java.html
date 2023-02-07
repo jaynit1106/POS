@@ -7,14 +7,12 @@ import javax.xml.transform.TransformerException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.pos.dto.OrderItemDto;
-import com.increff.pos.model.OrderItemData;
-import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.service.ApiException;
 
 import io.swagger.annotations.Api;
@@ -22,29 +20,22 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-<span class="fc" id="L25">public class OrderItemApiController {</span>
+<span class="fc" id="L23">public class OrderItemApiController {</span>
 
-<span class="fc" id="L27">	@Autowired</span>
-	private final OrderItemDto dto = new OrderItemDto();
+	@Autowired
+	private OrderItemDto dto;
 
 	@ApiOperation(value = &quot;Gets a Order Item by orderID&quot;)
 	@RequestMapping(path = &quot;/api/orderitems/{id}&quot;, method = RequestMethod.GET)
 	public List&lt;OrderItemData&gt; get(@PathVariable int id) throws ApiException, ParserConfigurationException, TransformerException {
-<span class="nc" id="L33">		return dto.getOrderItemByOrderID(id);</span>
+<span class="nc" id="L31">		return dto.getOrderItemByOrderID(id);</span>
 	}
 
 	@ApiOperation(value = &quot;Gets list of all Order Items&quot;)
 	@RequestMapping(path = &quot;/api/orderitems&quot;, method = RequestMethod.GET)
 	public List&lt;OrderItemData&gt; getAll() {
-<span class="nc" id="L39">		return dto.getAll();</span>
+<span class="nc" id="L37">		return dto.getAll();</span>
 	}
-
-	@ApiOperation(value = &quot;Updates a product Quantity&quot;)
-	@RequestMapping(path = &quot;/api/orderitems/{id}&quot;, method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody OrderItemForm form) throws ApiException {
-<span class="nc" id="L45">		dto.update(id, form);</span>
-<span class="nc" id="L46">	}</span>
-	
 
 
 }

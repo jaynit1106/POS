@@ -20,7 +20,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.increff.pos.model.OrderItemData;
+import com.increff.pos.model.data.OrderItemData;
 public class generateXML {
 
     public static void createXml(List<OrderItemData> list) throws ParserConfigurationException, TransformerException {

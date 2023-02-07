@@ -10,20 +10,20 @@ import com.increff.pos.pojo.ProductPojo;
 
 @Repository
 <span class="fc" id="L12">public class ProductDao extends AbstractDao {</span>
-	private static final String check_barcode=&quot;select p from ProductPojo p where barcode=:barcode&quot;;
-	private static final String product_exist=&quot;select p from ProductPojo p where brandId=:brandId and name=:name&quot;;
+	private static final String CHECK_BARCODE=&quot;select p from ProductPojo p where barcode=:barcode&quot;;
+	private static final String PRODUCT_EXIST=&quot;select p from ProductPojo p where brandId=:brandId and name=:name&quot;;
 	private static final String GET_ALL_BARCODE=&quot;select barcode from ProductPojo p&quot;;
 	
 
 	
 	public ProductPojo barcodeExist(String barcode) {
-<span class="fc" id="L20">		TypedQuery&lt;ProductPojo&gt; query = getQuery(check_barcode, ProductPojo.class);</span>
+<span class="fc" id="L20">		TypedQuery&lt;ProductPojo&gt; query = getQuery(CHECK_BARCODE, ProductPojo.class);</span>
 <span class="fc" id="L21">		query.setParameter(&quot;barcode&quot;, barcode);</span>
 <span class="fc" id="L22">		return getSingle(query);</span>
 	}
 	
 	public ProductPojo getProductByNameAndBrandId(int brandId,String name) {
-<span class="fc" id="L26">		TypedQuery&lt;ProductPojo&gt; query = getQuery(product_exist, ProductPojo.class);</span>
+<span class="fc" id="L26">		TypedQuery&lt;ProductPojo&gt; query = getQuery(PRODUCT_EXIST, ProductPojo.class);</span>
 <span class="fc" id="L27">		query.setParameter(&quot;brandId&quot;, brandId);</span>
 <span class="fc" id="L28">		query.setParameter(&quot;name&quot;, name);</span>
 <span class="fc" id="L29">		return getSingle(query);</span>

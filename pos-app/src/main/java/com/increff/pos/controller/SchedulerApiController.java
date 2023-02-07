@@ -2,12 +2,12 @@ package com.increff.pos.controller;
 
 import java.util.List;
 
-import com.increff.pos.model.SchedulerForm;
+import com.increff.pos.model.form.SchedulerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.dto.SchedulerDto;
-import com.increff.pos.model.SchedulerData;
+import com.increff.pos.model.data.SchedulerData;
 import com.increff.pos.service.ApiException;
 
 import io.swagger.annotations.Api;

@@ -13,11 +13,11 @@ import com.increff.pos.pojo.SchedulerPojo;
 public class SchedulerDao extends AbstractDao {
 
 	
-	private static String select_date = "select p from SchedulerPojo p where date=:date";
+	private static String SELECT_DATE = "select p from SchedulerPojo p where date=:date";
 	private static String SELECT_RANGE = "select p from SchedulerPojo p where date>=:startDate and date<=:endDate";
 	
 	public SchedulerPojo select(String date) {
-		TypedQuery<SchedulerPojo> query = getQuery(select_date, SchedulerPojo.class);
+		TypedQuery<SchedulerPojo> query = getQuery(SELECT_DATE, SchedulerPojo.class);
 		query.setParameter("date", date);
 		return getSingle(query);
 	}

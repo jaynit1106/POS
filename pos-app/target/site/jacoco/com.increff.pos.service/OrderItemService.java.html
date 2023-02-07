@@ -16,8 +16,8 @@ import com.increff.pos.pojo.OrderItemPojo;
 @Transactional(rollbackOn = ApiException.class)
 <span class="fc" id="L17">public class OrderItemService {</span>
 
-<span class="fc" id="L19">	@Autowired</span>
-	private final OrderItemDao dao = new OrderItemDao();
+	@Autowired
+	private  OrderItemDao dao;
 	
 	
 
@@ -37,24 +37,17 @@ import com.increff.pos.pojo.OrderItemPojo;
 <span class="fc" id="L37">		return dao.selectAll(OrderItemPojo.class);</span>
 	}
 
-	public void update(int id, OrderItemPojo p) throws ApiException {
-<span class="nc" id="L41">		OrderItemPojo ex = getCheck(id);</span>
-<span class="nc" id="L42">		ex.setQuantity(p.getQuantity());</span>
-<span class="nc" id="L43">		ex.setSellingPrice(p.getSellingPrice());</span>
-<span class="nc" id="L44">		ex.setProductId(p.getProductId());</span>
-<span class="nc" id="L45">		dao.update(ex);</span>
-<span class="nc" id="L46">	}</span>
 
 	public OrderItemPojo getCheck(int id) throws ApiException {
-<span class="fc" id="L49">		OrderItemPojo p = dao.select(id,OrderItemPojo.class);</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">		if (Objects.isNull(p)) {</span>
-<span class="fc" id="L51">			throw new ApiException(&quot;OrderItem with given ID does not exit, id: &quot; + id);</span>
+<span class="fc" id="L42">		OrderItemPojo p = dao.select(id,OrderItemPojo.class);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		if (Objects.isNull(p)) {</span>
+<span class="fc" id="L44">			throw new ApiException(&quot;OrderItem with given ID does not exit, id: &quot; + id);</span>
 		}
-<span class="fc" id="L53">		return p;</span>
+<span class="fc" id="L46">		return p;</span>
 	}
 	
 	public List&lt;OrderItemPojo&gt; getOrderItemByOrderId(int id) {
-<span class="fc" id="L57">		return dao.selectByOrderId(id);</span>
+<span class="fc" id="L50">		return dao.selectByOrderId(id);</span>
 	}
 	
 }

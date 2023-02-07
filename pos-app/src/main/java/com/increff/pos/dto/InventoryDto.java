@@ -2,14 +2,13 @@ package com.increff.pos.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.increff.pos.model.InventoryData;
-import com.increff.pos.model.InventoryForm;
+import com.increff.pos.model.data.InventoryData;
+import com.increff.pos.model.form.InventoryForm;
 import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;

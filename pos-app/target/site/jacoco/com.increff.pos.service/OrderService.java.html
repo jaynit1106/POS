@@ -26,8 +26,8 @@ import com.increff.pos.pojo.OrderPojo;
 @Transactional(rollbackOn = ApiException.class)
 <span class="fc" id="L27">public class OrderService {</span>
 
-<span class="fc" id="L29">	@Autowired</span>
-	private final OrderDao dao = new OrderDao();
+	@Autowired
+	private OrderDao dao;
 
 
 	public void add(OrderPojo p) throws ApiException {

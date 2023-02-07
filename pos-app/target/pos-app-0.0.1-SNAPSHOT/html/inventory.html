@@ -17,25 +17,10 @@
  <!-- Top row with form-->
  <div class="row" th:if="${info.getRole()}=='supervisor'">
 	 <div class="col-12">
-			<form class="form-inline" id="inventory-form">
-				<div class="form-group">
-					<label for="barcode" class="col-sm-2 col-form-label">Barcode</label>
-					<div class="col-sm-10">
-						<select name="barcode" class="form-control" id="barcodes">
-							<option value="Select a Category">barcode</option>
-						</select>
-					</div>
-				</div>
-			  <div class="form-group">
-			    <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
-			    <div class="col-sm-10">
-			      <input onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" type="number" class="form-control" name="quantity" id="quantity" placeholder="enter quantity">
-			    </div>
-			  </div>
-			  <button type="button" class="btn btn-primary" id="add-inventory">Add</button>
-			  &nbsp;
-			  <button type="button" class="btn btn-primary" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
-			</form>
+		  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To add an inventory"  id="add-inventory"><i class="fa-sharp fa-solid fa-plus"></i></button>
+		  &nbsp;
+		  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To upload tsv" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+
 	 </div>	
 </div> 
 
@@ -55,7 +40,7 @@
 		  <th scope="col" style="text-align:center;">Name</th>
 	      <th scope="col" style="text-align:center;">Barcode</th>
 	      <th scope="col" style="text-align:center;">Quantity</th>
-	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Actions</th>
+	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Action</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -76,11 +61,11 @@
         </button>
       </div>
       <div class="modal-body">
-			<form class="form-inline" id="inventory-edit-form">
-			  <div class="form-group">
+			<form class="form" id="inventory-edit-form">
+			  <div class="form-row">
 			    <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
 			    <div class="col-sm-10">
-			      <input type="number" class="form-control" id="editQuantity" name="quantity" placeholder="Enter Quantity">
+			      <input type="number" class="form-control" id="editQuantity" name="quantity" MIN="0" MAX="2147483647" placeholder="Enter Quantity">
 			    </div>
 			  </div>
 			</form>        
@@ -92,7 +77,42 @@
     </div>
   </div>
 </div>
-
+<!-- Inventory Add Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="addInventoryModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Inventory</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="form" id="inventory-form">
+					<div class="form-row">
+						<label for="barcode" class="col-sm-2 col-form-label">Barcode</label>
+						<div class="col-sm-10">
+							<select name="barcode" class="form-control" id="barcodes">
+								<option value="Select a Category">Barcode</option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="form-row">
+						<label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+						<div class="col-sm-10">
+							<input type="number" class="form-control" id="addQuantity" name="quantity" MIN="0" MAX="2147483647" placeholder="Enter Quantity">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="add">Add</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Inventory Edit Modal -->
 <div class="modal" tabindex="-1" role="dialog" id="upload-inventory-modal">
@@ -120,8 +140,8 @@
       
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="process-data">Upload</button>
-        <button type="button" class="btn btn-warning" id="download-errors">Download Errors</button>
+        <button type="button" class="btn btn-primary" id="process-data" disabled>Upload</button>
+        <button type="button" class="btn btn-warning" id="download-errors" disabled>Download Errors</button>
       </div>
     </div>
   </div>

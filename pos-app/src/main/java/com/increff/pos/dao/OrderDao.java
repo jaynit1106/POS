@@ -11,10 +11,10 @@ import com.increff.pos.pojo.OrderPojo;
 @Repository
 public class OrderDao extends AbstractDao {
 
-	private static String select_range = "select p from OrderPojo p where timestamp>=:startDate and timestamp<=:endDate";
+	private static String SELECT_RANGE = "select p from OrderPojo p where timestamp>=:startDate and timestamp<=:endDate";
 
 	public List<OrderPojo> selectRange(Instant startDate , Instant endDate){
-		TypedQuery<OrderPojo> query = getQuery(select_range, OrderPojo.class);
+		TypedQuery<OrderPojo> query = getQuery(SELECT_RANGE, OrderPojo.class);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
 		return query.getResultList();

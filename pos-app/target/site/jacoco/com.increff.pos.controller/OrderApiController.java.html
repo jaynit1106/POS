@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.model.form.OrderItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.dto.OrderDto;
-import com.increff.pos.model.OrderData;
+import com.increff.pos.model.data.OrderData;
 import com.increff.pos.service.ApiException;
 
 import io.swagger.annotations.Api;
@@ -23,32 +23,33 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 <span class="fc" id="L24">public class OrderApiController {</span>
 
-<span class="fc" id="L26">	@Autowired</span>
-	private final OrderDto dto = new OrderDto();
+	@Autowired
+	private  OrderDto dto;
 
 	@ApiOperation(value = &quot;Adds a Order&quot;)
 	@RequestMapping(path = &quot;/api/orders&quot;, method = RequestMethod.POST)
 	public void add(@RequestBody List&lt;OrderItemForm&gt; form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-<span class="nc" id="L32">		dto.add(form);</span>
-<span class="nc" id="L33">	}</span>
+<span class="nc" id="L32">		int orderId = dto.add(form);</span>
+<span class="nc" id="L33">		dto.generatedPdf(orderId);</span>
+<span class="nc" id="L34">	}</span>
 
 	@ApiOperation(value = &quot;Gets a Order by ID&quot;)
 	@RequestMapping(path = &quot;/api/orders/{id}&quot;, method = RequestMethod.GET)
 	public OrderData get(@PathVariable int id) throws ApiException {
-<span class="nc" id="L38">		return dto.get(id);</span>
+<span class="nc" id="L39">		return dto.get(id);</span>
 	}
 
 	@ApiOperation(value = &quot;Gets list of all Orders&quot;)
 	@RequestMapping(path = &quot;/api/orders&quot;, method = RequestMethod.GET)
 	public List&lt;OrderData&gt; getAll() {
-<span class="nc" id="L44">		return dto.getAll();</span>
+<span class="nc" id="L45">		return dto.getAll();</span>
 	}
 	
 	@ApiOperation(value = &quot;Gets Pdf&quot;)
 	@RequestMapping(path = &quot;/api/orders/download/{id}&quot;, method = RequestMethod.GET)
 	public void downloadPdf(@PathVariable int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
-<span class="nc" id="L50">		dto.downloadPdf(id, request, response);</span>
-<span class="nc" id="L51">	}</span>
+<span class="nc" id="L51">		dto.downloadPdf(id, request, response);</span>
+<span class="nc" id="L52">	}</span>
 	
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -48,7 +48,8 @@ function getSalesReport(){
                 swal("Hurray", "Created Report Successfully", "success");
                 console.log(response);
                 salesData = response; 
-                displaySalesList();  
+                displaySalesList();
+                $('#filterModal').modal('toggle');
         },
         error: function(response){
                 swal("Oops!", response.responseJSON.message, "error");
@@ -170,7 +171,6 @@ function addCategoryDropdown(data){
         categoryOption.text = categoryOption.value = e;
         categorySelect.add(categoryOption, 1);
 	}
-	displaySalesList();
 }
 
 function setDate(){
@@ -203,11 +203,14 @@ function setStartDate(){
     document.getElementById('startDate').max = document.getElementById('endDate').value;
 }
 
+function toggleFilters(){
+    $('#filterModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
-    $('#submit-filter').click(getSalesReport);
+    $('#add').click(getSalesReport);
+    $('#submit-filter').click(toggleFilters);
     document.getElementById('brands').addEventListener("change",getCategoryList);
-    document.getElementById('category').addEventListener("change",displaySalesList);
     document.getElementById('endDate').addEventListener("change",setStartDate);
 }
 

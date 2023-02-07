@@ -1,68 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderItemDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">OrderItemDto.java</span></div><h1>OrderItemDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.*;
-import com.increff.pos.util.Base64Util;
-import com.increff.pos.util.JSONUTil;
-import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.increff.pos.model.OrderItemData;
-import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.ConvertUtil;
-import org.json.simple.JSONObject;
+
 @Component
-<span class="fc" id="L28">public class OrderItemDto {</span>
-<span class="fc" id="L29">	@Autowired</span>
-	private final OrderItemService orderItemService = new OrderItemService();
+<span class="fc" id="L18">public class OrderItemDto {</span>
+	@Autowired
+	private  OrderItemService orderItemService;
 	
-<span class="fc" id="L32">	@Autowired</span>
-	private final ProductService productService = new ProductService();
+	@Autowired
+	private  ProductService productService;
 
 
 	public OrderItemData get(int id) throws ApiException {
-<span class="fc" id="L37">		return ConvertUtil.objectMapper(orderItemService.get(id),OrderItemData.class);</span>
+<span class="fc" id="L27">		return ConvertUtil.objectMapper(orderItemService.get(id),OrderItemData.class);</span>
 	}
 	
 	public List&lt;OrderItemData&gt; getAll() {
-<span class="fc" id="L41">		List&lt;OrderItemPojo&gt; list = orderItemService.getAll();</span>
-<span class="fc" id="L42">		List&lt;OrderItemData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">		for (OrderItemPojo p : list) {</span>
-<span class="fc" id="L44">			list2.add(ConvertUtil.objectMapper(p,OrderItemData.class));</span>
-<span class="fc" id="L45">		}</span>
-<span class="fc" id="L46">		return list2;</span>
+<span class="fc" id="L31">		List&lt;OrderItemPojo&gt; list = orderItemService.getAll();</span>
+<span class="fc" id="L32">		List&lt;OrderItemData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">		for (OrderItemPojo p : list) {</span>
+<span class="fc" id="L34">			list2.add(ConvertUtil.objectMapper(p,OrderItemData.class));</span>
+<span class="fc" id="L35">		}</span>
+<span class="fc" id="L36">		return list2;</span>
 	}
-	
-	public void update(int id,OrderItemForm form) throws ApiException {
-<span class="nc" id="L50">		OrderItemPojo p = ConvertUtil.objectMapper(form,OrderItemPojo.class);</span>
-<span class="nc" id="L51">		orderItemService.update(id, p);</span>
-<span class="nc" id="L52">	}</span>
+
 	
 	public List&lt;OrderItemData&gt; getOrderItemByOrderID(int id) throws ApiException {
-<span class="fc" id="L55">		List&lt;OrderItemPojo&gt; list = orderItemService.getOrderItemByOrderId(id);</span>
-<span class="fc" id="L56">		List&lt;OrderItemData&gt; items = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L57" title="All 2 branches covered.">		for(OrderItemPojo p : list) {</span>
-<span class="fc" id="L58">			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);</span>
-<span class="fc" id="L59">			ProductPojo product = productService.get(p.getProductId());</span>
-<span class="fc" id="L60">			item.setSellingPrice(String.format(&quot;%.2f&quot;, new BigDecimal(p.getSellingPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue()));</span>
-<span class="fc" id="L61">			item.setBarcode(product.getBarcode());</span>
-<span class="fc" id="L62">			item.setName(product.getName());</span>
-<span class="fc" id="L63">			items.add(item);</span>
-<span class="fc" id="L64">		}</span>
-<span class="fc" id="L65">		return items;</span>
+<span class="fc" id="L41">		List&lt;OrderItemPojo&gt; list = orderItemService.getOrderItemByOrderId(id);</span>
+<span class="fc" id="L42">		List&lt;OrderItemData&gt; items = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		for(OrderItemPojo p : list) {</span>
+<span class="fc" id="L44">			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);</span>
+<span class="fc" id="L45">			ProductPojo product = productService.get(p.getProductId());</span>
+<span class="fc" id="L46">			item.setSellingPrice(String.format(&quot;%.2f&quot;, new BigDecimal(p.getSellingPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue()));</span>
+<span class="fc" id="L47">			item.setBarcode(product.getBarcode());</span>
+<span class="fc" id="L48">			item.setName(product.getName());</span>
+<span class="fc" id="L49">			items.add(item);</span>
+<span class="fc" id="L50">		}</span>
+<span class="fc" id="L51">		return items;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

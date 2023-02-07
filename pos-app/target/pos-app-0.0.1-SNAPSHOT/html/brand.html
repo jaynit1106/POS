@@ -12,27 +12,15 @@
 
 <div class="container">
 
-<h3>Brands</h3>
+<h3>Brand</h3>
 
  <!-- Top row with form-->
  <div class="row" th:if="${info.getRole()}=='supervisor'">
 	 <div class="col-12">
-			<form class="form-inline" id="brand-form">
-			  <div class="form-group">
-			    <label for="inputName" class="col-sm-2 col-form-label">Brand</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="brand" id="inputName" placeholder="enter brand">
-			    </div>
-			  </div>
-			  <div class="form-group">
-			    <label for="inputAge" class="col-sm-2 col-form-label">Category</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" id="inputAge" placeholder="enter category">
-			    </div>
-			  </div>
-			  <button type="button" class="btn btn-primary" id="add-brand">Add</button>
+			<form class="form-inline">
+			  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To add a brand" id="add-brand"><i class="fa-sharp fa-solid fa-plus"></i></button>
 			  &nbsp;
-			  <button type="button" class="btn btn-primary" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+			  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To upload tsv" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
 			</form>
 	 </div>	
 </div> 
@@ -52,7 +40,7 @@
 	      <th scope="col" style="text-align:center;">S.No.</th>
 	      <th scope="col" style="text-align:center;">Brand</th>
 	      <th scope="col" style="text-align:center;">Category</th>
-	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Actions</th>
+	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Action</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -63,6 +51,8 @@
 </div>
 
 </div>
+
+
 
 <!-- Employee Edit Modal -->
 <div class="modal" tabindex="-1" role="dialog" id="edit-brand-modal">
@@ -75,17 +65,16 @@
         </button>
       </div>
       <div class="modal-body">
-			<form class="form-inline" id="brand-edit-form">
-			  <div class="form-group">
-			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
+			<form class="form" id="brand-edit-form">
+			  <div class="form-row">
+			    <label class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
 			      <input type="text" class="form-control" name="brand" id="editBrand" placeholder="enter brand">
 			    </div>
 			  </div>
 			  <br>
-			  <br>
-			  <div class="form-group">
-			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+			  <div class="form-row">
+			    <label class="col-sm-2 col-form-label">Category</label>
 			    <div class="col-sm-10">
 			      <input type="text" class="form-control" name="category" id="editCategory" placeholder="enter category">
 			    </div>
@@ -99,7 +88,40 @@
     </div>
   </div>
 </div>
-
+<!-- Add Brand Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="addBrandModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Brand</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="form" id="brand-form">
+					<div class="form-row">
+						<label class="col-sm-2 col-form-label">Brand</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="brand" id="addBrand" placeholder="enter brand">
+						</div>
+					</div>
+					<br>
+					<div class="form-row">
+						<label class="col-sm-2 col-form-label">Category</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="category" id="addCategory" placeholder="enter category">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="add">Add</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Employee Edit Modal -->
 <div class="modal" tabindex="-1" role="dialog" id="upload-brand-modal">
@@ -116,7 +138,7 @@
       <div class="modal-body">
       	<div class="employee-file">
 		  <input type="file" class="custom-file-input" id="brandFile">
-		  <label class="custom-file-label" for="employeeFile" id="brandFileName">Choose file</label>
+		  <label class="custom-file-label"  id="brandFileName">Choose file</label>
 		</div>
 		<a th:href="@{/sample/brand.tsv}" target="_blank">Download Sample</a> 
 		<br>
@@ -127,8 +149,8 @@
       
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="process-data">Upload</button>
-        <button type="button" class="btn btn-warning" id="download-errors">Download Errors</button>
+        <button type="button" class="btn btn-primary" id="process-data" disabled>Upload</button>
+        <button type="button" class="btn btn-warning" id="download-errors" disabled>Download Errors</button>
       </div>
     </div>
   </div>

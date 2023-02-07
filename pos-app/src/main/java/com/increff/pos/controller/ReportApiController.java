@@ -2,7 +2,12 @@ package com.increff.pos.controller;
 
 import java.util.List;
 
-import com.increff.pos.model.*;
+import com.increff.pos.model.data.BrandReportData;
+import com.increff.pos.model.data.InventoryReportData;
+import com.increff.pos.model.data.SalesReportData;
+import com.increff.pos.model.form.BrandReportForm;
+import com.increff.pos.model.form.InventoryReportForm;
+import com.increff.pos.model.form.SalesReportForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

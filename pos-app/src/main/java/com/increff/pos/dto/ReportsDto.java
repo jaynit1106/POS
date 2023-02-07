@@ -2,7 +2,6 @@ package com.increff.pos.dto;
 
 import java.time.Instant;
 import java.time.Period;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +9,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-import com.increff.pos.model.*;
+import com.increff.pos.model.data.BrandReportData;
+import com.increff.pos.model.data.InventoryReportData;
+import com.increff.pos.model.data.SalesReportData;
+import com.increff.pos.model.form.BrandReportForm;
+import com.increff.pos.model.form.InventoryReportForm;
+import com.increff.pos.model.form.SalesReportForm;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
 import com.increff.pos.util.MapUtil;
-import io.swagger.models.auth.In;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -10,10 +10,10 @@ import com.increff.pos.pojo.OrderItemPojo;
 @Repository
 public class OrderItemDao extends AbstractDao {
 
-	private static String select_by_order_id = "select p from OrderItemPojo p where orderid=:orderId";
+	private static String SELECT_BY_ORDER_ID = "select p from OrderItemPojo p where orderid=:orderId";
 
 	public List<OrderItemPojo> selectByOrderId(int orderId) {
-		TypedQuery<OrderItemPojo> query = getQuery(select_by_order_id, OrderItemPojo.class);
+		TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ORDER_ID, OrderItemPojo.class);
 		query.setParameter("orderId", orderId);
 		return query.getResultList();
 	}

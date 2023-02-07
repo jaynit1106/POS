@@ -1,16 +1,12 @@
 package com.increff.pos.service;
 
 import com.increff.pos.dao.BrandDao;
-import com.increff.pos.model.BrandData;
-import com.increff.pos.model.BrandForm;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.util.PojoUtil;
-import io.swagger.annotations.Api;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

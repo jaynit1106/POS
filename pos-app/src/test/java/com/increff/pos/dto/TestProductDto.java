@@ -2,8 +2,8 @@ package com.increff.pos.dto;
 
 import com.increff.pos.dao.BrandDao;
 import com.increff.pos.dao.ProductDao;
-import com.increff.pos.model.BrandData;
-import com.increff.pos.model.ProductData;
+import com.increff.pos.model.data.BrandData;
+import com.increff.pos.model.data.ProductData;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
@@ -11,13 +11,10 @@ import com.increff.pos.util.PojoUtil;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
 
 public class TestProductDto extends AbstractUnitTest{
     @Autowired

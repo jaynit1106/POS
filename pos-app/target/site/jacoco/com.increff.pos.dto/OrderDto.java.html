@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">OrderDto.java</span></div><h1>OrderDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +11,8 @@ import javax.transaction.Transactional;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import com.increff.pos.model.OrderItemData;
-import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.model.data.OrderItemData;
+import com.increff.pos.model.form.OrderItemForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.*;
@@ -25,105 +22,109 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import com.increff.pos.model.OrderData;
+import com.increff.pos.model.data.OrderData;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.util.ConvertUtil;
 
 @Component
-<span class="fc" id="L35">public class OrderDto {</span>
-<span class="fc" id="L36">	@Autowired</span>
-	private final PdfDto pdfDto = new PdfDto();
+<span class="fc" id="L31">public class OrderDto {</span>
+	@Autowired
+	private PdfDto pdfDto;
 
-<span class="fc" id="L39">	@Autowired</span>
-	private final OrderItemService orderItemService = new OrderItemService();
+	@Autowired
+	private  OrderItemService orderItemService;
 
-<span class="fc" id="L42">	@Autowired</span>
-	private final ProductService productService = new ProductService();
+	@Autowired
+	private  ProductService productService;
 
-<span class="fc" id="L45">	@Autowired</span>
-	private final InventoryService inventoryService = new InventoryService();
-<span class="fc" id="L47">	@Autowired</span>
-	private final OrderService orderService = new OrderService();
+	@Autowired
+	private  InventoryService inventoryService;
+	@Autowired
+	private  OrderService orderService;
 
 	@Transactional(rollbackOn = ApiException.class)
-	public void add(List&lt;OrderItemForm&gt; form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-<span class="fc" id="L52">		List&lt;JSONObject&gt; errors = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L53">		List&lt;OrderItemPojo&gt; items = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L54" title="All 2 branches covered.">		for(OrderItemForm f : form) {</span>
-<span class="fc" id="L55">			OrderItemPojo p =ConvertUtil.objectMapper(f, OrderItemPojo.class);</span>
-<span class="fc" id="L56">			p.setOrderId(1);</span>
+	public int add(List&lt;OrderItemForm&gt; form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
+<span class="fc" id="L48">		List&lt;JSONObject&gt; errors = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L49">		List&lt;OrderItemPojo&gt; items = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		for(OrderItemForm f : form) {</span>
+<span class="fc" id="L51">			OrderItemPojo p =ConvertUtil.objectMapper(f, OrderItemPojo.class);</span>
+<span class="fc" id="L52">			p.setOrderId(1);</span>
 			ProductPojo product;
 			try {
-<span class="fc" id="L59">				product = productService.getProductByBarcode(f.getBarcode());</span>
-<span class="fc" id="L60">			}catch (ApiException e){</span>
-<span class="fc" id="L61">				errors.add(JSONUTil.getJSONObject(p.getBarcode(),&quot;Product &quot;+f.getBarcode()+&quot; Does Not exists&quot;));</span>
-<span class="fc" id="L62">				continue;</span>
-<span class="fc" id="L63">			}</span>
-<span class="fc" id="L64">			p.setProductId(product.getId());</span>
-<span class="fc" id="L65">			items.add(p);</span>
-<span class="fc" id="L66">		}</span>
-
-
-<span class="fc" id="L69">		List&lt;JSONObject&gt; inventoryErrors = inventoryService.checkAndCreateOrder(items);</span>
-<span class="fc" id="L70">		errors.addAll(inventoryErrors);</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">		if(errors.size()&gt;0){</span>
-<span class="fc" id="L72">			throw new ApiException(JSONValue.toJSONString(errors));</span>
+<span class="fc" id="L55">				product = productService.getProductByBarcode(f.getBarcode());</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">				if(product.getMrp()&lt;f.getSellingPrice()){</span>
+<span class="nc" id="L57">					errors.add(JSONUTil.getJSONObject(p.getBarcode(),&quot;Selling price should be less than &quot;+product.getMrp()));</span>
+				}
+<span class="fc" id="L59">			}catch (ApiException e){</span>
+<span class="fc" id="L60">				errors.add(JSONUTil.getJSONObject(p.getBarcode(),&quot;Product &quot;+f.getBarcode()+&quot; Does Not exists&quot;));</span>
+<span class="fc" id="L61">				continue;</span>
+<span class="fc" id="L62">			}</span>
+<span class="fc" id="L63">			p.setProductId(product.getId());</span>
+<span class="fc" id="L64">			items.add(p);</span>
+<span class="fc" id="L65">		}</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">		if(errors.size()&gt;0){</span>
+<span class="fc" id="L67">			throw new ApiException(JSONValue.toJSONString(errors));</span>
 		}
+<span class="fc" id="L69">		inventoryService.checkAndCreateOrder(items);</span>
 
+<span class="fc" id="L71">		OrderPojo order = new OrderPojo();</span>
+<span class="fc" id="L72">		orderService.add(order);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">		for (OrderItemPojo item : items) {</span>
+<span class="fc" id="L74">			item.setOrderId(order.getId());</span>
+<span class="fc" id="L75">		}</span>
 
-<span class="fc" id="L76">		OrderPojo order = new OrderPojo();</span>
-<span class="fc" id="L77">		orderService.add(order);</span>
-<span class="fc bfc" id="L78" title="All 2 branches covered.">		for (OrderItemPojo item : items) {</span>
-<span class="fc" id="L79">			item.setOrderId(order.getId());</span>
-<span class="fc" id="L80">		}</span>
+<span class="fc" id="L77">		orderItemService.add(items);</span>
+<span class="fc" id="L78">		return order.getId();</span>
+	}
 
-<span class="fc" id="L82">		orderItemService.add(items);</span>
-
-
-<span class="fc" id="L85">		List&lt;OrderItemData&gt; list = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">		for(OrderItemPojo p : items) {</span>
-<span class="fc" id="L87">			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);</span>
-<span class="fc" id="L88">			ProductPojo product = productService.get(p.getProductId());</span>
-<span class="fc" id="L89">			item.setBarcode(product.getBarcode());</span>
-<span class="fc" id="L90">			item.setName(product.getName());</span>
-<span class="fc" id="L91">			list.add(item);</span>
-<span class="fc" id="L92">		}</span>
-
-		try {
-<span class="fc" id="L95">			String base64 = pdfDto.getBase64(list);</span>
-<span class="fc" id="L96">			Base64Util.savePdf(base64,&quot;Invoice &quot;+ list.get(0).getOrderId());</span>
-<span class="nc" id="L97">		}catch (Exception e){</span>
-<span class="nc" id="L98">			errors.add(JSONUTil.getJSONObject(&quot;server&quot;,&quot;Server error&quot;));</span>
-<span class="fc" id="L99">		}</span>
-
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">		if(errors.size()&gt;0)throw new ApiException(JSONValue.toJSONString(errors));</span>
-<span class="fc" id="L102">	}</span>
 	
 	public OrderData get(int id) throws ApiException {
-<span class="nc" id="L105">		OrderPojo p = orderService.get(id);</span>
-<span class="nc" id="L106">		OrderData data = new OrderData();</span>
-<span class="nc" id="L107">		data.setTimestamp(p.getTimestamp().toString());</span>
-<span class="nc" id="L108">		data.setId(p.getId());</span>
-<span class="nc" id="L109">		return  data;</span>
+<span class="nc" id="L83">		OrderPojo p = orderService.get(id);</span>
+<span class="nc" id="L84">		OrderData data = new OrderData();</span>
+<span class="nc" id="L85">		data.setTimestamp(p.getTimestamp().toString());</span>
+<span class="nc" id="L86">		data.setId(p.getId());</span>
+<span class="nc" id="L87">		return  data;</span>
 	}
 	
 	public List&lt;OrderData&gt; getAll() {
-<span class="fc" id="L113">		List&lt;OrderPojo&gt; list = orderService.getAll();</span>
-<span class="fc" id="L114">		List&lt;OrderData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">		for (OrderPojo p : list) {</span>
-<span class="fc" id="L116">			OrderData data = new OrderData();</span>
-<span class="fc" id="L117">			data.setId(p.getId());</span>
-<span class="fc" id="L118">			data.setTimestamp(p.getTimestamp().toString());</span>
-<span class="fc" id="L119">			list2.add(data);</span>
-<span class="fc" id="L120">		}</span>
-<span class="fc" id="L121">		Collections.reverse(list2);</span>
-<span class="fc" id="L122">		return list2;</span>
+<span class="fc" id="L91">		List&lt;OrderPojo&gt; list = orderService.getAll();</span>
+<span class="fc" id="L92">		List&lt;OrderData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">		for (OrderPojo p : list) {</span>
+<span class="fc" id="L94">			OrderData data = new OrderData();</span>
+<span class="fc" id="L95">			data.setId(p.getId());</span>
+<span class="fc" id="L96">			data.setTimestamp(p.getTimestamp().toString());</span>
+<span class="fc" id="L97">			list2.add(data);</span>
+<span class="fc" id="L98">		}</span>
+<span class="fc" id="L99">		Collections.reverse(list2);</span>
+<span class="fc" id="L100">		return list2;</span>
 	}
 	
 	public void downloadPdf(int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
-<span class="nc" id="L126">		orderService.downloadPdf(id, request, response);	</span>
-<span class="nc" id="L127">	}</span>
+<span class="nc" id="L104">		orderService.downloadPdf(id, request, response);	</span>
+<span class="nc" id="L105">	}</span>
+
+	public void generatedPdf(int id) throws ApiException {
+<span class="fc" id="L108">		List&lt;OrderItemPojo&gt; items = orderItemService.getOrderItemByOrderId(id);</span>
+<span class="fc" id="L109">		List&lt;OrderItemData&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L110">		List&lt;JSONObject&gt; errors = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L112" title="All 2 branches covered.">		for(OrderItemPojo p : items) {</span>
+<span class="fc" id="L113">			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);</span>
+<span class="fc" id="L114">			ProductPojo product = productService.get(p.getProductId());</span>
+<span class="fc" id="L115">			item.setBarcode(product.getBarcode());</span>
+<span class="fc" id="L116">			item.setName(product.getName());</span>
+<span class="fc" id="L117">			list.add(item);</span>
+<span class="fc" id="L118">		}</span>
+
+		try {
+<span class="fc" id="L121">			String base64 = pdfDto.getBase64(list);</span>
+<span class="fc" id="L122">			Base64Util.savePdf(base64,&quot;Invoice &quot;+ list.get(0).getOrderId());</span>
+<span class="nc" id="L123">		}catch (Exception e){</span>
+<span class="nc" id="L124">			errors.add(JSONUTil.getJSONObject(&quot;server&quot;,&quot;Server error&quot;));</span>
+<span class="fc" id="L125">		}</span>
+
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">		if(errors.size()&gt;0)throw new ApiException(JSONValue.toJSONString(errors));</span>
+<span class="fc" id="L128">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

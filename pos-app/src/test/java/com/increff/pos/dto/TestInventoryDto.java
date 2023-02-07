@@ -3,13 +3,10 @@ package com.increff.pos.dto;
 import com.increff.pos.dao.BrandDao;
 import com.increff.pos.dao.InventoryDao;
 import com.increff.pos.dao.ProductDao;
-import com.increff.pos.model.InventoryData;
+import com.increff.pos.model.data.InventoryData;
 import com.increff.pos.service.ApiException;
-import com.increff.pos.service.InventoryService;
 import com.increff.pos.util.PojoUtil;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

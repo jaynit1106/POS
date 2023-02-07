@@ -65,8 +65,8 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.increff.pos.service.TestInventoryService" name="testAdd" time="0"/>
-  <testcase classname="com.increff.pos.service.TestInventoryService" name="testCheckAndCreateOrder" time="0.032"/>
+  <testcase classname="com.increff.pos.service.TestInventoryService" name="testAdd" time="0.016"/>
+  <testcase classname="com.increff.pos.service.TestInventoryService" name="testCheckAndCreateOrder" time="0"/>
   <testcase classname="com.increff.pos.service.TestInventoryService" name="testGetAll" time="0"/>
-  <testcase classname="com.increff.pos.service.TestInventoryService" name="testUpdate" time="0"/>
+  <testcase classname="com.increff.pos.service.TestInventoryService" name="testUpdate" time="0.016"/>
 </testsuite>

@@ -2,7 +2,6 @@
 //HELPER METHOD
 function toJson($form){
     var serialized = $form.serializeArray();
-    console.log(serialized);
     var s = '';
     var data = {};
     for(s in serialized){
@@ -40,6 +39,7 @@ function writeFileData(arr){
 	
 	var data = Papa.unparse(arr, config);
     var blob = new Blob([data], {type: 'text/tsv;charset=utf-8;'});
+    var blob = new Blob([data], {type: 'text/tsv;charset=utf-8;'});
     var fileUrl =  null;
 
     if (navigator.msSaveBlob) {
@@ -51,4 +51,8 @@ function writeFileData(arr){
     tempLink.href = fileUrl;
     tempLink.setAttribute('download', 'errors.tsv');
     tempLink.click(); 
+}
+
+function validateForm(form){
+    return form[0].reportValidity();
 }

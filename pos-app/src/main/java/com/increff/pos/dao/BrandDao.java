@@ -11,13 +11,13 @@ import com.increff.pos.pojo.BrandPojo;
 public class BrandDao extends AbstractDao {
 
 	
-	private static final String check_id = "select p from BrandPojo p where (p.brand=:brand and p.category=:category)";
+	private static final String CHECK_ID = "select p from BrandPojo p where (p.brand=:brand and p.category=:category)";
 	private static final String GET_BRAND = "select distinct brand from BrandPojo p";
 	private static final String GET_CATEGORY = "select distinct category from BrandPojo p where p.brand=:brand";
 
 
 	public BrandPojo checkRepeat(String brand , String category) {
-		TypedQuery<BrandPojo> query = getQuery(check_id, BrandPojo.class);
+		TypedQuery<BrandPojo> query = getQuery(CHECK_ID, BrandPojo.class);
 		query.setParameter("category", category);
 		query.setParameter("brand", brand);
 		return getSingle(query);

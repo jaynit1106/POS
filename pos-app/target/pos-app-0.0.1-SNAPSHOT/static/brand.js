@@ -24,7 +24,9 @@ function addBrand(event){
        },	   
 	   success: function(response) {
 	   		getBrandList();
-	   		swal("Hurray", "Brand added successfully", "success");  
+	   		swal("Hurray", "Brand added successfully", "success");
+	   		document.getElementById('brand-form').reset();
+	   		$('#addBrandModal').modal('toggle');
 	   },
 	   error: function(response){
 	   		swal("Oops!", response.responseJSON.message, "error");
@@ -89,20 +91,19 @@ function readFileDataCallback(results){
 	fileData = results.data;
 	uploadRows();
 }
-
 function uploadRows(){
 	//Update progress
 	updateUploadDialog();
 	
 	//To avoid large files
 	if(fileData.length>5000){
-		alert("Size too large");
+		 swal("Oops!","only 5000 rows allowed", "error");
 		return;
 	}
 	
 	//To avoid empty files
 	if(fileData.length==0){
-		alert("File is empty");
+		 swal("Oops!","file is empty", "error");
 		return;
 	}
 	
@@ -110,13 +111,22 @@ function uploadRows(){
 	if(processCount==fileData.length){
 		getBrandList();
 	   	swal("Hurray", "Brand upload successfull", "success");
+	   	document.getElementById('process-data').disabled = true;
+	   	if(errorData.length>0){
+	   	    document.getElementById('download-errors').disabled = false;
+	   	}
 		return;
 	}
 	
 	//Process next row
 	var row = fileData[processCount];
 	processCount++;
-	
+	var title = Object.keys(row);
+	if(title[0]!='brand' || title[1]!='category' || title.length!=2){
+	    swal("Oops!","Incorrect tsv format please check the sample file", "error");
+	    return;
+	}
+
 	var json = JSON.stringify(row);
 	var url = getBrandUrl();
 
@@ -132,7 +142,7 @@ function uploadRows(){
 	   		uploadRows();  
 	   },
 	   error: function(response){
-	   		row.error=response.responseText
+	   		row.error=response.responseJSON.message
 	   		errorData.push(row);
 	   		uploadRows();
 	   }
@@ -177,7 +187,7 @@ function displayBrandList(data){
 		var e = data[i];
 		brandData.push(e);
 		let id = counter-1;
-		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id +')"><i class="fa-solid fa-pen-to-square"></i></button>';
+		var buttonHtml = '<button class="btn btn-dark" data-toggle="tooltip" data-placement="top" title="edit brand"  onclick="displayUpdateDialog(' + id +')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var row = '<tr>'
 		+ '<td style="text-align:center;">' + counter + '</td>'
 		+ '<td style="text-align:center;">' + e.brand + '</td>'
@@ -202,6 +212,8 @@ function resetUploadDialog(){
 	processCount = 0;
 	fileData = [];
 	errorData = [];
+	document.getElementById('process-data').disabled = true;
+	document.getElementById('download-errors').disabled = true;
 	//Update counts	
 	updateUploadDialog();
 }
@@ -211,12 +223,19 @@ function updateUploadDialog(){
 	$('#processCount').html("" + processCount);
 	$('#errorCount').html("" + errorData.length);
 }
-
 function updateFileName(){
 	var $file = $('#brandFile');
 	var fileName = $file.val();
-
+    var ok = String(fileName).split(/(\\|\/)/g).pop();
+    if(ok.split('.')[1]!="tsv"){
+        swal("Oops!", "please select a tsv file", "error");
+        return;
+    }
+    processCount = 0;
+    fileData = [];
+    errorData = [];
 	$('#brandFileName').html(String(fileName).split(/(\\|\/)/g).pop());
+	document.getElementById('process-data').disabled = false;
 }
 
 function displayBrandData(){
@@ -225,9 +244,13 @@ function displayBrandData(){
 }
 
 
+function toggleAddBrand(){
+    $('#addBrandModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
-	$('#add-brand').click(addBrand);
+	$('#add').click(addBrand);
+	$('#add-brand').click(toggleAddBrand);
 	$('#update-brand').click(updateBrand);
 	$('#upload-data').click(displayBrandData);
 	$('#process-data').click(processData);

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.pos.dto.InventoryDto;
-import com.increff.pos.model.InventoryData;
-import com.increff.pos.model.InventoryForm;
+import com.increff.pos.model.data.InventoryData;
+import com.increff.pos.model.form.InventoryForm;
 import com.increff.pos.service.ApiException;
 
 import io.swagger.annotations.Api;
@@ -21,8 +21,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 <span class="fc" id="L22">public class InventoryApiController {</span>
 
-<span class="fc" id="L24">	@Autowired</span>
-	private final InventoryDto dto = new InventoryDto();
+	@Autowired
+	private InventoryDto dto;
 
 	@ApiOperation(value = &quot;Adds a Product Quantity&quot;)
 	@RequestMapping(path = &quot;/api/inventorys&quot;, method = RequestMethod.POST)

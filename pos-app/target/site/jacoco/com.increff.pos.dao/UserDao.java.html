@@ -11,11 +11,11 @@ import com.increff.pos.pojo.UserPojo;
 @Repository
 <span class="fc" id="L12">public class UserDao extends AbstractDao {</span>
 
-<span class="fc" id="L14">	private static String select_email = &quot;select p from UserPojo p where email=:email&quot;;</span>
+<span class="fc" id="L14">	private static String SELECT_EMAIL = &quot;select p from UserPojo p where email=:email&quot;;</span>
 
 
 	public UserPojo select(String email) {
-<span class="fc" id="L18">		TypedQuery&lt;UserPojo&gt; query = getQuery(select_email, UserPojo.class);</span>
+<span class="fc" id="L18">		TypedQuery&lt;UserPojo&gt; query = getQuery(SELECT_EMAIL, UserPojo.class);</span>
 <span class="fc" id="L19">		query.setParameter(&quot;email&quot;, email);</span>
 <span class="fc" id="L20">		return getSingle(query);</span>
 	}

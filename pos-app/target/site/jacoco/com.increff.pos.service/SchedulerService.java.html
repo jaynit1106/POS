@@ -17,8 +17,8 @@ import com.increff.pos.pojo.SchedulerPojo;
 @Transactional(rollbackOn = ApiException.class)
 <span class="fc" id="L18">public class SchedulerService {</span>
 
-<span class="fc" id="L20">	@Autowired</span>
-	private final SchedulerDao dao = new SchedulerDao();
+	@Autowired
+	private  SchedulerDao dao;
 	
 
 	public void add(SchedulerPojo p) throws ApiException {
@@ -31,12 +31,11 @@ import com.increff.pos.pojo.SchedulerPojo;
 
 	public List&lt;SchedulerPojo&gt; getRange(String startDate,String endDate) throws ApiException {
 <span class="nc bnc" id="L33" title="All 2 branches missed.">		if(startDate.compareTo(endDate)&gt;0){throw new ApiException(&quot;please select a valid time range&quot;);}</span>
-<span class="nc bnc" id="L34" title="All 2 branches missed.">		if(String.valueOf(Instant.now()).compareTo(endDate+&quot;T23:59:59Z&quot;)&lt;-1){throw new ApiException(&quot;Invalid Time Period&quot;);}</span>
 
-<span class="nc" id="L36">		Instant range = Instant.now().minus(Period.ofDays(365));</span>
-<span class="nc bnc" id="L37" title="All 2 branches missed.">		if(String.valueOf(range).compareTo(startDate+&quot;T00:00:00Z&quot;)&gt;0){throw new ApiException(&quot;Only one year is allowed for the reports&quot;);}</span>
+<span class="nc" id="L35">		Instant range = Instant.now().minus(Period.ofDays(365));</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		if(String.valueOf(range).compareTo(startDate+&quot;T00:00:00Z&quot;)&gt;0){throw new ApiException(&quot;Only one year is allowed for the reports&quot;);}</span>
 
-<span class="nc" id="L39">		return dao.selectRange(startDate,endDate);</span>
+<span class="nc" id="L38">		return dao.selectRange(startDate,endDate);</span>
 	}
 
 }

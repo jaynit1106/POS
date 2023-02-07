@@ -1,8 +1,9 @@
 package com.increff.pos.util;
 
-import com.increff.pos.dto.InventoryDto;
-import com.increff.pos.dto.OrderItemDto;
-import com.increff.pos.model.*;
+import com.increff.pos.model.form.BrandForm;
+import com.increff.pos.model.form.InventoryForm;
+import com.increff.pos.model.form.OrderItemForm;
+import com.increff.pos.model.form.ProductForm;
 import com.increff.pos.pojo.*;
 
 public class PojoUtil {
@@ -28,7 +29,7 @@ public class PojoUtil {
         return p;
     }
 
-    public static ProductForm getProductForm(String brand, String category , String name,String barcode,double mrp){
+    public static ProductForm getProductForm(String brand, String category , String name, String barcode, double mrp){
         ProductForm p =new ProductForm();
         p.setBrand(brand);
         p.setCategory(category);
@@ -64,8 +65,8 @@ public class PojoUtil {
         p.setSellingPrice(sellingPrice);
         return p;
     }
-    public static OrderItemForm getOrderItemForm(int quantity, String barcode, double sellingPrice){
-        OrderItemForm p =new OrderItemForm();
+    public static com.increff.pos.model.form.OrderItemForm getOrderItemForm(int quantity, String barcode, double sellingPrice){
+        com.increff.pos.model.form.OrderItemForm p =new OrderItemForm();
         p.setQuantity(quantity);
         p.setSellingPrice(sellingPrice);
         p.setBarcode(barcode);

@@ -20,8 +20,8 @@ import com.increff.pos.util.StringUtil;
 @Transactional(rollbackOn = ApiException.class)
 <span class="fc" id="L21">public class BrandService {</span>
 
-<span class="fc" id="L23">	@Autowired</span>
-	private final BrandDao dao = new BrandDao();
+	@Autowired
+	private  BrandDao dao ;
 
 
 	public void add(BrandPojo p) throws ApiException {

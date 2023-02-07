@@ -2,8 +2,6 @@ package com.increff.pos.service;
 
 import com.increff.pos.dao.BrandDao;
 import com.increff.pos.dao.ProductDao;
-import com.increff.pos.model.BrandData;
-import com.increff.pos.model.ProductData;
 import com.increff.pos.pojo.BrandPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.PojoUtil;

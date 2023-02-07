@@ -1,24 +1,21 @@
 package com.increff.pos.dto;
 
 import java.time.Instant;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-import com.increff.pos.model.SchedulerForm;
+import com.increff.pos.model.form.SchedulerForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
-import io.swagger.models.auth.In;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.increff.pos.model.SchedulerData;
+import com.increff.pos.model.data.SchedulerData;
 import com.increff.pos.pojo.SchedulerPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.SchedulerService;

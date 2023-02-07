@@ -1,6 +1,6 @@
 package com.increff.pos.dto;
 
-import com.increff.pos.model.AboutAppData;
+import com.increff.pos.model.data.AboutAppData;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

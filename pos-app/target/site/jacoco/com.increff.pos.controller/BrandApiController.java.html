@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.dto.BrandDto;
-import com.increff.pos.model.BrandData;
-import com.increff.pos.model.BrandForm;
+import com.increff.pos.model.data.BrandData;
+import com.increff.pos.model.form.BrandForm;
 import com.increff.pos.service.ApiException;
 
 import io.swagger.annotations.Api;
@@ -17,8 +17,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 <span class="fc" id="L18">public class BrandApiController {</span>
 	
-<span class="fc" id="L20">	@Autowired</span>
-	private final BrandDto dto = new BrandDto();
+	@Autowired
+	private BrandDto dto ;
 
 	@ApiOperation(value = &quot;Adds an Brand&quot;)
 	@RequestMapping(path = &quot;/api/brands&quot;, method = RequestMethod.POST)

@@ -26,6 +26,7 @@ function getSchedulerList(){
        success: function(response) {
             displaySchedulerList(response);
             swal("Hurray", "report created successfully", "success");
+            $('#filterModal').modal('toggle');
        },
        error: function(response){
             swal("Oops!", response.responseJSON.message, "error");
@@ -122,9 +123,13 @@ function setStartDate(){
     document.getElementById('startDate').max = document.getElementById('endDate').value;
 }
 
+function toggleFilters(){
+    $('#filterModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
-    $('#submit-filter').click(getSchedulerList);
+    $('#add').click(getSchedulerList);
+    $('#submit-filter').click(toggleFilters);
     document.getElementById('endDate').addEventListener("change",setStartDate);
 
 }

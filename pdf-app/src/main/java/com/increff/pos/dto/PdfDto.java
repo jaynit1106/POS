@@ -1,6 +1,6 @@
 package com.increff.pos.dto;
 
-import com.increff.pos.model.OrderItemData;
+import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.util.generatePdf;
 import com.increff.pos.util.generateXML;
 import org.springframework.stereotype.Component;

@@ -12,17 +12,17 @@
 
 <div class="container">
 
-<h3>Orders</h3>
+<h3>Order</h3>
 
  <!-- Top row with form-->
  <div class="row">
 	 <div class="col-12">
 			<form class="form-inline" id="brand-form">
-			  <button type="button" class="btn btn-primary" id="create-order"><i class="fa-solid fa-cart-plus"></i></button>
+			  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To create an order"  id="create-order"><i class="fa-solid fa-cart-plus"></i></button>
               &nbsp;
               &nbsp;
               &nbsp;
-              <button type="button" class="btn btn-primary" id="refresh-orders"><i class="fa-solid fa-rotate"></i></button>
+              <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="refresh"  id="refresh-orders"><i class="fa-solid fa-rotate"></i></button>
 			</form>
 	 </div>	
 </div> 
@@ -42,7 +42,7 @@
 	      <th scope="col" style="text-align:center;">S.No.</th>
         <th scope="col" style="text-align:center;">OrderId</th>
 	      <th scope="col" style="text-align:center;">Timestamp</th>
-	      <th scope="col" style="text-align:center;">Actions</th>
+	      <th scope="col" style="text-align:center;">Action</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -107,16 +107,16 @@
             <div class="form-group">
               <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
               <div class="col-sm-10">
-                <input type="number" onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" class="form-control" name="quantity" id="quantity" placeholder="enter quantity">
+                <input type="number" MIN="0" MAX="2147483647" onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" class="form-control" name="quantity" id="quantity" placeholder="enter quantity">
               </div>
             </div>
             <div class="form-group">
               <label for="inputPrice" class="col-sm-2 col-form-label">Price</label>
               <div class="col-sm-10">
-                <input type="number" class="form-control" name="sellingPrice" id="price" placeholder="enter price">
+                <input type="text" class="form-control" maxlength="10" name="sellingPrice" id="price" placeholder="enter price">
               </div>
             </div>
-            <button type="button" class="btn btn-primary" id="add-item">Add</button>
+            <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="add item"  id="add-item"><i class="fa-sharp fa-solid fa-plus"></i></button>
           </form>
           &nbsp;
           &nbsp;

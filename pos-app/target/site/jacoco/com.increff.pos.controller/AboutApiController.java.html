@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.pos.dto.AboutAppDto;
-import com.increff.pos.model.AboutAppData;
+import com.increff.pos.model.data.AboutAppData;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,18 +1,14 @@
 package com.increff.pos.dto;
 
 import com.increff.pos.dao.*;
-import com.increff.pos.model.OrderData;
-import com.increff.pos.model.OrderItemData;
-import com.increff.pos.model.OrderItemForm;
+import com.increff.pos.model.data.OrderItemData;
+import com.increff.pos.model.form.OrderItemForm;
 import com.increff.pos.pojo.BrandPojo;
-import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,7 +16,6 @@ import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -56,14 +51,14 @@ public class TestOrderDto extends  AbstractUnitTest{
 
         //add order-item
         List<OrderItemForm> lists = new ArrayList<>();
-        lists.add(PojoUtil.getOrderItemForm(11,"abcdabcd",100.23));
+        lists.add(PojoUtil.getOrderItemForm(11,"abcdabcd",20));
         orderDto.add(lists);
 
         //checking the order-item
         List<OrderItemData> list = orderItemDto.getAll();
         assertEquals(list.get(0).getOrderId(),orderDto.getAll().get(0).getId());
         assertEquals(list.get(0).getQuantity(),11);
-        assertEquals(new Double(list.get(0).getSellingPrice()),(Double) 100.23,0);
+        assertEquals(new Double(list.get(0).getSellingPrice()),(Double) 20.0,0);
         assertEquals(list.get(0).getProductId(),productDto.getAll().get(0).getId());
     }
 
@@ -83,7 +78,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Please Enter a Valid Quantity for abcdabcd");
         List<OrderItemForm> list = new ArrayList<>();
-        list.add(PojoUtil.getOrderItemForm(-20,"abcdabcd",100.23));
+        list.add(PojoUtil.getOrderItemForm(-20,"abcdabcd",20));
         orderDto.add(list);
 
         //checking for API exception for invalid sellingPrice
@@ -155,7 +150,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("[{\"abcdabcd\":\"Only 100 pieces left for abcdabcd\"}]");
         List<OrderItemForm> list = new ArrayList<>();
-        list.add(PojoUtil.getOrderItemForm(120,"abcdabcd",100.23));
+        list.add(PojoUtil.getOrderItemForm(120,"abcdabcd",20));
         orderDto.add(list);
     }
 
@@ -166,7 +161,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDao.selectAll(ProductPojo.class).get(0).getId()));
 
         List<OrderItemForm> list = new ArrayList<>();
-        list.add(PojoUtil.getOrderItemForm(20,"abcdabcd",90));
+        list.add(PojoUtil.getOrderItemForm(20,"abcdabcd",10));
 
 
         //checking creating the pdf part
