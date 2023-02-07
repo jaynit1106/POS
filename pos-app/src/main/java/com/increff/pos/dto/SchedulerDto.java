@@ -1,11 +1,13 @@
 package com.increff.pos.dto;
 
 import java.time.Instant;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import com.increff.pos.model.SchedulerForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.OrderItemService;
@@ -57,8 +59,8 @@ public class SchedulerDto {
 		return ConvertUtil.objectMapper(p, SchedulerData.class);
 	}
 	
-	public List<SchedulerData> getAll() {
-		List<SchedulerPojo> list = schedulerService.getAll();
+	public List<SchedulerData> getRange(SchedulerForm form) throws ApiException {
+		List<SchedulerPojo> list = schedulerService.getRange(form.getStartDate(),form.getEndDate());
 		List<SchedulerData> list2 = new ArrayList<>();
 		for (SchedulerPojo p : list) {
 			list2.add(ConvertUtil.objectMapper(p, SchedulerData.class));

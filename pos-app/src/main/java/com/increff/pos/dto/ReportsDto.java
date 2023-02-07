@@ -1,6 +1,7 @@
 package com.increff.pos.dto;
 
 import java.time.Instant;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,17 +10,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-import com.increff.pos.model.InventoryReportForm;
+import com.increff.pos.model.*;
 import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
 import com.increff.pos.util.MapUtil;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.increff.pos.model.InventoryReportData;
-import com.increff.pos.model.SalesReportData;
-import com.increff.pos.model.SalesReportForm;
 
 @Component
 public class ReportsDto {
@@ -34,7 +31,22 @@ public class ReportsDto {
 	private final OrderService orderService = new OrderService();
 	@Autowired
 	private final OrderItemService orderItemService = new OrderItemService();
-	
+
+
+	public List<BrandReportData> getBrandReport(BrandReportForm form){
+		List<BrandPojo> list = brandService.getAll();
+		List<BrandReportData> data = new ArrayList<>();
+		for(BrandPojo p : list){
+			if(!Objects.equals(form.getBrand(),"All") && !Objects.equals(form.getBrand(),p.getBrand()))continue;
+			if(!Objects.equals(form.getCategory(),"All") && !Objects.equals(form.getCategory(),p.getCategory()))continue;
+			BrandReportData brand = new BrandReportData();
+			brand.setBrand(p.getBrand());
+			brand.setCategory(p.getCategory());
+			data.add(brand);
+
+		}
+		return data;
+	}
 	public List<InventoryReportData> getInventoryReport(InventoryReportForm form) throws ApiException {
 		List<InventoryPojo> list = inventoryService.getAll();
 		HashMap<Integer,Integer> inventory = new HashMap<>();
@@ -63,8 +75,19 @@ public class ReportsDto {
 	}
 	
 	public List<SalesReportData> getSalesReport(SalesReportForm form) throws ApiException {
+		Instant range = Instant.now().minus(Period.ofDays(365));
 		Instant startDate = form.getStartDate();
 		Instant endDate = form.getEndDate();
+
+		int comparedValue = startDate.compareTo(endDate);
+		if(comparedValue>0){throw new ApiException("Invalid Time Period");}
+
+		comparedValue = range.compareTo(startDate);
+		if(comparedValue>0){throw new ApiException("Only one year is allowed for the reports");}
+
+		comparedValue = Instant.now().compareTo(endDate);
+		if(comparedValue<-1){throw new ApiException("Invalid Time Period");}
+
 
 		// querying the time range
 		List<OrderPojo> list = orderService.selectRange(startDate, endDate);

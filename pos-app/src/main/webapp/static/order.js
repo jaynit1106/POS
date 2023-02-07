@@ -205,15 +205,18 @@ function displayItemList(){
 		}
 		var e = JSON.parse(itemList[i]);
 		productMap.set(e.barcode,itr);
+
 		var buttonHtml = '<button id="button'+itr+'"class="btn btn-dark" onclick="editItem(' + itr + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var deleteButton = '<button class="btn btn-danger" onclick="deleteItem(' + itr + ')"><i class="fa-solid fa-trash"></i></button>';
 		var row;
+		var sp = parseFloat(e.sellingPrice);
+        sp=sp.toFixed(2);
 		if(errorName.get(e.barcode)==undefined){
 		    row = '<tr>'
             		+'<td><form id="row'+ itr +'">'+serialId+'</form>'
             		+ '<td><label for="barcode" class="form-control" form="row'+itr+'" name="barcode" id="barcode'+itr+'">'+e.barcode+'</label></td>'
             		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity'+itr+'" value="'+e.quantity+'" disabled></td>'
-            		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+e.sellingPrice+'" disabled></td>'
+            		+ '<td><input type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+sp+'" disabled></td>'
             		+ '<td>' + buttonHtml +"   "+ deleteButton + '</td>'
             		+ '</tr>';
 		}else{
@@ -222,7 +225,7 @@ function displayItemList(){
             +'<td><form style="color:red" id="row'+ itr +'">'+serialId+'</form>'
             + '<td><label style="color:red" for="barcode" class="form-control" form="row'+itr+'" name="barcode" id="barcode'+itr+'">'+e.barcode+'</label></td>'
             + '<td><input style="color:red" type="number" class="form-control" form="row'+itr+'"name="quantity" id="quantity'+itr+'" value="'+e.quantity+'" disabled></td>'
-            + '<td><input style="color:red" type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+e.sellingPrice+'" disabled></td>'
+            + '<td><input style="color:red" type="number" class="form-control" form="row'+itr+'"name="sellingPrice" id="price'+itr+'" value="'+sp+'" disabled></td>'
             + '<td>' + buttonHtml +"   "+ deleteButton + "   " + infoButton + '</td>'
             + '</tr>';
 		}
@@ -365,7 +368,7 @@ function init(){
 	$('#create-order').click(displayCreateItemModal);
 	$('#add-item').click(addItem);
 	$('#submit-order').click(submitOrder);
-	$('#refresh-order').click(getOrderList);
+	$('#refresh-orders').click(getOrderList);
     $('#cancel-order').click(cancelOrder);
 }
 

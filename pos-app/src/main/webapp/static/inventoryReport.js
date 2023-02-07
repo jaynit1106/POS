@@ -23,7 +23,8 @@ function getInventoryReportList(){
           'Content-Type': 'application/json'
        },
 	   success: function(data) {
-	   		displayInventoryReportList(data);  
+	   		displayInventoryReportList(data);
+	   		$('#filterModal').modal('toggle');
 	   },
 	   error: function(response){
 	   		swal("Oops!", response.responseJSON.message, "error");
@@ -135,17 +136,19 @@ function addCategoryDropdown(data){
         categoryOption.text = categoryOption.value = e;
         categorySelect.add(categoryOption, 1);
 	}
-	getInventoryReportList()
 }
-
+function toggleFilters(){
+    $('#filterModal').modal('toggle');
+}
 
 //INITIALIZATION CODE
 function init(){
     document.getElementById('brands').addEventListener("change",getCategoryList);
-    document.getElementById('category').addEventListener("change",getInventoryReportList);
+    $('#submit-filter').click(toggleFilters);
+    $('#add').click(getInventoryReportList);
+
 }
 
 $(document).ready(init);
 $(document).ready(getBrandList);
 $(document).ready(getCategoryList);
-$(document).ready(getInventoryReportList);

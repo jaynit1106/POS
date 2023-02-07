@@ -16,23 +16,30 @@
 
     <!-- Top row with form-->
     <div class="row">
-        <div class="col-12 form-inline">
-            <div class="form-inline form-group">
-                <label for="brands" class="col-sm-3 col-form-label">Brand</label>
-                <div class="col-sm-9">
-                    <select name="brand" id="brands" class="form-control">
-                        <option value="All">All</option>
-                    </select>
+        <div class="col-12">
+            <form class="form-inline" id="filter-form">
+                <div class="form-inline form-group">
+                    <label for="brands" class="col-sm-3 col-form-label">Brand</label>
+                    <div class="col-sm-9">
+                        <select name="brand" id="brands" class="form-control">
+                            <option value="All">All</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-inline form-group">
-                <label for="categories" class="col-sm-3 col-form-label">Category</label>
-                <div class="col-sm-9">
-                    <select name="category" class="form-control" id="category">
-                        <option value="All">All</option>
-                    </select>
+                <div class="form-inline form-group">
+                    <label for="category" class="col-sm-3 col-form-label">Category</label>
+                    <div class="col-sm-9">
+                        <select name="category" class="form-control" id="category">
+                            <option value="All">All</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <button type="button" class="btn btn-primary" id="submit-filter">Submit</button>
+            </form>
+
         </div>
     </div>
 
@@ -45,12 +52,12 @@
 
         <!-- Table -->
         <div class="col-12">
-            <table class="table table-hover" id="brand-table">
+            <table class="table table-bordered table-hover" id="brand-table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">S.No.</th>
-                    <th scope="col">Brand</th>
-                    <th scope="col">Category</th>
+                    <th scope="col" style="text-align:center;">S.No.</th>
+                    <th scope="col" style="text-align:center;">Brand</th>
+                    <th scope="col" style="text-align:center;">Category</th>
                 </tr>
                 </thead>
                 <tbody>

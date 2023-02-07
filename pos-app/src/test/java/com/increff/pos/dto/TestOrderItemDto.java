@@ -63,7 +63,7 @@ public class TestOrderItemDto extends AbstractUnitTest{
         List<OrderItemData> list = orderItemDto.getAll();
         assertEquals(list.get(0).getOrderId(),orderDto.getAll().get(0).getId());
         assertEquals(list.get(0).getQuantity(),20);
-        assertEquals(list.get(0).getSellingPrice(),(double) 100,0);
+        assertEquals(list.get(0).getSellingPrice(),"100.0");
         assertEquals(list.get(0).getProductId(),productDto.getAll().get(0).getId());
     }
 
@@ -84,7 +84,7 @@ public class TestOrderItemDto extends AbstractUnitTest{
         OrderItemData item = list.get(0);
         assertEquals(item.getName(),"name");
         assertEquals(item.getBarcode(),"abcdabcd");
-        assertEquals(item.getSellingPrice(),100,0);
+        assertEquals(item.getSellingPrice(),"100.00");
         assertEquals(item.getQuantity(),20);
         assertEquals(item.getOrderId(),orderDto.getAll().get(0).getId());
     }
@@ -106,7 +106,7 @@ public class TestOrderItemDto extends AbstractUnitTest{
 
         OrderItemData data = orderItemDto.get(list.get(0).getId());
         assertEquals(data.getQuantity(),20);
-        assertEquals(data.getSellingPrice(),100,0);
+        assertEquals(data.getSellingPrice(),"100.0");
         assertEquals(data.getId(),list.get(0).getId());
     }
 

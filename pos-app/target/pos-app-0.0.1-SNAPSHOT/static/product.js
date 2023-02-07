@@ -53,27 +53,17 @@ function getBrandList(){
 }
 
 function getCategoryList(){
-	//Set the values to update
-	var url = getBrandUrl() + "/unique"
-	var data = {}
-	data["brand"]=document.getElementById('brands').value;
-	data["category"]="";
-	var json = JSON.stringify(data);
+	var url = getBrandUrl() + "/unique/"+document.getElementById('brands').value;
 	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
+       url: url,
+       type: 'GET',
+       success: function(data) {
+            addCategoryDropdown(data);
        },
-	   success: function(response) {
-	   		addCategoryDropdown(response)
-	   },
-	   error: function(response){
-	   		swal("Oops!", response.responseJSON.message, "error");
-	   }
-	});
-
+       error: function(response){
+            swal("Oops!", response.responseJSON.message, "error");
+       }
+    });
 	return false;
 }
 
@@ -212,7 +202,7 @@ function displayProductList(data){
 		+ '<td style="text-align:center">'  + e.name + '</td>'
 		+ '<td style="text-align:right">'  + e.mrp + '</td>'
 		if(role=='supervisor'){
-            row+=' style="text-align:center" <td th:if="${info.getRole()}=='+role+'">' + buttonHtml + '</td>';
+            row+='<td style="text-align:center"  th:if="${info.getRole()}=='+role+'">' + buttonHtml + '</td>';
         }
         row += '</tr>';
         $tbody.append(row);

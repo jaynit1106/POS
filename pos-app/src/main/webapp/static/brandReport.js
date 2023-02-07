@@ -5,16 +5,28 @@ function getBrandUrl(){
 	return baseUrl + "/api/brands";
 }
 
+function getBrandReportUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/reports/brand";
+}
+
 
 //API CALLING FUNCTIONS
 function getBrandReport(){
-    var url = getBrandUrl();
+    var url = getBrandReportUrl();
+    var $form = $('#filter-form')
+    var json = toJson($form);
+
     $.ajax({
        url: url,
-       type: 'GET',
+       type: 'POST',
+       data:json,
+       headers: {
+          'Content-Type': 'application/json'
+       },
        success: function(data) {
-            brandData=data;
-            displayBrandsList();
+            displayBrandsList(data);
+            $('#filterModal').modal('toggle');
        },
        error: function(response){
             swal("Oops!", response.responseJSON.message, "error");
@@ -51,22 +63,13 @@ function getCategoryList(){
     	return false;
 }
 //CREATING TABLES
-function displayBrandsList(){
-	let data = brandData;
+function displayBrandsList(data){
 	$('#brand-table').DataTable().destroy();
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-        if(document.getElementById('brands').value != "All"){
-            if(document.getElementById('brands').value != String(e.brand))continue;
-        }
-
-        if(document.getElementById('category').value != "All"){
-            if(document.getElementById('category').value != String(e.category))continue;
-        }
-
 		var row = '<tr>'
 		+ '<td style="text-align:center;">' + counter + '</td>'
 		+ '<td style="text-align:center;">' + e.brand+ '</td>'
@@ -132,18 +135,21 @@ function addCategoryDropdown(data){
         categoryOption.text = categoryOption.value = e;
         categorySelect.add(categoryOption, 1);
 	}
-	displayBrandsList();
 }
 
+function toggleFilters(){
+    $('#filterModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
     document.getElementById('brands').addEventListener("change",getCategoryList);
-    document.getElementById('category').addEventListener("change",displayBrandsList);
+    $('#submit-filter').click(toggleFilters);
+    $('#add').click(getBrandReport);
 }
 
 $(document).ready(init);
 $(document).ready(getBrandList);
-$(document).ready(getBrandReport);
+$(document).ready(getCategoryList);
 
 
 

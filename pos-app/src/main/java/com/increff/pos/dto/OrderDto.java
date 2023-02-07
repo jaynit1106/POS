@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.increff.pos.model.OrderData;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.util.ConvertUtil;
-import com.increff.pos.util.TimestampUtil;
 
 @Component
 public class OrderDto {
 	@Autowired
 	private final PdfDto pdfDto = new PdfDto();
+
 	@Autowired
 	private final OrderItemService orderItemService = new OrderItemService();
 
@@ -48,7 +48,7 @@ public class OrderDto {
 	private final OrderService orderService = new OrderService();
 
 	@Transactional(rollbackOn = ApiException.class)
-	public void add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
+	public int add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
 		List<JSONObject> errors = new ArrayList<>();
 		List<OrderItemPojo> items = new ArrayList<>();
 		for(OrderItemForm f : form) {
@@ -64,14 +64,10 @@ public class OrderDto {
 			p.setProductId(product.getId());
 			items.add(p);
 		}
-
-
-		List<JSONObject> inventoryErrors = inventoryService.checkAndCreateOrder(items);
-		errors.addAll(inventoryErrors);
 		if(errors.size()>0){
 			throw new ApiException(JSONValue.toJSONString(errors));
 		}
-
+		inventoryService.checkAndCreateOrder(items);
 
 		OrderPojo order = new OrderPojo();
 		orderService.add(order);
@@ -80,28 +76,11 @@ public class OrderDto {
 		}
 
 		orderItemService.add(items);
-
-
-		List<OrderItemData> list = new ArrayList<>();
-		for(OrderItemPojo p : items) {
-			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
-			ProductPojo product = productService.get(p.getProductId());
-			item.setBarcode(product.getBarcode());
-			item.setName(product.getName());
-			list.add(item);
-		}
-
-		try {
-			String base64 = pdfDto.getBase64(list);
-			Base64Util.savePdf(base64,"Invoice "+ list.get(0).getOrderId());
-		}catch (Exception e){
-			errors.add(JSONUTil.getJSONObject("server","Server error"));
-		}
-
-		if(errors.size()>0)throw new ApiException(JSONValue.toJSONString(errors));
+		return order.getId();
 	}
+
 	
-	public OrderData get(@PathVariable int id) throws ApiException {
+	public OrderData get(int id) throws ApiException {
 		OrderPojo p = orderService.get(id);
 		OrderData data = new OrderData();
 		data.setTimestamp(p.getTimestamp().toString());
@@ -124,5 +103,28 @@ public class OrderDto {
 	
 	public void downloadPdf(int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
 		orderService.downloadPdf(id, request, response);	
+	}
+
+	public void generatedPdf(int id) throws ApiException {
+		List<OrderItemPojo> items = orderItemService.getOrderItemByOrderId(id);
+		List<OrderItemData> list = new ArrayList<>();
+		List<JSONObject> errors = new ArrayList<>();
+
+		for(OrderItemPojo p : items) {
+			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
+			ProductPojo product = productService.get(p.getProductId());
+			item.setBarcode(product.getBarcode());
+			item.setName(product.getName());
+			list.add(item);
+		}
+
+		try {
+			String base64 = pdfDto.getBase64(list);
+			Base64Util.savePdf(base64,"Invoice "+ list.get(0).getOrderId());
+		}catch (Exception e){
+			errors.add(JSONUTil.getJSONObject("server","Server error"));
+		}
+
+		if(errors.size()>0)throw new ApiException(JSONValue.toJSONString(errors));
 	}
 }

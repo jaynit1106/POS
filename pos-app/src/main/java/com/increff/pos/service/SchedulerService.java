@@ -1,5 +1,7 @@
 package com.increff.pos.service;
 
+import java.time.Instant;
+import java.time.Period;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -27,8 +29,13 @@ public class SchedulerService {
 		return dao.select(date);
 	}
 
-	public List<SchedulerPojo> getAll() {
-		return dao.selectAll(SchedulerPojo.class);
+	public List<SchedulerPojo> getRange(String startDate,String endDate) throws ApiException {
+		if(startDate.compareTo(endDate)>0){throw new ApiException("please select a valid time range");}
+
+		Instant range = Instant.now().minus(Period.ofDays(365));
+		if(String.valueOf(range).compareTo(startDate+"T00:00:00Z")>0){throw new ApiException("Only one year is allowed for the reports");}
+
+		return dao.selectRange(startDate,endDate);
 	}
 
 }

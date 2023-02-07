@@ -26,7 +26,8 @@ function addInventory(event){
        },	   
 	   success: function(response) {
 	   		getInventoryList();
-	   		swal("Hurray", "Inventory added successfully", "success");  
+	   		swal("Hurray", "Inventory added successfully", "success");
+	   		$('#addInventoryModal').modal('toggle');
 	   },
 	   error: function(response){
 	   		swal("Oops!", response.responseJSON.message, "error");
@@ -123,6 +124,10 @@ function uploadRows(){
 	//If everything processed then return
 	if(processCount==fileData.length){
 		getInventoryList();
+		document.getElementById('process-data').disabled = true;
+        if(errorData.length>0){
+            document.getElementById('download-errors').disabled = false;
+        }
 	   	swal("Hurray", "Inventory upload successfull", "success");
 		return;
 	}
@@ -130,6 +135,11 @@ function uploadRows(){
 	//Process next row
 	var row = fileData[processCount];
 	processCount++;
+	var title = Object.keys(row);
+    if(title[0]!='barcode' || title[1]!='quantity' || title.length!=2){
+        swal("Oops!","incorrect tsv format please check the sample file", "error");
+        return;
+    }
 	
 	var json = JSON.stringify(row);
 	var url = getInventoryUrl();
@@ -210,6 +220,8 @@ function resetUploadDialog(){
 	processCount = 0;
 	fileData = [];
 	errorData = [];
+	document.getElementById('process-data').disabled = true;
+    document.getElementById('download-errors').disabled = true;
 	//Update counts	
 	updateUploadDialog();
 }
@@ -223,7 +235,16 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#inventoryFile');
 	var fileName = $file.val();
+	var ok = String(fileName).split(/(\\|\/)/g).pop();
+    if(ok.split('.')[1]!="tsv"){
+        swal("Oops!", "please select a tsv file", "error");
+        return;
+    }
+    processCount = 0;
+    fileData = [];
+    errorData = [];
 	$('#inventoryFileName').html(String(fileName).split(/(\\|\/)/g).pop());
+	document.getElementById('process-data').disabled = false;
 }
 
 function displayinventoryData(){
@@ -242,10 +263,13 @@ function addBarcodeDropdown(data){
 	}
 }
 
-
+function toggleAddInventory(){
+    $('#addInventoryModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
-	$('#add-inventory').click(addInventory);
+	$('#add').click(addInventory);
+	$('#add-inventory').click(toggleAddInventory);
 	$('#update-inventory').click(updateInventory);
 	$('#upload-data').click(displayinventoryData);
 	$('#process-data').click(processData);

@@ -39,9 +39,9 @@ import io.swagger.annotations.ApiOperation;
 	}
 
 	@ApiOperation(value = &quot;gets all unique category list&quot;)
-	@PostMapping(path = &quot;/api/brands/unique&quot;)
-	public List&lt;String&gt; getCategoryList(@RequestBody BrandForm f){
-<span class="nc" id="L44">		return dto.getCategoryList(f.getBrand());</span>
+	@GetMapping(path = &quot;/api/brands/unique/{brand}&quot;)
+	public List&lt;String&gt; getCategoryList(@PathVariable String brand){
+<span class="nc" id="L44">		return dto.getCategoryList(brand);</span>
 	}
 
 	@ApiOperation(value = &quot;Gets list of all Brands&quot;)

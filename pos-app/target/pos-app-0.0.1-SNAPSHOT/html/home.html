@@ -26,7 +26,7 @@
 	<div class="col-2">
 		<a th:href="@{/ui/orders}" title="order"><i class="fa-solid fa-cart-shopping fas"></i></a>
 	</div>
-	<div class="col-2">
+	<div class="col-2" th:if="${info.getRole()}=='supervisor'">
 		<a th:href="@{/ui/salesReport}" title="salesReport"><i class="fa-solid fa-magnifying-glass-chart fas"></i></a>
 	</div>
 </div> 

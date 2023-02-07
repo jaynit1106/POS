@@ -29,7 +29,8 @@ public class OrderApiController {
 	@ApiOperation(value = "Adds a Order")
 	@RequestMapping(path = "/api/orders", method = RequestMethod.POST)
 	public void add(@RequestBody List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-		dto.add(form);
+		int orderId = dto.add(form);
+		dto.generatedPdf(orderId);
 	}
 
 	@ApiOperation(value = "Gets a Order by ID")

@@ -18,7 +18,5 @@ public class OrderItemDao extends AbstractDao {
 		return query.getResultList();
 	}
 
-	public void update(OrderItemPojo p) {
-	}
 
 }

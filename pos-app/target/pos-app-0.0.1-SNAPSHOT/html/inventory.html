@@ -22,14 +22,14 @@
 					<label for="barcode" class="col-sm-2 col-form-label">Barcode</label>
 					<div class="col-sm-10">
 						<select name="barcode" class="form-control" id="barcodes">
-							<option value="Select a Category">Barcode</option>
+							<option value="Select a Category">barcode</option>
 						</select>
 					</div>
 				</div>
 			  <div class="form-group">
 			    <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
 			    <div class="col-sm-10">
-			      <input onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" type="number" class="form-control" name="quantity" id="quantity" placeholder="enter Quantity">
+			      <input onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" type="number" class="form-control" name="quantity" id="quantity" placeholder="enter quantity">
 			    </div>
 			  </div>
 			  <button type="button" class="btn btn-primary" id="add-inventory">Add</button>
@@ -48,14 +48,14 @@
 
  <!-- Table -->
  <div class="col-12">
-	<table class="table table-hover" id="inventory-table">
+	<table class="table table-bordered table-hover" id="inventory-table">
 	  <thead class="thead-dark">
 	    <tr>
-	      <th scope="col">S.No.</th>
-		  <th scope="col">Name</th>
-	      <th scope="col">Barcode</th>
-	      <th scope="col">Quantity</th>
-	      <th scope="col" th:if="${info.getRole()}=='supervisor'">Actions</th>
+	      <th scope="col" style="text-align:center;">S.No.</th>
+		  <th scope="col" style="text-align:center;">Name</th>
+	      <th scope="col" style="text-align:center;">Barcode</th>
+	      <th scope="col" style="text-align:center;">Quantity</th>
+	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Actions</th>
 	    </tr>
 	  </thead>
 	  <tbody>

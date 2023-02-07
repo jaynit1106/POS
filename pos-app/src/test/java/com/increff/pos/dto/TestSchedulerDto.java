@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Time;
+import java.time.Instant;
 import java.util.List;
 
 public class TestSchedulerDto extends AbstractUnitTest{
@@ -45,8 +46,8 @@ public class TestSchedulerDto extends AbstractUnitTest{
 
         //testing scheduler add
         schedulerDto.add();
-        List<SchedulerData> list = schedulerDto.getAll();
-        Assert.assertEquals(list.size(),1);
+        SchedulerData p = schedulerDto.get(String.valueOf(Instant.now()).substring(0,10));
+        Assert.assertNotNull(p);
 
     }
 
@@ -65,12 +66,11 @@ public class TestSchedulerDto extends AbstractUnitTest{
         //creating a schedule
         schedulerDto.add();
 
-        SchedulerData data = schedulerDto.get(schedulerDto.getAll().get(0).getDate());
+        SchedulerData data = schedulerDto.get(String.valueOf(Instant.now()).substring(0,10));
 
         Assert.assertEquals(data.getInvoiced_orders_count(),1);
         Assert.assertEquals(data.getTotal_revenue(),220,0);
         Assert.assertEquals(data.getInvoiced_items_count(),11);
-        Assert.assertEquals(data.getDate(),schedulerDto.getAll().get(0).getDate());
 
     }
 }

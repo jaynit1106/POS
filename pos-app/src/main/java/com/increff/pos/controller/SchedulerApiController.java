@@ -2,11 +2,9 @@ package com.increff.pos.controller;
 
 import java.util.List;
 
+import com.increff.pos.model.SchedulerForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.increff.pos.dto.SchedulerDto;
 import com.increff.pos.model.SchedulerData;
@@ -30,9 +28,9 @@ public class SchedulerApiController {
 	}
 
 	@ApiOperation(value = "Gets list of all Schedulers")
-	@RequestMapping(path = "/api/scheduler", method = RequestMethod.GET)
-	public List<SchedulerData> getAll() {
-		return dto.getAll();
+	@RequestMapping(path = "/api/scheduler", method = RequestMethod.POST)
+	public List<SchedulerData> getRange(@RequestBody SchedulerForm form) throws ApiException {
+		return dto.getRange(form);
 	}
 
 }

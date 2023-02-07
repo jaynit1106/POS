@@ -1,6 +1,8 @@
 package com.increff.pos.util;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +24,7 @@ import com.increff.pos.model.OrderItemData;
 public class generateXML {
 
     public static void createXml(List<OrderItemData> list) throws ParserConfigurationException, TransformerException {
+        System.out.println("Inside XML");
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Document doc = docBuilder.newDocument();
@@ -54,19 +57,19 @@ public class generateXML {
             item.appendChild(quantity);
 
             Element price = doc.createElement("price");
-            price.appendChild(doc.createTextNode(String.valueOf(data.getSellingPrice())));
+            price.appendChild(doc.createTextNode(String.format("%.2f",new BigDecimal(new Double(data.getSellingPrice())).setScale(2, RoundingMode.HALF_UP).doubleValue())));
             item.appendChild(price);
 
             Element total = doc.createElement("total");
-            total.appendChild(doc.createTextNode(String.format("%.1f",data.getQuantity()*data.getSellingPrice())));
+            total.appendChild(doc.createTextNode(String.format("%.2f",new BigDecimal(data.getQuantity()*new Double(data.getSellingPrice())).setScale(2, RoundingMode.HALF_UP).doubleValue())));
             item.appendChild(total);
 
-            totalCost+=data.getQuantity()*data.getSellingPrice();
+            totalCost+=data.getQuantity()*new Double(data.getSellingPrice());
             id++;
         }
 
         Element costs = doc.createElement("totalCost");
-        costs.appendChild(doc.createTextNode(String.valueOf(totalCost)));
+        costs.appendChild(doc.createTextNode(String.format("%.2f",new BigDecimal(totalCost).setScale(2, RoundingMode.HALF_UP).doubleValue())));
         rootElement.appendChild(costs);
 
 
@@ -90,7 +93,7 @@ public class generateXML {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        String path = new File("./src/main/resources/com/increff/pos/invoiceTemplate "+String.valueOf(list.get(0).getOrderId())+".xml").getAbsolutePath();
+        String path = "C:\\Increff Project\\POS\\pdf-app\\src\\main\\resources\\com\\increff\\pos\\invoiceTemplate "+String.valueOf(list.get(0).getOrderId())+".xml";
         StreamResult result = new StreamResult(new File(path).toURI()
                 .getPath());
         transformer.transform(source, result);

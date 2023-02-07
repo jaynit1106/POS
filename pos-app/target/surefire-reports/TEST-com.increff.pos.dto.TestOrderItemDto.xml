@@ -66,6 +66,6 @@
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
   <testcase classname="com.increff.pos.dto.TestOrderItemDto" name="testGetById" time="0.032"/>
-  <testcase classname="com.increff.pos.dto.TestOrderItemDto" name="testGetOrderItemBYOrderId" time="0.031"/>
-  <testcase classname="com.increff.pos.dto.TestOrderItemDto" name="testGetAll" time="0.031"/>
+  <testcase classname="com.increff.pos.dto.TestOrderItemDto" name="testGetOrderItemBYOrderId" time="0.046"/>
+  <testcase classname="com.increff.pos.dto.TestOrderItemDto" name="testGetAll" time="0.016"/>
 </testsuite>

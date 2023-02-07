@@ -8,17 +8,32 @@ function getSchedulerUrl(){
 
 //API CALLING FUNCTIONS
 function getSchedulerList(){
-	var url = getSchedulerUrl();
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displaySchedulerList(data);  
-	   },
-	   error: function(response){
-	   		swal("Oops!", response.responseJSON.message, "error");
-	   }
-	});
+	var $form = $("#sales-form");
+    var json = toJson($form);
+    var url = getSchedulerUrl();
+    if( document.getElementById('startDate').value>document.getElementById('endDate').value){
+        swal("Oops!","please select a valid range", "error");
+        return;
+    }
+
+    $.ajax({
+       url: url,
+       type: 'POST',
+       data: json,
+       headers: {
+        'Content-Type': 'application/json'
+       },
+       success: function(response) {
+            displaySchedulerList(response);
+            swal("Hurray", "report created successfully", "success");
+            $('#filterModal').modal('toggle');
+       },
+       error: function(response){
+            swal("Oops!", response.responseJSON.message, "error");
+       }
+    });
+
+    return false;
 }
 
 //UI FUNCTIONS
@@ -29,17 +44,15 @@ function displaySchedulerList(data){
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		if(flag!=1){
-			var start = document.getElementById('startDate').value;
-			var end = document.getElementById('endDate').value;
-			if(String(e.date)<start || String(e.date)>end)continue;
-		}
+		var rev = parseFloat(e.total_revenue);
+        rev=rev.toFixed(2);
+
 		var row = '<tr>'
 		+ '<td style="text-align:center;">' + counter + '</td>'
 		+ '<td style="text-align:center;">' + String(e.date).split("-").reverse().join("-") + '</td>'
 		+ '<td style="text-align:center;">'  + e.invoiced_orders_count + '</td>'
 		+ '<td style="text-align:center;">'  + e.invoiced_items_count + '</td>'
-		+ '<td style="text-align:center;">'  + e.total_revenue + '</td>'
+		+ '<td style="text-align:right;">'  + rev + '</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
@@ -79,19 +92,6 @@ function paginate() {
 }
 
 //UTIL METHODS
-function getFilteredList(){
-	if( document.getElementById('startDate').value>document.getElementById('endDate').value){
-		swal("Oops!","Pls select a valid range", "error");
-		return;
-	}
-	flag = 0;
-	getSchedulerList();
-}
-
-function getFullList(){
-	flag = 1;
-	getSchedulerList();
-}
 
 function setDate(){
     var today = new Date();
@@ -119,14 +119,21 @@ function setDate(){
     document.getElementById('endDate').value = today;
 }
 
+function setStartDate(){
+    document.getElementById('startDate').max = document.getElementById('endDate').value;
+}
+
+function toggleFilters(){
+    $('#filterModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
-	
-    $('#submit-filter').click(getFilteredList);
-	$('#all-data').click(getFullList);
+    $('#add').click(getSchedulerList);
+    $('#submit-filter').click(toggleFilters);
+    document.getElementById('endDate').addEventListener("change",setStartDate);
+
 }
 
 $(document).ready(init);
-$(document).ready(getSchedulerList);
 $(document).ready(setDate);
 

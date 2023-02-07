@@ -13,6 +13,7 @@ import java.util.List;
 public class PdfDto {
 
     public String getBase64(List<OrderItemData> data) throws ParserConfigurationException, TransformerException {
+        System.out.println("Inside Dto");
         generateXML.createXml(data);
         return generatePdf.createPdf(String.valueOf(data.get(0).getOrderId()));
     }

@@ -20,8 +20,10 @@ import org.apache.fop.apps.MimeConstants;
 public class generatePdf {
     public static String createPdf(String name) {
         try {
-            String xmlPath = new File("./src/main/resources/com/increff/pos/invoiceTemplate "+name+".xml").getAbsolutePath();
-            String xslPath = new File("./src/main/resources/com/increff/pos/invoiceTemplate.xsl").getAbsolutePath();
+            System.out.println("Inside Pdf");
+            String xmlPath ="C:\\Increff Project\\POS\\pdf-app\\src\\main\\resources\\com\\increff\\pos\\invoiceTemplate "+name+".xml";
+            String xslPath = "C:\\Increff Project\\POS\\pdf-app\\src\\main\\resources\\com\\increff\\pos\\invoiceTemplate.xsl";
+            System.out.println(xslPath);
             File xmlfile = new File(xmlPath);
             File xslfile = new File(xslPath);
             final FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());

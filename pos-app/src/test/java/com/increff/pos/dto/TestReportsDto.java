@@ -62,13 +62,32 @@ public class TestReportsDto extends AbstractUnitTest{
         orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(),11,productDao.selectAll(ProductPojo.class).get(0).getId(),20));
 
         SalesReportForm salesReportForm = new SalesReportForm();
-        salesReportForm.setEndDate(Instant.parse("2024-01-01T00:00:00Z"));
-        salesReportForm.setStartDate(Instant.parse("2021-01-01T00:00:00Z"));
+        salesReportForm.setEndDate(Instant.now());
+        salesReportForm.setStartDate(Instant.now().minusSeconds(2000));
         List<SalesReportData> list = reportsDto.getSalesReport(salesReportForm);
         Assert.assertEquals(list.get(0).getBrand(),"brand");
         Assert.assertEquals(list.get(0).getCategory(),"category");
         Assert.assertEquals(list.get(0).getQuantity(),22);
         Assert.assertEquals(list.get(0).getRevenue(),440,0);
+    }
+
+    @Test
+    public void testBrandReport(){
+        //create brand
+        brandDao.insert(PojoUtil.getBrandPojo("brand1","category"));
+        brandDao.insert(PojoUtil.getBrandPojo("brand1","category1"));
+        brandDao.insert(PojoUtil.getBrandPojo("brand","category2"));
+
+        BrandReportForm brandReportForm = new BrandReportForm();
+        brandReportForm.setBrand("brand1");
+        brandReportForm.setCategory("All");
+        List<BrandReportData> list = reportsDto.getBrandReport(brandReportForm);
+
+        Assert.assertEquals(2,list.size());
+        Assert.assertEquals("brand1",list.get(0).getBrand());
+        Assert.assertEquals("category",list.get(0).getCategory());
+
+
     }
 
 

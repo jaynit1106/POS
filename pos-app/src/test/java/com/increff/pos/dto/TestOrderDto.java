@@ -5,6 +5,7 @@ import com.increff.pos.model.OrderData;
 import com.increff.pos.model.OrderItemData;
 import com.increff.pos.model.OrderItemForm;
 import com.increff.pos.pojo.BrandPojo;
+import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
@@ -62,7 +63,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         List<OrderItemData> list = orderItemDto.getAll();
         assertEquals(list.get(0).getOrderId(),orderDto.getAll().get(0).getId());
         assertEquals(list.get(0).getQuantity(),11);
-        assertEquals(list.get(0).getSellingPrice(),(double) 100.23,0);
+        assertEquals(new Double(list.get(0).getSellingPrice()),(Double) 100.23,0);
         assertEquals(list.get(0).getProductId(),productDto.getAll().get(0).getId());
     }
 
@@ -152,7 +153,7 @@ public class TestOrderDto extends  AbstractUnitTest{
 
         //checking for API exception for excess quantity
         exceptionRule.expect(ApiException.class);
-        exceptionRule.expectMessage("Only 100 pieces left of abcdabcd");
+        exceptionRule.expectMessage("[{\"abcdabcd\":\"Only 100 pieces left for abcdabcd\"}]");
         List<OrderItemForm> list = new ArrayList<>();
         list.add(PojoUtil.getOrderItemForm(120,"abcdabcd",100.23));
         orderDto.add(list);
@@ -170,7 +171,8 @@ public class TestOrderDto extends  AbstractUnitTest{
 
         //checking creating the pdf part
         try {
-            orderDto.add(list);
+            int id = orderDto.add(list);
+            orderDto.generatedPdf(id);
         } catch (ParserConfigurationException e) {
             Assert.fail();
         } catch (IOException e) {

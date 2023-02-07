@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.increff.pos.model.OrderData;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.util.ConvertUtil;
-import com.increff.pos.util.TimestampUtil;
 
 @Component
-<span class="fc" id="L36">public class OrderDto {</span>
-<span class="fc" id="L37">	@Autowired</span>
+<span class="fc" id="L35">public class OrderDto {</span>
+<span class="fc" id="L36">	@Autowired</span>
 	private final PdfDto pdfDto = new PdfDto();
+
 <span class="fc" id="L39">	@Autowired</span>
 	private final OrderItemService orderItemService = new OrderItemService();
 
@@ -101,7 +101,7 @@ import com.increff.pos.util.TimestampUtil;
 <span class="pc bpc" id="L101" title="1 of 2 branches missed.">		if(errors.size()&gt;0)throw new ApiException(JSONValue.toJSONString(errors));</span>
 <span class="fc" id="L102">	}</span>
 	
-	public OrderData get(@PathVariable int id) throws ApiException {
+	public OrderData get(int id) throws ApiException {
 <span class="nc" id="L105">		OrderPojo p = orderService.get(id);</span>
 <span class="nc" id="L106">		OrderData data = new OrderData();</span>
 <span class="nc" id="L107">		data.setTimestamp(p.getTimestamp().toString());</span>

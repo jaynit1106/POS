@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SchedulerDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dto</a> &gt; <span class="el_source">SchedulerDto.java</span></div><h1>SchedulerDto.java</h1><pre class="source lang-java linenums">package com.increff.pos.dto;
 
 import java.time.Instant;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import com.increff.pos.model.SchedulerForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.OrderItemService;
@@ -23,48 +25,48 @@ import com.increff.pos.util.TimestampUtil;
 
 
 @Component
-<span class="fc" id="L26">public class SchedulerDto {</span>
+<span class="fc" id="L28">public class SchedulerDto {</span>
 	
-<span class="fc" id="L28">	@Autowired</span>
-	private final SchedulerService schedulerService = new SchedulerService();
 <span class="fc" id="L30">	@Autowired</span>
-	private final OrderService orderService = new OrderService();
+	private final SchedulerService schedulerService = new SchedulerService();
 <span class="fc" id="L32">	@Autowired</span>
+	private final OrderService orderService = new OrderService();
+<span class="fc" id="L34">	@Autowired</span>
 	private final OrderItemService orderItemService = new OrderItemService();
 
 	@Scheduled(cron = &quot;00 00 12 * * *&quot;)
 	public void add() throws ApiException{
-<span class="fc" id="L37">		SchedulerPojo p = new SchedulerPojo();</span>
-<span class="fc" id="L38">		p.setDate(TimestampUtil.getTimestamp().substring(0,10));</span>
-<span class="fc" id="L39">		List&lt;OrderPojo&gt; list = orderService.selectRange(Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T00:00:00Z&quot;),Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T23:59:59Z&quot;));</span>
-<span class="fc" id="L40">		p.setInvoiced_orders_count(list.size());</span>
-<span class="fc" id="L41">		double revenue = 0;</span>
-<span class="fc" id="L42">		Integer totalItems = 0;</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">		for(OrderPojo order : list){</span>
-<span class="fc" id="L44">			List&lt;OrderItemPojo&gt; item = orderItemService.getOrderItemByOrderId(order.getId());</span>
-<span class="fc bfc" id="L45" title="All 2 branches covered.">			for(OrderItemPojo pojo : item){</span>
-<span class="fc" id="L46">				totalItems+=pojo.getQuantity();</span>
-<span class="fc" id="L47">				revenue+=(pojo.getQuantity()*pojo.getSellingPrice());</span>
-<span class="fc" id="L48">			}</span>
-<span class="fc" id="L49">		}</span>
-<span class="fc" id="L50">		p.setTotal_revenue(revenue);</span>
-<span class="fc" id="L51">		p.setInvoiced_items_count(totalItems);</span>
-<span class="fc" id="L52">		schedulerService.add(p);</span>
-<span class="fc" id="L53">	}</span>
+<span class="fc" id="L39">		SchedulerPojo p = new SchedulerPojo();</span>
+<span class="fc" id="L40">		p.setDate(TimestampUtil.getTimestamp().substring(0,10));</span>
+<span class="fc" id="L41">		List&lt;OrderPojo&gt; list = orderService.selectRange(Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T00:00:00Z&quot;),Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T23:59:59Z&quot;));</span>
+<span class="fc" id="L42">		p.setInvoiced_orders_count(list.size());</span>
+<span class="fc" id="L43">		double revenue = 0;</span>
+<span class="fc" id="L44">		Integer totalItems = 0;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		for(OrderPojo order : list){</span>
+<span class="fc" id="L46">			List&lt;OrderItemPojo&gt; item = orderItemService.getOrderItemByOrderId(order.getId());</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">			for(OrderItemPojo pojo : item){</span>
+<span class="fc" id="L48">				totalItems+=pojo.getQuantity();</span>
+<span class="fc" id="L49">				revenue+=(pojo.getQuantity()*pojo.getSellingPrice());</span>
+<span class="fc" id="L50">			}</span>
+<span class="fc" id="L51">		}</span>
+<span class="fc" id="L52">		p.setTotal_revenue(revenue);</span>
+<span class="fc" id="L53">		p.setInvoiced_items_count(totalItems);</span>
+<span class="fc" id="L54">		schedulerService.add(p);</span>
+<span class="fc" id="L55">	}</span>
 	
 	public SchedulerData get(String date) throws ApiException {
-<span class="fc" id="L56">		SchedulerPojo p = schedulerService.get(date);</span>
-<span class="fc" id="L57">		return ConvertUtil.objectMapper(p, SchedulerData.class);</span>
+<span class="fc" id="L58">		SchedulerPojo p = schedulerService.get(date);</span>
+<span class="fc" id="L59">		return ConvertUtil.objectMapper(p, SchedulerData.class);</span>
 	}
 	
-	public List&lt;SchedulerData&gt; getAll() {
-<span class="fc" id="L61">		List&lt;SchedulerPojo&gt; list = schedulerService.getAll();</span>
-<span class="fc" id="L62">		List&lt;SchedulerData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">		for (SchedulerPojo p : list) {</span>
-<span class="fc" id="L64">			list2.add(ConvertUtil.objectMapper(p, SchedulerData.class));</span>
-<span class="fc" id="L65">		}</span>
-<span class="fc" id="L66">		Collections.reverse(list2);</span>
-<span class="fc" id="L67">		return list2;</span>
+	public List&lt;SchedulerData&gt; getRange(SchedulerForm form) throws ApiException {
+<span class="nc" id="L63">		List&lt;SchedulerPojo&gt; list = schedulerService.getRange(form.getStartDate(),form.getEndDate());</span>
+<span class="nc" id="L64">		List&lt;SchedulerData&gt; list2 = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		for (SchedulerPojo p : list) {</span>
+<span class="nc" id="L66">			list2.add(ConvertUtil.objectMapper(p, SchedulerData.class));</span>
+<span class="nc" id="L67">		}</span>
+<span class="nc" id="L68">		Collections.reverse(list2);</span>
+<span class="nc" id="L69">		return list2;</span>
 	}
 
 }

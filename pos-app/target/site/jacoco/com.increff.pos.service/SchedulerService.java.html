@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SchedulerService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.service</a> &gt; <span class="el_source">SchedulerService.java</span></div><h1>SchedulerService.java</h1><pre class="source lang-java linenums">package com.increff.pos.service;
 
+import java.time.Instant;
+import java.time.Period;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -13,22 +15,28 @@ import com.increff.pos.pojo.SchedulerPojo;
 
 @Service
 @Transactional(rollbackOn = ApiException.class)
-<span class="fc" id="L16">public class SchedulerService {</span>
+<span class="fc" id="L18">public class SchedulerService {</span>
 
-<span class="fc" id="L18">	@Autowired</span>
+<span class="fc" id="L20">	@Autowired</span>
 	private final SchedulerDao dao = new SchedulerDao();
 	
 
 	public void add(SchedulerPojo p) throws ApiException {
-<span class="fc" id="L23">		dao.insert(p); </span>
-<span class="fc" id="L24">	}</span>
+<span class="fc" id="L25">		dao.insert(p); </span>
+<span class="fc" id="L26">	}</span>
 
 	public SchedulerPojo get(String date) throws ApiException {
-<span class="fc" id="L27">		return dao.select(date);</span>
+<span class="fc" id="L29">		return dao.select(date);</span>
 	}
 
-	public List&lt;SchedulerPojo&gt; getAll() {
-<span class="fc" id="L31">		return dao.selectAll(SchedulerPojo.class);</span>
+	public List&lt;SchedulerPojo&gt; getRange(String startDate,String endDate) throws ApiException {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		if(startDate.compareTo(endDate)&gt;0){throw new ApiException(&quot;please select a valid time range&quot;);}</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		if(String.valueOf(Instant.now()).compareTo(endDate+&quot;T23:59:59Z&quot;)&lt;-1){throw new ApiException(&quot;Invalid Time Period&quot;);}</span>
+
+<span class="nc" id="L36">		Instant range = Instant.now().minus(Period.ofDays(365));</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">		if(String.valueOf(range).compareTo(startDate+&quot;T00:00:00Z&quot;)&gt;0){throw new ApiException(&quot;Only one year is allowed for the reports&quot;);}</span>
+
+<span class="nc" id="L39">		return dao.selectRange(startDate,endDate);</span>
 	}
 
 }

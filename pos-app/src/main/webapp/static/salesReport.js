@@ -48,7 +48,8 @@ function getSalesReport(){
                 swal("Hurray", "Created Report Successfully", "success");
                 console.log(response);
                 salesData = response; 
-                displaySalesList();  
+                displaySalesList();
+                $('#filterModal').modal('toggle');
         },
         error: function(response){
                 swal("Oops!", response.responseJSON.message, "error");
@@ -101,12 +102,14 @@ function displaySalesList(){
             if(document.getElementById('category').value != String(e.category))continue;
         }
 
+        var rev = parseFloat(e.revenue);
+        rev=rev.toFixed(2);
 		var row = '<tr>'
 		+ '<td style="text-align:center;">' + counter + '</td>'
 		+ '<td style="text-align:center;">' + e.brand+ '</td>'
 		+ '<td style="text-align:center;">'  + e.category + '</td>'
 		+ '<td style="text-align:center;">'  + e.quantity + '</td>'
-		+ '<td style="text-align:center;">'  + e.revenue + '</td>'
+		+ '<td style="text-align:right;">'  + rev + '</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
@@ -168,7 +171,6 @@ function addCategoryDropdown(data){
         categoryOption.text = categoryOption.value = e;
         categorySelect.add(categoryOption, 1);
 	}
-	displaySalesList();
 }
 
 function setDate(){
@@ -197,11 +199,19 @@ function setDate(){
     document.getElementById('endDate').value = today;
 }
 
+function setStartDate(){
+    document.getElementById('startDate').max = document.getElementById('endDate').value;
+}
+
+function toggleFilters(){
+    $('#filterModal').modal('toggle');
+}
 //INITIALIZATION CODE
 function init(){
-    $('#submit-filter').click(getSalesReport);
+    $('#add').click(getSalesReport);
+    $('#submit-filter').click(toggleFilters);
     document.getElementById('brands').addEventListener("change",getCategoryList);
-    document.getElementById('category').addEventListener("change",displaySalesList);
+    document.getElementById('endDate').addEventListener("change",setStartDate);
 }
 
 $(document).ready(init);

@@ -47,28 +47,18 @@ function getBrandList(){
 
 
 function getCategoryList(){
-	//Set the values to update
-	var url = getBrandUrl() + "/unique"
-	var data = {}
-	data["brand"]=document.getElementById('brands').value;
-	data["category"]="";
-	var json = JSON.stringify(data);
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		addCategoryDropdown(response)
-	   },
-	   error: function(response){
-	   		swal("Oops!", response.responseJSON.message, "error");
-	   }
-	});
-
-	return false;
+	var url = getBrandUrl() + "/unique/"+document.getElementById('brands').value;
+    	$.ajax({
+           url: url,
+           type: 'GET',
+           success: function(data) {
+                addCategoryDropdown(data);
+           },
+           error: function(response){
+                swal("Oops!", response.responseJSON.message, "error");
+           }
+        });
+    	return false;
 }
 
 
@@ -81,10 +71,10 @@ function displayInventoryReportList(data){
 	for(var i in data){
 		var e = data[i];
 		var row = '<tr>'
-		+ '<td>' + counter + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>'  + e.quantity + '</td>'
+		+ '<td style="text-align:center;">' + counter + '</td>'
+		+ '<td style="text-align:center;">' + e.brand + '</td>'
+		+ '<td style="text-align:center;">'  + e.category + '</td>'
+		+ '<td style="text-align:center;">'  + e.quantity + '</td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
@@ -145,17 +135,15 @@ function addCategoryDropdown(data){
         categoryOption.text = categoryOption.value = e;
         categorySelect.add(categoryOption, 1);
 	}
-	getInventoryReportList()
 }
 
 
 //INITIALIZATION CODE
 function init(){
     document.getElementById('brands').addEventListener("change",getCategoryList);
-    document.getElementById('category').addEventListener("change",getInventoryReportList);
+    $('#submit-filter').click(getInventoryReportList);
 }
 
 $(document).ready(init);
 $(document).ready(getBrandList);
 $(document).ready(getCategoryList);
-$(document).ready(getInventoryReportList);

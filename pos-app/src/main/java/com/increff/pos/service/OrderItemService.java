@@ -37,13 +37,6 @@ public class OrderItemService {
 		return dao.selectAll(OrderItemPojo.class);
 	}
 
-	public void update(int id, OrderItemPojo p) throws ApiException {
-		OrderItemPojo ex = getCheck(id);
-		ex.setQuantity(p.getQuantity());
-		ex.setSellingPrice(p.getSellingPrice());
-		ex.setProductId(p.getProductId());
-		dao.update(ex);
-	}
 
 	public OrderItemPojo getCheck(int id) throws ApiException {
 		OrderItemPojo p = dao.select(id,OrderItemPojo.class);

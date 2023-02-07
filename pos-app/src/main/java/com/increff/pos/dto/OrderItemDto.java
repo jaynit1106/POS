@@ -1,6 +1,8 @@
 package com.increff.pos.dto;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +45,7 @@ public class OrderItemDto {
 		}
 		return list2;
 	}
-	
-	public void update(int id,OrderItemForm form) throws ApiException {
-		OrderItemPojo p = ConvertUtil.objectMapper(form,OrderItemPojo.class);
-		orderItemService.update(id, p);
-	}
+
 	
 	public List<OrderItemData> getOrderItemByOrderID(int id) throws ApiException {
 		List<OrderItemPojo> list = orderItemService.getOrderItemByOrderId(id);
@@ -55,6 +53,7 @@ public class OrderItemDto {
 		for(OrderItemPojo p : list) {
 			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
 			ProductPojo product = productService.get(p.getProductId());
+			item.setSellingPrice(String.format("%.2f", new BigDecimal(p.getSellingPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue()));
 			item.setBarcode(product.getBarcode());
 			item.setName(product.getName());
 			items.add(item);

@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SchedulerDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pos-app</a> &gt; <a href="index.source.html" class="el_package">com.increff.pos.dao</a> &gt; <span class="el_source">SchedulerDao.java</span></div><h1>SchedulerDao.java</h1><pre class="source lang-java linenums">package com.increff.pos.dao;
 
+import java.time.Instant;
 import java.util.List;
 import javax.persistence.TypedQuery;
 
+import com.increff.pos.pojo.OrderPojo;
 import org.springframework.stereotype.Repository;
 
 import com.increff.pos.pojo.SchedulerPojo;
 
 @Repository
-<span class="fc" id="L11">public class SchedulerDao extends AbstractDao {</span>
+<span class="fc" id="L13">public class SchedulerDao extends AbstractDao {</span>
 
 	
-<span class="fc" id="L14">	private static String select_date = &quot;select p from SchedulerPojo p where date=:date&quot;;</span>
-
+<span class="fc" id="L16">	private static String select_date = &quot;select p from SchedulerPojo p where date=:date&quot;;</span>
+<span class="fc" id="L17">	private static String SELECT_RANGE = &quot;select p from SchedulerPojo p where date&gt;=:startDate and date&lt;=:endDate&quot;;</span>
 	
 	public SchedulerPojo select(String date) {
-<span class="fc" id="L18">		TypedQuery&lt;SchedulerPojo&gt; query = getQuery(select_date, SchedulerPojo.class);</span>
-<span class="fc" id="L19">		query.setParameter(&quot;date&quot;, date);</span>
-<span class="fc" id="L20">		return getSingle(query);</span>
+<span class="fc" id="L20">		TypedQuery&lt;SchedulerPojo&gt; query = getQuery(select_date, SchedulerPojo.class);</span>
+<span class="fc" id="L21">		query.setParameter(&quot;date&quot;, date);</span>
+<span class="fc" id="L22">		return getSingle(query);</span>
+	}
+
+	public List&lt;SchedulerPojo&gt; selectRange(String startDate,String endDate){
+<span class="nc" id="L26">		TypedQuery&lt;SchedulerPojo&gt; query = getQuery(SELECT_RANGE, SchedulerPojo.class);</span>
+<span class="nc" id="L27">		query.setParameter(&quot;startDate&quot;, startDate);</span>
+<span class="nc" id="L28">		query.setParameter(&quot;endDate&quot;, endDate);</span>
+<span class="nc" id="L29">		return query.getResultList();</span>
 	}
 
 }

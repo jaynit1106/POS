@@ -3,6 +3,7 @@ C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\ApiExceptio
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dao\SchedulerDao.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\controller\BrandApiController.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\util\IOUtil.java
+C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\BrandReportForm.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\pojo\OrderPojo.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\InventoryReportForm.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\util\StringUtil.java
@@ -63,6 +64,7 @@ C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\pojo\BrandPojo.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\SchedulerService.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\controller\InventoryApiController.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dto\BrandDto.java
+C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\BrandReportData.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\MessageData.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\pojo\InventoryPojo.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\spring\DbConfig.java
@@ -73,6 +75,7 @@ C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\InventoryRepo
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\spring\SecurityConfig.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\util\UserPrincipal.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\OrderData.java
+C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\SchedulerForm.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dto\OrderItemDto.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\OrderItemService.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dao\AbstractDao.java

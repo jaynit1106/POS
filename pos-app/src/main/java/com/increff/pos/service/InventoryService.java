@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import com.increff.pos.util.JSONUTil;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,13 +50,21 @@ public class InventoryService {
 		dao.update(ex);
 	}
 
+	public void reduceInventory(int id,InventoryPojo p) throws ApiException {
+		InventoryPojo ex = getCheck(id);
+		if(p.getQuantity()>ex.getQuantity())throw new ApiException("quantity does not exists");
+		ex.setQuantity(ex.getQuantity()-p.getQuantity());
+
+	}
+
 	public InventoryPojo getCheck(int id) throws ApiException{
 		InventoryPojo p = dao.select(id,InventoryPojo.class);
 		if(Objects.isNull(p))throw new ApiException("Inventory Does Not Exists");
 		return p;
 	}
-	
-	public List<JSONObject> checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
+
+	@Transactional(rollbackOn = ApiException.class)
+	public void checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
 		List<JSONObject> errors = new ArrayList<>();
 		for(OrderItemPojo p : items) {
 			if(p.getQuantity()<=0){
@@ -66,29 +75,19 @@ public class InventoryService {
 				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Please Enter a Valid Price for "+p.getBarcode()));
 				continue;
 			}
-			InventoryPojo inventory;
-
 			try {
-				inventory = getCheck(p.getProductId());
+				InventoryPojo inventory = getCheck(p.getProductId());
+				if(inventory.getQuantity()<p.getQuantity()){
+					errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Only "+inventory.getQuantity()+" pieces left for " + p.getBarcode()));
+					continue;
+				}
+				inventory.setQuantity(inventory.getQuantity()-p.getQuantity());
 			}catch (ApiException e){
 				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Inventory does not exists for " + p.getBarcode()));
-				continue;
 			}
-
-			int quantity = inventory.getQuantity();
-			if(quantity<p.getQuantity()){
-				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Only "+quantity+" pieces left of " + p.getBarcode()));
-				continue;
-			}
-
-			quantity=quantity-p.getQuantity();
-			inventory.setQuantity(quantity);
-			update(inventory.getId(), inventory);
 		}
-		return errors;
+		if(errors.size()>0){
+			throw new ApiException(JSONValue.toJSONString(errors));
+		}
 	}
-	
-	
-	
-	
 }

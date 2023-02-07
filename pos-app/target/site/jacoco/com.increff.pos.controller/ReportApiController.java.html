@@ -2,16 +2,13 @@
 
 import java.util.List;
 
-import com.increff.pos.model.InventoryReportForm;
+import com.increff.pos.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.increff.pos.model.InventoryReportData;
-import com.increff.pos.model.SalesReportData;
-import com.increff.pos.model.SalesReportForm;
 import com.increff.pos.dto.ReportsDto;
 import com.increff.pos.service.ApiException;
 
@@ -20,21 +17,27 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-<span class="fc" id="L23">public class ReportApiController {</span>
+<span class="fc" id="L20">public class ReportApiController {</span>
 
-<span class="fc" id="L25">	@Autowired</span>
+<span class="fc" id="L22">	@Autowired</span>
 	private final ReportsDto dto = new ReportsDto();
 
 	@ApiOperation(value = &quot;gives inventory report&quot;)
 	@RequestMapping(path = &quot;/api/reports/inventory&quot;, method = RequestMethod.POST)
 	public List&lt;InventoryReportData&gt; getInventoryReport(@RequestBody InventoryReportForm form) throws ApiException {
-<span class="nc" id="L31">		return dto.getInventoryReport(form);</span>
+<span class="nc" id="L28">		return dto.getInventoryReport(form);</span>
 	}
 	
 	@ApiOperation(value = &quot;gives sales report&quot;)
 	@RequestMapping(path = &quot;/api/reports/sales&quot;, method = RequestMethod.POST)
 	public List&lt;SalesReportData&gt; getSalesReport(@RequestBody SalesReportForm form) throws ApiException{
-<span class="nc" id="L37">		return dto.getSalesReport(form);</span>
+<span class="nc" id="L34">		return dto.getSalesReport(form);</span>
+	}
+
+	@ApiOperation(value = &quot;gives sales report&quot;)
+	@RequestMapping(path = &quot;/api/reports/brand&quot;, method = RequestMethod.POST)
+	public List&lt;BrandReportData&gt; getBrandReport(@RequestBody BrandReportForm form){
+<span class="nc" id="L40">		return dto.getBrandReport(form);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
