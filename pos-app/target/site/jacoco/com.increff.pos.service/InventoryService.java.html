@@ -22,73 +22,65 @@ import com.increff.pos.pojo.OrderItemPojo;
 <span class="fc" id="L22">public class InventoryService {</span>
 
 	@Autowired
-	private  InventoryDao dao;
+	private  InventoryDao inventoryDao;
 
-	public void add(InventoryPojo p) throws ApiException {
-<span class="fc bfc" id="L28" title="All 2 branches covered.">		if(p.getQuantity()&lt;0)throw new ApiException(&quot;Quantity cannot be Negative&quot;);</span>
-<span class="fc" id="L29">		InventoryPojo inventory = dao.select(p.getId(),InventoryPojo.class);</span>
-<span class="fc bfc" id="L30" title="All 2 branches covered.">		if(!Objects.isNull(inventory)) {</span>
-<span class="fc" id="L31">			inventory.setQuantity(inventory.getQuantity()+p.getQuantity());</span>
-<span class="fc" id="L32">			update(inventory.getId(), inventory);</span>
-<span class="fc" id="L33">			return;</span>
+	public void addInventory(InventoryPojo inventoryPojo) throws ApiException {
+<span class="fc bfc" id="L28" title="All 2 branches covered.">		if(inventoryPojo.getQuantity()&lt;0)throw new ApiException(&quot;Quantity cannot be Negative&quot;);</span>
+
+
+<span class="fc" id="L31">		InventoryPojo existingInventory = inventoryDao.select(inventoryPojo.getId(),InventoryPojo.class);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">		if(!Objects.isNull(existingInventory)) {</span>
+<span class="fc" id="L33">			existingInventory.setQuantity(existingInventory.getQuantity()+inventoryPojo.getQuantity());</span>
+<span class="fc" id="L34">			return;</span>
 		}
-<span class="fc" id="L35">		dao.insert(p);</span>
-<span class="fc" id="L36">	}</span>
 
-	public InventoryPojo get(int id) throws ApiException {
-<span class="fc" id="L39">		return getCheck(id);</span>
+<span class="fc" id="L37">		inventoryDao.insert(inventoryPojo);</span>
+<span class="fc" id="L38">	}</span>
+
+	public InventoryPojo getInventoryById(int inventoryId) throws ApiException {
+
+<span class="fc" id="L42">		InventoryPojo inventoryPojo = inventoryDao.select(inventoryId,InventoryPojo.class);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">		if(Objects.isNull(inventoryPojo))throw new ApiException(&quot;Inventory Does Not Exists&quot;);</span>
+<span class="fc" id="L44">		return inventoryPojo;</span>
 	}
 
-	public List&lt;InventoryPojo&gt; getAll() {
-<span class="fc" id="L43">		return dao.selectAll(InventoryPojo.class);</span>
+	public List&lt;InventoryPojo&gt; getAllInventorys() {
+<span class="fc" id="L48">		return inventoryDao.selectAll(InventoryPojo.class);</span>
 	}
 
-	public void update(int id, InventoryPojo p) throws ApiException {
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">		if(p.getQuantity()&lt;0)throw new ApiException(&quot;Quantity cannot be Negative&quot;);</span>
-<span class="fc" id="L48">		InventoryPojo ex = getCheck(id);</span>
-<span class="fc" id="L49">		ex.setQuantity(p.getQuantity());</span>
-<span class="fc" id="L50">		dao.update(ex);</span>
-<span class="fc" id="L51">	}</span>
-
-	public void reduceInventory(int id,InventoryPojo p) throws ApiException {
-<span class="nc" id="L54">		InventoryPojo ex = getCheck(id);</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">		if(p.getQuantity()&gt;ex.getQuantity())throw new ApiException(&quot;quantity does not exists&quot;);</span>
-<span class="nc" id="L56">		ex.setQuantity(ex.getQuantity()-p.getQuantity());</span>
-
-<span class="nc" id="L58">	}</span>
-
-	public InventoryPojo getCheck(int id) throws ApiException{
-<span class="fc" id="L61">		InventoryPojo p = dao.select(id,InventoryPojo.class);</span>
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">		if(Objects.isNull(p))throw new ApiException(&quot;Inventory Does Not Exists&quot;);</span>
-<span class="fc" id="L63">		return p;</span>
-	}
+	public void updateInventory(int id, InventoryPojo p) throws ApiException {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">		if(p.getQuantity()&lt;0)throw new ApiException(&quot;Quantity cannot be Negative&quot;);</span>
+<span class="fc" id="L53">		InventoryPojo ex = getInventoryById(id);</span>
+<span class="fc" id="L54">		ex.setQuantity(p.getQuantity());</span>
+<span class="fc" id="L55">		inventoryDao.update(ex);</span>
+<span class="fc" id="L56">	}</span>
 
 	@Transactional(rollbackOn = ApiException.class)
-	public void checkAndCreateOrder(List&lt;OrderItemPojo&gt; items) throws ApiException {
-<span class="fc" id="L68">		List&lt;JSONObject&gt; errors = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">		for(OrderItemPojo p : items) {</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">			if(p.getQuantity()&lt;=0){</span>
-<span class="fc" id="L71">				errors.add(JSONUTil.getJSONObject(p.getBarcode(),&quot;Please Enter a Valid Quantity for &quot;+p.getBarcode()));</span>
-<span class="fc" id="L72">				continue;</span>
+	public void checkAndCreateOrder(List&lt;OrderItemPojo&gt; itemPojoList) throws ApiException {
+<span class="fc" id="L60">		List&lt;JSONObject&gt; errors = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		for(OrderItemPojo orderItemPojo : itemPojoList) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">			if(orderItemPojo.getQuantity()&lt;=0){</span>
+<span class="fc" id="L63">				errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),&quot;Please Enter a Valid Quantity for &quot;+orderItemPojo.getBarcode()));</span>
+<span class="fc" id="L64">				continue;</span>
 			}
-<span class="fc bfc" id="L74" title="All 2 branches covered.">			if(p.getSellingPrice()&lt;0) {</span>
-<span class="fc" id="L75">				errors.add(JSONUTil.getJSONObject(p.getBarcode(),&quot;Please Enter a Valid Price for &quot;+p.getBarcode()));</span>
-<span class="fc" id="L76">				continue;</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">			if(orderItemPojo.getSellingPrice()&lt;0) {</span>
+<span class="fc" id="L67">				errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),&quot;Please Enter a Valid Price for &quot;+orderItemPojo.getBarcode()));</span>
+<span class="fc" id="L68">				continue;</span>
 			}
 			try {
-<span class="fc" id="L79">				InventoryPojo inventory = getCheck(p.getProductId());</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">				if(inventory.getQuantity()&lt;p.getQuantity()){</span>
-<span class="fc" id="L81">					errors.add(JSONUTil.getJSONObject(p.getBarcode(),&quot;Only &quot;+inventory.getQuantity()+&quot; pieces left for &quot; + p.getBarcode()));</span>
-<span class="fc" id="L82">					continue;</span>
+<span class="fc" id="L71">				InventoryPojo inventoryPojo = getInventoryById(orderItemPojo.getProductId());</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">				if(inventoryPojo.getQuantity()&lt;orderItemPojo.getQuantity()){</span>
+<span class="fc" id="L73">					errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),&quot;Only &quot;+inventoryPojo.getQuantity()+&quot; pieces left for &quot; + orderItemPojo.getBarcode()));</span>
+<span class="fc" id="L74">					continue;</span>
 				}
-<span class="fc" id="L84">				inventory.setQuantity(inventory.getQuantity()-p.getQuantity());</span>
-<span class="nc" id="L85">			}catch (ApiException e){</span>
-<span class="nc" id="L86">				errors.add(JSONUTil.getJSONObject(p.getBarcode(),&quot;Inventory does not exists for &quot; + p.getBarcode()));</span>
-<span class="fc" id="L87">			}</span>
-<span class="fc" id="L88">		}</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">		if(errors.size()&gt;0){</span>
-<span class="fc" id="L90">			throw new ApiException(JSONValue.toJSONString(errors));</span>
+<span class="fc" id="L76">				inventoryPojo.setQuantity(inventoryPojo.getQuantity()-orderItemPojo.getQuantity());</span>
+<span class="nc" id="L77">			}catch (ApiException e){</span>
+<span class="nc" id="L78">				errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),&quot;Inventory does not exists for &quot; + orderItemPojo.getBarcode()));</span>
+<span class="fc" id="L79">			}</span>
+<span class="fc" id="L80">		}</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">		if(errors.size()&gt;0){</span>
+<span class="fc" id="L82">			throw new ApiException(JSONValue.toJSONString(errors));</span>
 		}
-<span class="fc" id="L92">	}</span>
+<span class="fc" id="L84">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

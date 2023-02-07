@@ -66,10 +66,10 @@
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
   <testcase classname="com.increff.pos.service.TestBrandService" name="testAdd" time="0"/>
-  <testcase classname="com.increff.pos.service.TestBrandService" name="testUniqueCategoryList" time="0.016"/>
+  <testcase classname="com.increff.pos.service.TestBrandService" name="testUniqueCategoryList" time="0.015"/>
   <testcase classname="com.increff.pos.service.TestBrandService" name="testGetById" time="0"/>
-  <testcase classname="com.increff.pos.service.TestBrandService" name="testUniqueBrandList" time="0"/>
+  <testcase classname="com.increff.pos.service.TestBrandService" name="testUniqueBrandList" time="0.016"/>
   <testcase classname="com.increff.pos.service.TestBrandService" name="testGetBrandId" time="0"/>
   <testcase classname="com.increff.pos.service.TestBrandService" name="testGetAll" time="0"/>
-  <testcase classname="com.increff.pos.service.TestBrandService" name="testUpdate" time="0.015"/>
+  <testcase classname="com.increff.pos.service.TestBrandService" name="testUpdate" time="0"/>
 </testsuite>

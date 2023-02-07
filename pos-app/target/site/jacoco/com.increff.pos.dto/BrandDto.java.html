@@ -21,30 +21,30 @@ import com.increff.pos.util.ConvertUtil;
 	@Autowired
 	BrandService brandService;
 	
-	public void add(BrandForm form) throws ApiException{
-<span class="fc" id="L25">		StringUtil.normalise(form,BrandForm.class);</span>
-<span class="fc" id="L26">		BrandPojo p = ConvertUtil.objectMapper(form, BrandPojo.class);</span>
-<span class="nc" id="L27">		brandService.add(p);</span>
+	public void addBrand(BrandForm brandForm) throws ApiException{
+<span class="fc" id="L25">		StringUtil.normalise(brandForm,BrandForm.class);</span>
+<span class="fc" id="L26">		BrandPojo p = ConvertUtil.objectMapper(brandForm, BrandPojo.class);</span>
+<span class="nc" id="L27">		brandService.addBrand(p);</span>
 <span class="nc" id="L28">	}</span>
 	
-	public BrandData get(int id) throws ApiException {
-<span class="fc" id="L31">		BrandPojo p = brandService.get(id);</span>
-<span class="fc" id="L32">		return ConvertUtil.objectMapper(p, BrandData.class);</span>
+	public BrandData getBrandById(int brandId) throws ApiException {
+<span class="fc" id="L31">		BrandPojo brandPojo = brandService.getBrandById(brandId);</span>
+<span class="fc" id="L32">		return ConvertUtil.objectMapper(brandPojo, BrandData.class);</span>
 	}
 	
-	public List&lt;BrandData&gt; getAll() {
-<span class="fc" id="L36">		List&lt;BrandPojo&gt; list = brandService.getAll();</span>
-<span class="fc" id="L37">		List&lt;BrandData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L38" title="All 2 branches covered.">		for (BrandPojo p : list) {</span>
-<span class="fc" id="L39">			list2.add(ConvertUtil.objectMapper(p, BrandData.class));</span>
+	public List&lt;BrandData&gt; getAllBrands() {
+<span class="fc" id="L36">		List&lt;BrandPojo&gt; brandList = brandService.getAllBrands();</span>
+<span class="fc" id="L37">		List&lt;BrandData&gt; brandDataList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		for (BrandPojo brandPojo : brandList) {</span>
+<span class="fc" id="L39">			brandDataList.add(ConvertUtil.objectMapper(brandPojo, BrandData.class));</span>
 <span class="fc" id="L40">		}</span>
-<span class="fc" id="L41">		return list2;</span>
+<span class="fc" id="L41">		return brandDataList;</span>
 	}
 	
-	public void update(int id, BrandForm f) throws ApiException {
-<span class="fc" id="L45">		StringUtil.normalise(f,BrandForm.class);</span>
-<span class="fc" id="L46">		BrandPojo p = ConvertUtil.objectMapper(f, BrandPojo.class);</span>
-<span class="fc" id="L47">		brandService.update(id,p);</span>
+	public void updateBrand(int brandId, BrandForm brandForm) throws ApiException {
+<span class="fc" id="L45">		StringUtil.normalise(brandForm,BrandForm.class);</span>
+<span class="fc" id="L46">		BrandPojo brandPojo = ConvertUtil.objectMapper(brandForm, BrandPojo.class);</span>
+<span class="fc" id="L47">		brandService.updateBrand(brandId,brandPojo);</span>
 <span class="fc" id="L48">	}</span>
 
 	public List&lt;String&gt; getBrandList(){

@@ -39,54 +39,64 @@ public class ReportsDto {
 	private static Logger logger = Logger.getLogger(ReportsDto.class);
 
 
-	public List<BrandReportData> getBrandReport(BrandReportForm form){
+	public List<BrandReportData> getBrandReport(BrandReportForm brandReportForm){
 		logger.info("creating brand report");
-		List<BrandPojo> list = brandService.getAll();
-		List<BrandReportData> data = new ArrayList<>();
-		for(BrandPojo p : list){
-			if(!Objects.equals(form.getBrand(),"All") && !Objects.equals(form.getBrand(),p.getBrand()))continue;
-			if(!Objects.equals(form.getCategory(),"All") && !Objects.equals(form.getCategory(),p.getCategory()))continue;
-			BrandReportData brand = new BrandReportData();
-			brand.setBrand(p.getBrand());
-			brand.setCategory(p.getCategory());
-			data.add(brand);
+		List<BrandPojo> brandPojoList = brandService.getAllBrands();
+		List<BrandReportData> brandReportDataList = new ArrayList<>();
+
+		for(BrandPojo brandPojo : brandPojoList){
+
+			if(!Objects.equals(brandReportForm.getBrand(),"All") && !Objects.equals(brandReportForm.getBrand(), brandPojo.getBrand()))continue;
+			if(!Objects.equals(brandReportForm.getCategory(),"All") && !Objects.equals(brandReportForm.getCategory(), brandPojo.getCategory()))continue;
+
+			BrandReportData brandReportData = new BrandReportData();
+			brandReportData.setBrand(brandPojo.getBrand());
+			brandReportData.setCategory(brandPojo.getCategory());
+
+			brandReportDataList.add(brandReportData);
 
 		}
 		logger.info("Created Brand Report at "+(Instant.now()));
-		return data;
+		return brandReportDataList;
 	}
-	public List<InventoryReportData> getInventoryReport(InventoryReportForm form) throws ApiException {
-		List<InventoryPojo> list = inventoryService.getAll();
-		HashMap<Integer,Integer> inventory = new HashMap<>();
-		for(InventoryPojo p : list) {
-			ProductPojo product = productService.get(p.getId());
-			int quant = 0;
-			int brandId = product.getBrandId();
+	public List<InventoryReportData> getInventoryReport(InventoryReportForm inventoryReportForm) throws ApiException {
+		List<InventoryPojo> inventoryPojoList = inventoryService.getAllInventorys();
+		HashMap<Integer,Integer> inventoryMap = new HashMap<>();
 
-			if(inventory.get(brandId)!= null)quant = inventory.get(brandId);
-			inventory.put(brandId , quant + p.getQuantity());
+		//mapping brands with quantity
+		for(InventoryPojo inventoryPojo : inventoryPojoList) {
+			ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());
+
+			int quantity = 0;
+			int brandId = productPojo.getBrandId();
+			if(inventoryMap.get(brandId)!= null) quantity = inventoryMap.get(brandId);
+
+			inventoryMap.put(brandId , quantity + inventoryPojo.getQuantity());
 		}
 
-		List<InventoryReportData> Data = new ArrayList<>();
-		for(Integer id : inventory.keySet()) {
-			BrandPojo brand = brandService.get(id);
-			if(!Objects.equals(form.getBrand(),"All") && !Objects.equals(form.getBrand(),brand.getBrand()))continue;
-			if(!Objects.equals(form.getCategory(),"All") && !Objects.equals(form.getCategory(),brand.getCategory()))continue;
-			InventoryReportData data = new InventoryReportData();
-			data.setBrand(brand.getBrand());
-			data.setCategory(brand.getCategory());
-			data.setQuantity(inventory.get(id));
-			Data.add(data);
+		List<InventoryReportData> inventoryReportDataList = new ArrayList<>();
+		for(Integer id : inventoryMap.keySet()) {
+			BrandPojo brandPojo = brandService.getBrandById(id);
+			//applying filters
+			if(!Objects.equals(inventoryReportForm.getBrand(),"All") && !Objects.equals(inventoryReportForm.getBrand(), brandPojo.getBrand()))continue;
+			if(!Objects.equals(inventoryReportForm.getCategory(),"All") && !Objects.equals(inventoryReportForm.getCategory(), brandPojo.getCategory()))continue;
+
+			//creating the output
+			InventoryReportData inventoryReportData = new InventoryReportData();
+			inventoryReportData.setBrand(brandPojo.getBrand());
+			inventoryReportData.setCategory(brandPojo.getCategory());
+			inventoryReportData.setQuantity(inventoryMap.get(id));
+			inventoryReportDataList.add(inventoryReportData);
 		}
 
 		logger.info("Created Inventory Report at "+(Instant.now()));
-		return Data;
+		return inventoryReportDataList;
 	}
 	
-	public List<SalesReportData> getSalesReport(SalesReportForm form) throws ApiException {
+	public List<SalesReportData> getSalesReport(SalesReportForm salesReportForm) throws ApiException {
 		Instant range = Instant.now().minus(Period.ofDays(365));
-		Instant startDate = form.getStartDate();
-		Instant endDate = form.getEndDate();
+		Instant startDate = salesReportForm.getStartDate();
+		Instant endDate = salesReportForm.getEndDate();
 
 		int comparedValue = startDate.compareTo(endDate);
 		if(comparedValue>0){throw new ApiException("Invalid Time Period");}
@@ -99,21 +109,22 @@ public class ReportsDto {
 
 
 		// querying the time range
-		List<OrderPojo> list = orderService.selectRange(startDate, endDate);
+		List<OrderPojo> orderPojoList = orderService.selectOrdersInRange(startDate, endDate);
 
 		//creating the list of order items based on orderId
-		List<OrderItemPojo> orders = new ArrayList<>();
-		for(OrderPojo p : list) {
-			List<OrderItemPojo> items = orderItemService.getOrderItemByOrderId(p.getId());
-			orders.addAll(items);
+		List<OrderItemPojo> orderItemPojoList = new ArrayList<>();
+		for(OrderPojo orderPojo : orderPojoList) {
+			List<OrderItemPojo> items = orderItemService.getOrderItemByOrderId(orderPojo.getId());
+			orderItemPojoList.addAll(items);
 		}
 
 		//generate product revenues
-		HashMap<Integer,Integer> quantityProducts = (HashMap<Integer, Integer>)orders.stream().collect(Collectors.toMap(OrderItemPojo::getProductId,OrderItemPojo::getQuantity,(s, a)->s+a));
-		HashMap<Integer,Double> revenueProducts = MapUtil.getProductsRevenue(orders);
+		HashMap<Integer,Integer> quantityProducts = (HashMap<Integer, Integer>) orderItemPojoList.stream().collect(Collectors.toMap(OrderItemPojo::getProductId,OrderItemPojo::getQuantity,(s, a)->s+a));
+		HashMap<Integer,Double> revenueProducts = MapUtil.getProductsRevenue(orderItemPojoList);
+
 		List<ProductPojo> products = new ArrayList<>();
 		for(int id : revenueProducts.keySet()) {
-			products.add(productService.get(id));
+			products.add(productService.getProductById(id));
 		}
 
 		//generate brand revenues
@@ -124,7 +135,7 @@ public class ReportsDto {
 		List<SalesReportData> data = new ArrayList<>();
 		for(int id : revenueBrands.keySet()) {
 			SalesReportData item = new SalesReportData();
-			BrandPojo p = brandService.get(id);
+			BrandPojo p = brandService.getBrandById(id);
 			item.setBrand(p.getBrand());
 			item.setCategory(p.getCategory());
 			item.setRevenue(revenueBrands.get(id));
@@ -132,7 +143,7 @@ public class ReportsDto {
 			data.add(item);
 		}
 
-		logger.info("Created Inventory Report at "+(Instant.now()));
+		logger.info("Created Sales Report at "+(Instant.now()));
 		return data;
 	}
 	

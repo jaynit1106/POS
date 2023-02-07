@@ -18,36 +18,30 @@ import io.swagger.annotations.ApiOperation;
 public class ProductApiController {
 
 	@Autowired
-	private ProductDto dto;
+	private ProductDto productDto;
 
 	@ApiOperation(value = "Adds a Product")
 	@RequestMapping(path = "/api/products", method = RequestMethod.POST)
-	public void add(@RequestBody ProductForm form) throws ApiException {
-		dto.add(form);
-	}
-
-	@ApiOperation(value = "Gets a Product by ID")
-	@RequestMapping(path = "/api/products/{id}", method = RequestMethod.GET)
-	public ProductData get(@PathVariable int id) throws ApiException {
-		return dto.get(id);
+	public void addProduct(@RequestBody ProductForm productForm) throws ApiException {
+		productDto.addProduct(productForm);
 	}
 
 	@ApiOperation(value = "Gets list of all products")
 	@RequestMapping(path = "/api/products", method = RequestMethod.GET)
-	public List<ProductData> getAll() throws ApiException {
-		return dto.getAll();
+	public List<ProductData> getAllProducts() throws ApiException {
+		return productDto.getAllProducts();
 	}
 
 	@ApiOperation(value = "Updates a product")
-	@RequestMapping(path = "/api/products/{id}", method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody ProductForm form) throws ApiException {
-		dto.update(id, form);
+	@RequestMapping(path = "/api/products/{productId}", method = RequestMethod.PUT)
+	public void updateProduct(@PathVariable int productId, @RequestBody ProductForm productForm) throws ApiException {
+		productDto.updateProduct(productId, productForm);
 	}
 
 	@ApiOperation(value = "Get Barcode List")
 	@GetMapping(path = "/api/products/barcode")
 	public List<String> getBarcodeList(){
-		return dto.getBarcodeList();
+		return productDto.getBarcodeList();
 	}
 	
 

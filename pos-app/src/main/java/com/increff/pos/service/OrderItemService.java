@@ -17,37 +17,18 @@ import com.increff.pos.pojo.OrderItemPojo;
 public class OrderItemService {
 
 	@Autowired
-	private  OrderItemDao dao;
+	private  OrderItemDao orderItemDao;
 	
 	
 
-	public void add(List<OrderItemPojo> items) throws ApiException {
-		for(OrderItemPojo p : items) {
-			
-			dao.insert(p);
+	public void addOrderItems(List<OrderItemPojo> orderItemPojoList) throws ApiException {
+		for(OrderItemPojo orderItemPojo : orderItemPojoList) {
+			orderItemDao.insert(orderItemPojo);
 		}
-		
 	}
 
-	public OrderItemPojo get(int id) throws ApiException {
-		return getCheck(id);
-	}
-
-	public List<OrderItemPojo> getAll() {
-		return dao.selectAll(OrderItemPojo.class);
-	}
-
-
-	public OrderItemPojo getCheck(int id) throws ApiException {
-		OrderItemPojo p = dao.select(id,OrderItemPojo.class);
-		if (Objects.isNull(p)) {
-			throw new ApiException("OrderItem with given ID does not exit, id: " + id);
-		}
-		return p;
-	}
-	
-	public List<OrderItemPojo> getOrderItemByOrderId(int id) {
-		return dao.selectByOrderId(id);
+	public List<OrderItemPojo> getOrderItemByOrderId(int orderId) {
+		return orderItemDao.selectByOrderId(orderId);
 	}
 	
 }

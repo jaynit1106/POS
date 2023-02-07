@@ -29,39 +29,20 @@ public class TestInventoryDto extends AbstractUnitTest{
     private  ProductDto productDto ;
 
     @Test
-    public void testAddAndGetAll() throws ApiException {
+    public void testAddAndgetAllBrands() throws ApiException {
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
 
         //checking the getAll operations
-        List<InventoryData> list = inventoryDto.getAll();
+        List<InventoryData> list = inventoryDto.getAllInventorys();
         assertEquals(list.get(0).getQuantity(),100);
         assertEquals(list.get(0).getName(),"name");
         assertEquals(list.get(0).getBarcode(),"abcdabcd");
-        assertEquals(list.get(0).getId(),productDto.getAll().get(0).getId());
-
-    }
-
-    @Test
-    public void testGetById() throws ApiException {
-        //create brand
-        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
-        //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
-        //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
-
-        List<InventoryData> list = inventoryDto.getAll();
-        //checking getById operation
-        InventoryData data = inventoryDto.get(list.get(0).getId());
-        assertEquals(data.getQuantity(),100);
-        assertEquals(data.getName(),"name");
-        assertEquals(data.getBarcode(),"abcdabcd");
-        assertEquals(data.getId(),productDto.getAll().get(0).getId());
+        assertEquals(list.get(0).getId(),productDto.getAllProducts().get(0).getId());
 
     }
 
@@ -70,22 +51,22 @@ public class TestInventoryDto extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
 
-        List<InventoryData> list = inventoryDto.getAll();
+        List<InventoryData> list = inventoryDto.getAllInventorys();
 
         //update
-        inventoryDto.update(list.get(0).getId(),PojoUtil.getInventoryForm(200,"abcdabcd"));
-        list = inventoryDto.getAll();
+        inventoryDto.updateInventory(list.get(0).getId(),PojoUtil.getInventoryForm(200,"abcdabcd"));
+        list = inventoryDto.getAllInventorys();
 
         //checking update operation
-        InventoryData data = inventoryDto.get(list.get(0).getId());
+        InventoryData data = inventoryDto.getAllInventorys().get(0);
         assertEquals(data.getQuantity(),200);
         assertEquals(data.getName(),"name");
         assertEquals(data.getBarcode(),"abcdabcd");
-        assertEquals(data.getId(),productDto.getAll().get(0).getId());
+        assertEquals(data.getId(),productDto.getAllProducts().get(0).getId());
     }
 
     @Test
@@ -93,12 +74,12 @@ public class TestInventoryDto extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
 
         //Negative Quantity API exception
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Quantity cannot be Negative");
-        inventoryDto.add(PojoUtil.getInventoryForm(-100,"abcdabcd"));
+        inventoryDto.addInventory(PojoUtil.getInventoryForm(-100,"abcdabcd"));
 
     }
     @Test
@@ -106,31 +87,31 @@ public class TestInventoryDto extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
 
         //adding the quantity so the quantity should be 100+150 = 250
-        inventoryDto.add(PojoUtil.getInventoryForm(150,"abcdabcd"));
+        inventoryDto.addInventory(PojoUtil.getInventoryForm(150,"abcdabcd"));
 
 
         //checking the quantity
-        List<InventoryData> list = inventoryDto.getAll();
+        List<InventoryData> list = inventoryDto.getAllInventorys();
         assertEquals(list.get(0).getQuantity(),250);
         assertEquals(list.get(0).getName(),"name");
         assertEquals(list.get(0).getBarcode(),"abcdabcd");
-        assertEquals(list.get(0).getId(),productDto.getAll().get(0).getId());
+        assertEquals(list.get(0).getId(),productDto.getAllProducts().get(0).getId());
     }
 
     @Test
     public void testForProductDoesNotExist() throws ApiException {
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
 
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product Does Not Exists");
-        inventoryDto.add(PojoUtil.getInventoryForm(100,"abcdabce"));
+        inventoryDto.addInventory(PojoUtil.getInventoryForm(100,"abcdabce"));
 
     }
 

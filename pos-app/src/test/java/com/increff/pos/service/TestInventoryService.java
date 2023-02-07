@@ -37,12 +37,12 @@ public class TestInventoryService extends AbstractUnitTest{
         //adds brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //adds product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandService.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandService.getAllBrands().get(0).getId()));
 
         //inserting inventory
-        inventoryService.add(PojoUtil.getInventoryPojo(100,productService.getAll().get(0).getId()));
+        inventoryService.addInventory(PojoUtil.getInventoryPojo(100,productService.getAllProducts().get(0).getId()));
 
-        List<InventoryPojo> list = inventoryService.getAll();
+        List<InventoryPojo> list = inventoryService.getAllInventorys();
 
         //checking if it is added
         assertEquals(list.size(),1);
@@ -53,15 +53,15 @@ public class TestInventoryService extends AbstractUnitTest{
         //adds brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //adds products
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandService.getAll().get(0).getId()));
-        productDao.insert(PojoUtil.getProductPojo("name1","abcdabce",20,brandService.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandService.getAllBrands().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name1","abcdabce",20,brandService.getAllBrands().get(0).getId()));
 
         //inserting inventory
-        inventoryService.add(PojoUtil.getInventoryPojo(200,productService.getAll().get(0).getId()));
-        inventoryService.add(PojoUtil.getInventoryPojo(100,productService.getAll().get(1).getId()));
+        inventoryService.addInventory(PojoUtil.getInventoryPojo(200,productService.getAllProducts().get(0).getId()));
+        inventoryService.addInventory(PojoUtil.getInventoryPojo(100,productService.getAllProducts().get(1).getId()));
 
         //checking the operation
-        assertEquals(2,inventoryService.getAll().size());
+        assertEquals(2,inventoryService.getAllInventorys().size());
     }
 
     @Test
@@ -69,18 +69,18 @@ public class TestInventoryService extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandService.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandService.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productService.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productService.getAllProducts().get(0).getId()));
 
-        List<InventoryPojo> list = inventoryService.getAll();
+        List<InventoryPojo> list = inventoryService.getAllInventorys();
 
         //update
-        inventoryService.update(list.get(0).getId(),PojoUtil.getInventoryPojo(200,productService.getAll().get(0).getId()));
-        list = inventoryService.getAll();
+        inventoryService.updateInventory(list.get(0).getId(),PojoUtil.getInventoryPojo(200,productService.getAllProducts().get(0).getId()));
+        list = inventoryService.getAllInventorys();
 
         //checking update operation
-        InventoryPojo data = inventoryService.get(list.get(0).getId());
+        InventoryPojo data = inventoryService.getInventoryById(list.get(0).getId());
         assertEquals(data.getQuantity(),200);
     }
 
@@ -89,9 +89,9 @@ public class TestInventoryService extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandService.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandService.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productService.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productService.getAllProducts().get(0).getId()));
         //adds order
         orderDao.insert(PojoUtil.getOrderPojo());
 
@@ -102,7 +102,7 @@ public class TestInventoryService extends AbstractUnitTest{
         inventoryService.checkAndCreateOrder(list);
 
         //checking if the quantity is reduced or not
-        assertEquals(80,inventoryService.getAll().get(0).getQuantity());
+        assertEquals(80,inventoryService.getAllInventorys().get(0).getQuantity());
     }
 
     //ask mentor about it

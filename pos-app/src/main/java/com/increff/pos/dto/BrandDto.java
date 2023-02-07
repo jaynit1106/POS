@@ -21,30 +21,30 @@ public class BrandDto {
 	@Autowired
 	BrandService brandService;
 	
-	public void add(BrandForm form) throws ApiException{
-		StringUtil.normalise(form,BrandForm.class);
-		BrandPojo p = ConvertUtil.objectMapper(form, BrandPojo.class);
-		brandService.add(p);
+	public void addBrand(BrandForm brandForm) throws ApiException{
+		StringUtil.normalise(brandForm,BrandForm.class);
+		BrandPojo p = ConvertUtil.objectMapper(brandForm, BrandPojo.class);
+		brandService.addBrand(p);
 	}
 	
-	public BrandData get(int id) throws ApiException {
-		BrandPojo p = brandService.get(id);
-		return ConvertUtil.objectMapper(p, BrandData.class);
+	public BrandData getBrandById(int brandId) throws ApiException {
+		BrandPojo brandPojo = brandService.getBrandById(brandId);
+		return ConvertUtil.objectMapper(brandPojo, BrandData.class);
 	}
 	
-	public List<BrandData> getAll() {
-		List<BrandPojo> list = brandService.getAll();
-		List<BrandData> list2 = new ArrayList<>();
-		for (BrandPojo p : list) {
-			list2.add(ConvertUtil.objectMapper(p, BrandData.class));
+	public List<BrandData> getAllBrands() {
+		List<BrandPojo> brandList = brandService.getAllBrands();
+		List<BrandData> brandDataList = new ArrayList<>();
+		for (BrandPojo brandPojo : brandList) {
+			brandDataList.add(ConvertUtil.objectMapper(brandPojo, BrandData.class));
 		}
-		return list2;
+		return brandDataList;
 	}
 	
-	public void update(int id, BrandForm f) throws ApiException {
-		StringUtil.normalise(f,BrandForm.class);
-		BrandPojo p = ConvertUtil.objectMapper(f, BrandPojo.class);
-		brandService.update(id,p);
+	public void updateBrand(int brandId, BrandForm brandForm) throws ApiException {
+		StringUtil.normalise(brandForm,BrandForm.class);
+		BrandPojo brandPojo = ConvertUtil.objectMapper(brandForm, BrandPojo.class);
+		brandService.updateBrand(brandId,brandPojo);
 	}
 
 	public List<String> getBrandList(){

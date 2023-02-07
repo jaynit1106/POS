@@ -18,19 +18,12 @@ import io.swagger.annotations.ApiOperation;
 <span class="fc" id="L18">public class SchedulerApiController {</span>
 	
 	@Autowired
-	private SchedulerDto dto;
-
-
-	@ApiOperation(value = &quot;Gets an Scheduler by ID&quot;)
-	@RequestMapping(path = &quot;/api/scheduler/{date}&quot;, method = RequestMethod.GET)
-	public SchedulerData get(@PathVariable String date) throws ApiException {
-<span class="nc" id="L27">		return dto.get(date);</span>
-	}
+	private SchedulerDto schedulerDto;
 
 	@ApiOperation(value = &quot;Gets list of all Schedulers&quot;)
 	@RequestMapping(path = &quot;/api/scheduler&quot;, method = RequestMethod.POST)
-	public List&lt;SchedulerData&gt; getRange(@RequestBody SchedulerForm form) throws ApiException {
-<span class="nc" id="L33">		return dto.getRange(form);</span>
+	public List&lt;SchedulerData&gt; getReportInRange(@RequestBody SchedulerForm schedulerForm) throws ApiException {
+<span class="nc" id="L26">		return schedulerDto.getReportInRange(schedulerForm);</span>
 	}
 
 }

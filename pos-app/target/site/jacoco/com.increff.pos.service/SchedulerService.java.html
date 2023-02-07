@@ -18,24 +18,24 @@ import com.increff.pos.pojo.SchedulerPojo;
 <span class="fc" id="L18">public class SchedulerService {</span>
 
 	@Autowired
-	private  SchedulerDao dao;
+	private  SchedulerDao schedulerDao;
 	
 
-	public void add(SchedulerPojo p) throws ApiException {
-<span class="fc" id="L25">		dao.insert(p); </span>
+	public void addReport(SchedulerPojo schedulerPojo) throws ApiException {
+<span class="fc" id="L25">		schedulerDao.insert(schedulerPojo);</span>
 <span class="fc" id="L26">	}</span>
 
 	public SchedulerPojo get(String date) throws ApiException {
-<span class="fc" id="L29">		return dao.select(date);</span>
+<span class="nc" id="L29">		return schedulerDao.select(date);</span>
 	}
 
-	public List&lt;SchedulerPojo&gt; getRange(String startDate,String endDate) throws ApiException {
+	public List&lt;SchedulerPojo&gt; getReportInRange(String startDate,String endDate) throws ApiException {
 <span class="nc bnc" id="L33" title="All 2 branches missed.">		if(startDate.compareTo(endDate)&gt;0){throw new ApiException(&quot;please select a valid time range&quot;);}</span>
 
 <span class="nc" id="L35">		Instant range = Instant.now().minus(Period.ofDays(365));</span>
 <span class="nc bnc" id="L36" title="All 2 branches missed.">		if(String.valueOf(range).compareTo(startDate+&quot;T00:00:00Z&quot;)&gt;0){throw new ApiException(&quot;Only one year is allowed for the reports&quot;);}</span>
 
-<span class="nc" id="L38">		return dao.selectRange(startDate,endDate);</span>
+<span class="nc" id="L38">		return schedulerDao.selectRange(startDate,endDate);</span>
 	}
 
 }

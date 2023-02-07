@@ -24,31 +24,31 @@ import io.swagger.annotations.ApiOperation;
 public class OrderApiController {
 
 	@Autowired
-	private  OrderDto dto;
+	private  OrderDto orderDto;
 
 	@ApiOperation(value = "Adds a Order")
 	@RequestMapping(path = "/api/orders", method = RequestMethod.POST)
-	public void add(@RequestBody List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-		int orderId = dto.add(form);
-		dto.generatedPdf(orderId);
+	public void addOrder(@RequestBody List<OrderItemForm> orderItemForms) throws ApiException, ParserConfigurationException, TransformerException, IOException {
+		int orderId = orderDto.addOrder(orderItemForms);
+		orderDto.generatedPdf(orderId);
 	}
 
 	@ApiOperation(value = "Gets a Order by ID")
-	@RequestMapping(path = "/api/orders/{id}", method = RequestMethod.GET)
-	public OrderData get(@PathVariable int id) throws ApiException {
-		return dto.get(id);
+	@RequestMapping(path = "/api/orders/{orderId}", method = RequestMethod.GET)
+	public OrderData getOrderById(@PathVariable int orderId) throws ApiException {
+		return orderDto.getOrderById(orderId);
 	}
 
 	@ApiOperation(value = "Gets list of all Orders")
 	@RequestMapping(path = "/api/orders", method = RequestMethod.GET)
-	public List<OrderData> getAll() {
-		return dto.getAll();
+	public List<OrderData> getAllOrders() {
+		return orderDto.getAllOrders();
 	}
 	
 	@ApiOperation(value = "Gets Pdf")
-	@RequestMapping(path = "/api/orders/download/{id}", method = RequestMethod.GET)
-	public void downloadPdf(@PathVariable int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
-		dto.downloadPdf(id, request, response);
+	@RequestMapping(path = "/api/orders/download/{orderId}", method = RequestMethod.GET)
+	public void downloadPdf(@PathVariable int orderId, HttpServletRequest request,HttpServletResponse response) throws ApiException {
+		orderDto.downloadPdf(orderId, request, response);
 	}
 	
 }

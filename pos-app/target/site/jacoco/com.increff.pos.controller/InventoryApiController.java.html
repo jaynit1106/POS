@@ -22,30 +22,25 @@ import io.swagger.annotations.ApiOperation;
 <span class="fc" id="L22">public class InventoryApiController {</span>
 
 	@Autowired
-	private InventoryDto dto;
+	private InventoryDto inventoryDto;
 
 	@ApiOperation(value = &quot;Adds a Product Quantity&quot;)
 	@RequestMapping(path = &quot;/api/inventorys&quot;, method = RequestMethod.POST)
-	public void add(@RequestBody InventoryForm form) throws ApiException {
-<span class="nc" id="L30">		dto.add(form);</span>
+	public void addInventory(@RequestBody InventoryForm inventoryForm) throws ApiException {
+<span class="nc" id="L30">		inventoryDto.addInventory(inventoryForm);</span>
 <span class="nc" id="L31">	}</span>
 
-	@ApiOperation(value = &quot;Gets a Product Quantity by ID&quot;)
-	@RequestMapping(path = &quot;/api/inventorys/{id}&quot;, method = RequestMethod.GET)
-	public InventoryData get(@PathVariable int id) throws ApiException {
-<span class="nc" id="L36">		return dto.get(id);</span>
-	}
 
 	@ApiOperation(value = &quot;Gets list of all products Quantity&quot;)
 	@RequestMapping(path = &quot;/api/inventorys&quot;, method = RequestMethod.GET)
-	public List&lt;InventoryData&gt; getAll() throws ApiException {
-<span class="nc" id="L42">		return dto.getAll();</span>
+	public List&lt;InventoryData&gt; getAllInventorys() throws ApiException {
+<span class="nc" id="L37">		return inventoryDto.getAllInventorys();</span>
 	}
 
 	@ApiOperation(value = &quot;Updates a product Quantity&quot;)
 	@RequestMapping(path = &quot;/api/inventorys/{id}&quot;, method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody InventoryForm form) throws ApiException {
-<span class="nc" id="L48">		dto.update(id, form);</span>
-<span class="nc" id="L49">	}</span>
+	public void update(@PathVariable int inventoryId, @RequestBody InventoryForm inventoryForm) throws ApiException {
+<span class="nc" id="L43">		inventoryDto.updateInventory(inventoryId, inventoryForm);</span>
+<span class="nc" id="L44">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -18,42 +18,42 @@ import io.swagger.annotations.ApiOperation;
 <span class="fc" id="L18">public class BrandApiController {</span>
 	
 	@Autowired
-	private BrandDto dto ;
+	private BrandDto brandDto ;
 
 	@ApiOperation(value = &quot;Adds an Brand&quot;)
 	@RequestMapping(path = &quot;/api/brands&quot;, method = RequestMethod.POST)
-	public void add(@RequestBody BrandForm form) throws ApiException {
-<span class="nc" id="L26">		dto.add(form);</span>
+	public void addBrand(@RequestBody BrandForm brandForm) throws ApiException {
+<span class="nc" id="L26">		brandDto.addBrand(brandForm);</span>
 <span class="nc" id="L27">	}</span>
 
 	@ApiOperation(value = &quot;Gets an brand by ID&quot;)
 	@RequestMapping(path = &quot;/api/brands/{id}&quot;, method = RequestMethod.GET)
-	public BrandData get(@PathVariable int id) throws ApiException {
-<span class="nc" id="L32">		return dto.get(id);</span>
+	public BrandData getBrandById(@PathVariable int brandId) throws ApiException {
+<span class="nc" id="L32">		return brandDto.getBrandById(brandId);</span>
 	}
 
 	@ApiOperation(value = &quot;gets all unique brand list&quot;)
 	@GetMapping(path = &quot;/api/brands/unique&quot;)
 	public List&lt;String&gt; getBrandList(){
-<span class="nc" id="L38">		return dto.getBrandList();</span>
+<span class="nc" id="L38">		return brandDto.getBrandList();</span>
 	}
 
 	@ApiOperation(value = &quot;gets all unique category list&quot;)
 	@GetMapping(path = &quot;/api/brands/unique/{brand}&quot;)
 	public List&lt;String&gt; getCategoryList(@PathVariable String brand){
-<span class="nc" id="L44">		return dto.getCategoryList(brand);</span>
+<span class="nc" id="L44">		return brandDto.getCategoryList(brand);</span>
 	}
 
 	@ApiOperation(value = &quot;Gets list of all Brands&quot;)
 	@RequestMapping(path = &quot;/api/brands&quot;, method = RequestMethod.GET)
-	public List&lt;BrandData&gt; getAll() {
-<span class="nc" id="L50">		return dto.getAll();</span>
+	public List&lt;BrandData&gt; getAllBrands() {
+<span class="nc" id="L50">		return brandDto.getAllBrands();</span>
 	}
 
 	@ApiOperation(value = &quot;Updates an Brand&quot;)
 	@RequestMapping(path = &quot;/api/brands/{id}&quot;, method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody BrandForm f) throws ApiException {
-<span class="nc" id="L56">		dto.update(id, f);</span>
+	public void update(@PathVariable int brandId, @RequestBody BrandForm brandForm) throws ApiException {
+<span class="nc" id="L56">		brandDto.updateBrand(brandId, brandForm);</span>
 <span class="nc" id="L57">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

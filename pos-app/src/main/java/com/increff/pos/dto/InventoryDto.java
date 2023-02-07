@@ -21,45 +21,37 @@ public class InventoryDto {
 
 	@Autowired
 	private InventoryService inventoryService;
-	
-	
+
 	@Autowired
-	private final ProductService productService = new ProductService();
+	private ProductService productService;
 	
-	public void add(@RequestBody InventoryForm form) throws ApiException {
-		InventoryPojo p = ConvertUtil.objectMapper(form, InventoryPojo.class);
+	public void addInventory(@RequestBody InventoryForm inventoryForm) throws ApiException {
+		InventoryPojo inventoryPojo = ConvertUtil.objectMapper(inventoryForm, InventoryPojo.class);
 
-		ProductPojo product = productService.getProductByBarcode(form.getBarcode());
-		p.setId(product.getId());
-		
+		ProductPojo productPojo = productService.getProductByBarcode(inventoryForm.getBarcode());
+		inventoryPojo.setId(productPojo.getId());
 
-		inventoryService.add(p);
+		inventoryService.addInventory(inventoryPojo);
 	}
+
 	
-	public InventoryData get(int id) throws ApiException {
-		InventoryPojo p = inventoryService.get(id);
-		InventoryData data =  ConvertUtil.objectMapper(p, InventoryData.class);
-		ProductPojo product = productService.get(id);
-		data.setBarcode(product.getBarcode());
-		data.setName(product.getName());
-		return  data;
-	}
-	
-	public List<InventoryData> getAll() throws ApiException {
-		List<InventoryPojo> list = inventoryService.getAll();
-		List<InventoryData> list2 = new ArrayList<>();
-		for (InventoryPojo p : list) {
-			InventoryData data =  ConvertUtil.objectMapper(p,InventoryData.class);
-			ProductPojo product = productService.get(p.getId());
-			data.setBarcode(product.getBarcode());
-			data.setName(product.getName());
-			list2.add(data);
+	public List<InventoryData> getAllInventorys() throws ApiException {
+		List<InventoryPojo> inventoryPojoList = inventoryService.getAllInventorys();
+		List<InventoryData> inventoryDataList = new ArrayList<>();
+		for (InventoryPojo inventoryPojo : inventoryPojoList) {
+			InventoryData inventoryData =  ConvertUtil.objectMapper(inventoryPojo,InventoryData.class);
+
+			ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());
+			inventoryData.setBarcode(productPojo.getBarcode());
+			inventoryData.setName(productPojo.getName());
+
+			inventoryDataList.add(inventoryData);
 		}
-		return list2;
+		return inventoryDataList;
 	}
 	
-	public void update(int id,InventoryForm form) throws ApiException {
-		InventoryPojo inventory = ConvertUtil.objectMapper(form, InventoryPojo.class);
-		inventoryService.update(id, inventory);
+	public void updateInventory(int inventoryId,InventoryForm inventoryForm) throws ApiException {
+		InventoryPojo inventoryPojo = ConvertUtil.objectMapper(inventoryForm, InventoryPojo.class);
+		inventoryService.updateInventory(inventoryId, inventoryPojo);
 	}
 }

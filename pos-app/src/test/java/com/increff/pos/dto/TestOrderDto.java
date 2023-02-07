@@ -4,6 +4,7 @@ import com.increff.pos.dao.*;
 import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.model.form.OrderItemForm;
 import com.increff.pos.pojo.BrandPojo;
+import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.util.PojoUtil;
@@ -43,23 +44,23 @@ public class TestOrderDto extends  AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
         //add order
         orderDao.insert(PojoUtil.getOrderPojo());
 
         //add order-item
         List<OrderItemForm> lists = new ArrayList<>();
         lists.add(PojoUtil.getOrderItemForm(11,"abcdabcd",20));
-        orderDto.add(lists);
+        orderDto.addOrder(lists);
 
         //checking the order-item
-        List<OrderItemData> list = orderItemDto.getAll();
-        assertEquals(list.get(0).getOrderId(),orderDto.getAll().get(0).getId());
+        List<OrderItemData> list = orderItemDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
+        assertEquals(list.get(0).getOrderId(),orderDto.getAllOrders().get(0).getId());
         assertEquals(list.get(0).getQuantity(),11);
         assertEquals(new Double(list.get(0).getSellingPrice()),(Double) 20.0,0);
-        assertEquals(list.get(0).getProductId(),productDto.getAll().get(0).getId());
+        assertEquals(list.get(0).getProductId(),productDto.getAllProducts().get(0).getId());
     }
 
     @Test
@@ -67,9 +68,9 @@ public class TestOrderDto extends  AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
         //add order
         orderDao.insert(PojoUtil.getOrderPojo());
         //add order-item
@@ -79,14 +80,14 @@ public class TestOrderDto extends  AbstractUnitTest{
         exceptionRule.expectMessage("Please Enter a Valid Quantity for abcdabcd");
         List<OrderItemForm> list = new ArrayList<>();
         list.add(PojoUtil.getOrderItemForm(-20,"abcdabcd",20));
-        orderDto.add(list);
+        orderDto.addOrder(list);
 
         //checking for API exception for invalid sellingPrice
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Prodjuct already Exists");
         list = new ArrayList<>();
         list.add(PojoUtil.getOrderItemForm(10,"abcdabcd",-100));
-        orderDto.add(list);
+        orderDto.addOrder(list);
 
     }
 
@@ -95,9 +96,9 @@ public class TestOrderDto extends  AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
         //add order
         orderDao.insert(PojoUtil.getOrderPojo());
         //add order-item
@@ -108,7 +109,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         exceptionRule.expectMessage("Please Enter a Valid Price for abcdabcd");
         List<OrderItemForm> list = new ArrayList<>();
         list.add(PojoUtil.getOrderItemForm(10,"abcdabcd",-100));
-        orderDto.add(list);
+        orderDto.addOrder(list);
 
     }
 
@@ -117,9 +118,9 @@ public class TestOrderDto extends  AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
         //add order
         orderDao.insert(PojoUtil.getOrderPojo());
 
@@ -129,7 +130,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         exceptionRule.expectMessage("Product abcdabce Does Not exists");
         List<OrderItemForm> list = new ArrayList<>();
         list.add(PojoUtil.getOrderItemForm(10,"abcdabce",100));
-        orderDto.add(list);
+        orderDto.addOrder(list);
 
     }
 
@@ -138,9 +139,9 @@ public class TestOrderDto extends  AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
         //add order
         orderDao.insert(PojoUtil.getOrderPojo());
         //add order-item
@@ -151,7 +152,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         exceptionRule.expectMessage("[{\"abcdabcd\":\"Only 100 pieces left for abcdabcd\"}]");
         List<OrderItemForm> list = new ArrayList<>();
         list.add(PojoUtil.getOrderItemForm(120,"abcdabcd",20));
-        orderDto.add(list);
+        orderDto.addOrder(list);
     }
 
     @Test
@@ -166,7 +167,7 @@ public class TestOrderDto extends  AbstractUnitTest{
 
         //checking creating the pdf part
         try {
-            int id = orderDto.add(list);
+            int id = orderDto.addOrder(list);
             orderDto.generatedPdf(id);
         } catch (ParserConfigurationException e) {
             Assert.fail();
@@ -177,6 +178,12 @@ public class TestOrderDto extends  AbstractUnitTest{
         } catch (ApiException e) {
             Assert.fail();
         }
+    }
+
+    @Test
+    public void testGetOrderById() throws ApiException {
+        orderDao.insert(PojoUtil.getOrderPojo());
+        Assert.assertNotNull(orderDto.getOrderById(orderDao.selectAll(OrderPojo.class).get(0).getId()));
     }
 
 }

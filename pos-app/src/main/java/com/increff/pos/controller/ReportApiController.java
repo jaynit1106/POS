@@ -25,23 +25,23 @@ import io.swagger.annotations.ApiOperation;
 public class ReportApiController {
 
 	@Autowired
-	private ReportsDto dto;
+	private ReportsDto reportsDto;
 
 	@ApiOperation(value = "gives inventory report")
 	@RequestMapping(path = "/api/reports/inventory", method = RequestMethod.POST)
-	public List<InventoryReportData> getInventoryReport(@RequestBody InventoryReportForm form) throws ApiException {
-		return dto.getInventoryReport(form);
+	public List<InventoryReportData> getInventoryReport(@RequestBody InventoryReportForm inventoryReportForm) throws ApiException {
+		return reportsDto.getInventoryReport(inventoryReportForm);
 	}
 	
 	@ApiOperation(value = "gives sales report")
 	@RequestMapping(path = "/api/reports/sales", method = RequestMethod.POST)
-	public List<SalesReportData> getSalesReport(@RequestBody SalesReportForm form) throws ApiException{
-		return dto.getSalesReport(form);
+	public List<SalesReportData> getSalesReport(@RequestBody SalesReportForm salesReportForm) throws ApiException{
+		return reportsDto.getSalesReport(salesReportForm);
 	}
 
 	@ApiOperation(value = "gives sales report")
 	@RequestMapping(path = "/api/reports/brand", method = RequestMethod.POST)
-	public List<BrandReportData> getBrandReport(@RequestBody BrandReportForm form){
-		return dto.getBrandReport(form);
+	public List<BrandReportData> getBrandReport(@RequestBody BrandReportForm brandReportForm){
+		return reportsDto.getBrandReport(brandReportForm);
 	}
 }

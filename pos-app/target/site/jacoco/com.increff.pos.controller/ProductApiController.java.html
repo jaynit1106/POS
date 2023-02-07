@@ -18,36 +18,30 @@ import io.swagger.annotations.ApiOperation;
 <span class="fc" id="L18">public class ProductApiController {</span>
 
 	@Autowired
-	private ProductDto dto;
+	private ProductDto productDto;
 
 	@ApiOperation(value = &quot;Adds a Product&quot;)
 	@RequestMapping(path = &quot;/api/products&quot;, method = RequestMethod.POST)
-	public void add(@RequestBody ProductForm form) throws ApiException {
-<span class="nc" id="L26">		dto.add(form);</span>
+	public void addProduct(@RequestBody ProductForm productForm) throws ApiException {
+<span class="nc" id="L26">		productDto.addProduct(productForm);</span>
 <span class="nc" id="L27">	}</span>
-
-	@ApiOperation(value = &quot;Gets a Product by ID&quot;)
-	@RequestMapping(path = &quot;/api/products/{id}&quot;, method = RequestMethod.GET)
-	public ProductData get(@PathVariable int id) throws ApiException {
-<span class="nc" id="L32">		return dto.get(id);</span>
-	}
 
 	@ApiOperation(value = &quot;Gets list of all products&quot;)
 	@RequestMapping(path = &quot;/api/products&quot;, method = RequestMethod.GET)
-	public List&lt;ProductData&gt; getAll() throws ApiException {
-<span class="nc" id="L38">		return dto.getAll();</span>
+	public List&lt;ProductData&gt; getAllProducts() throws ApiException {
+<span class="nc" id="L32">		return productDto.getAllProducts();</span>
 	}
 
 	@ApiOperation(value = &quot;Updates a product&quot;)
 	@RequestMapping(path = &quot;/api/products/{id}&quot;, method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody ProductForm form) throws ApiException {
-<span class="nc" id="L44">		dto.update(id, form);</span>
-<span class="nc" id="L45">	}</span>
+	public void updateProduct(@PathVariable int productId, @RequestBody ProductForm productForm) throws ApiException {
+<span class="nc" id="L38">		productDto.updateProduct(productId, productForm);</span>
+<span class="nc" id="L39">	}</span>
 
 	@ApiOperation(value = &quot;Get Barcode List&quot;)
 	@GetMapping(path = &quot;/api/products/barcode&quot;)
 	public List&lt;String&gt; getBarcodeList(){
-<span class="nc" id="L50">		return dto.getBarcodeList();</span>
+<span class="nc" id="L44">		return productDto.getBarcodeList();</span>
 	}
 	
 

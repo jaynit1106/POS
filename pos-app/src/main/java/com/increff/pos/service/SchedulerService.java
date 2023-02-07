@@ -18,24 +18,24 @@ import com.increff.pos.pojo.SchedulerPojo;
 public class SchedulerService {
 
 	@Autowired
-	private  SchedulerDao dao;
+	private  SchedulerDao schedulerDao;
 	
 
-	public void add(SchedulerPojo p) throws ApiException {
-		dao.insert(p); 
+	public void addReport(SchedulerPojo schedulerPojo) throws ApiException {
+		schedulerDao.insert(schedulerPojo);
 	}
 
 	public SchedulerPojo get(String date) throws ApiException {
-		return dao.select(date);
+		return schedulerDao.select(date);
 	}
 
-	public List<SchedulerPojo> getRange(String startDate,String endDate) throws ApiException {
+	public List<SchedulerPojo> getReportInRange(String startDate,String endDate) throws ApiException {
 		if(startDate.compareTo(endDate)>0){throw new ApiException("please select a valid time range");}
 
 		Instant range = Instant.now().minus(Period.ofDays(365));
 		if(String.valueOf(range).compareTo(startDate+"T00:00:00Z")>0){throw new ApiException("Only one year is allowed for the reports");}
 
-		return dao.selectRange(startDate,endDate);
+		return schedulerDao.selectRange(startDate,endDate);
 	}
 
 }

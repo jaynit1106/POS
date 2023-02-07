@@ -23,31 +23,21 @@ public class OrderItemDto {
 	private  ProductService productService;
 
 
-	public OrderItemData get(int id) throws ApiException {
-		return ConvertUtil.objectMapper(orderItemService.get(id),OrderItemData.class);
-	}
-	
-	public List<OrderItemData> getAll() {
-		List<OrderItemPojo> list = orderItemService.getAll();
-		List<OrderItemData> list2 = new ArrayList<>();
-		for (OrderItemPojo p : list) {
-			list2.add(ConvertUtil.objectMapper(p,OrderItemData.class));
-		}
-		return list2;
-	}
-
-	
 	public List<OrderItemData> getOrderItemByOrderID(int id) throws ApiException {
-		List<OrderItemPojo> list = orderItemService.getOrderItemByOrderId(id);
-		List<OrderItemData> items = new ArrayList<>();
-		for(OrderItemPojo p : list) {
-			OrderItemData item = ConvertUtil.objectMapper(p, OrderItemData.class);
-			ProductPojo product = productService.get(p.getProductId());
-			item.setSellingPrice(String.format("%.2f", new BigDecimal(p.getSellingPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue()));
-			item.setBarcode(product.getBarcode());
-			item.setName(product.getName());
-			items.add(item);
+		List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemByOrderId(id);
+		List<OrderItemData> orderItemDataList = new ArrayList<>();
+
+		for(OrderItemPojo orderItemPojo : orderItemPojoList) {
+			OrderItemData orderItemData = ConvertUtil.objectMapper(orderItemPojo, OrderItemData.class);
+
+			ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
+			orderItemData.setSellingPrice(String.format("%.2f", new BigDecimal(orderItemPojo.getSellingPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue()));
+			orderItemData.setBarcode(productPojo.getBarcode());
+			orderItemData.setName(productPojo.getName());
+
+			orderItemDataList.add(orderItemData);
 		}
-		return items;
+
+		return orderItemDataList;
 	}
 }

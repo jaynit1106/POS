@@ -27,17 +27,17 @@ public class TestOrderService extends AbstractUnitTest{
     @Test
     public void testAdd() throws ApiException {
         //checking the add operation
-        orderService.add(PojoUtil.getOrderPojo());
-        List<OrderPojo> list = orderService.getAll();
+        orderService.addOrder(PojoUtil.getOrderPojo());
+        List<OrderPojo> list = orderService.getAllOrders();
         assertEquals(list.size(),1);
     }
 
     @Test
     public void testGetById() throws ApiException {
-        orderService.add(PojoUtil.getOrderPojo());
-        List<OrderPojo> list = orderService.getAll();
+        orderService.addOrder(PojoUtil.getOrderPojo());
+        List<OrderPojo> list = orderService.getAllOrders();
 
-        OrderPojo data = orderService.get(list.get(0).getId());
+        OrderPojo data = orderService.getOrderById(list.get(0).getId());
         assertEquals(data.getId(),list.get(0).getId());
         assertEquals(data.getTimestamp(),list.get(0).getTimestamp());
 
@@ -45,18 +45,18 @@ public class TestOrderService extends AbstractUnitTest{
 
     @Test
     public void testGetAll() throws ApiException {
-        orderService.add(PojoUtil.getOrderPojo());
-        orderService.add(PojoUtil.getOrderPojo());
-        orderService.add(PojoUtil.getOrderPojo());
+        orderService.addOrder(PojoUtil.getOrderPojo());
+        orderService.addOrder(PojoUtil.getOrderPojo());
+        orderService.addOrder(PojoUtil.getOrderPojo());
 
-        List<OrderPojo> list = orderService.getAll();
+        List<OrderPojo> list = orderService.getAllOrders();
         assertEquals(list.size(),3);
     }
 
     @Test
     public void testGetCheck(){
         try {
-            orderService.getCheck(1000);
+            orderService.getOrderById(1000);
         }catch (ApiException e){
             return;
         }
@@ -65,11 +65,11 @@ public class TestOrderService extends AbstractUnitTest{
 
     @Test
     public void testSelectRange() throws ApiException {
-        orderService.add(PojoUtil.getOrderPojo());
-        orderService.add(PojoUtil.getOrderPojo());
-        orderService.add(PojoUtil.getOrderPojo());
+        orderService.addOrder(PojoUtil.getOrderPojo());
+        orderService.addOrder(PojoUtil.getOrderPojo());
+        orderService.addOrder(PojoUtil.getOrderPojo());
 
-        List<OrderPojo> list = orderService.selectRange(Instant.parse("2022-01-11T00:00:00Z"),Instant.parse("2024-01-11T00:00:00Z"));
+        List<OrderPojo> list = orderService.selectOrdersInRange(Instant.parse("2022-01-11T00:00:00Z"),Instant.parse("2024-01-11T00:00:00Z"));
         assertEquals(list.size(),3);
     }
 

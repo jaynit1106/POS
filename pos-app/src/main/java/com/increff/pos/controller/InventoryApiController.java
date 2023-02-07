@@ -22,29 +22,24 @@ import io.swagger.annotations.ApiOperation;
 public class InventoryApiController {
 
 	@Autowired
-	private InventoryDto dto;
+	private InventoryDto inventoryDto;
 
 	@ApiOperation(value = "Adds a Product Quantity")
 	@RequestMapping(path = "/api/inventorys", method = RequestMethod.POST)
-	public void add(@RequestBody InventoryForm form) throws ApiException {
-		dto.add(form);
+	public void addInventory(@RequestBody InventoryForm inventoryForm) throws ApiException {
+		inventoryDto.addInventory(inventoryForm);
 	}
 
-	@ApiOperation(value = "Gets a Product Quantity by ID")
-	@RequestMapping(path = "/api/inventorys/{id}", method = RequestMethod.GET)
-	public InventoryData get(@PathVariable int id) throws ApiException {
-		return dto.get(id);
-	}
 
 	@ApiOperation(value = "Gets list of all products Quantity")
 	@RequestMapping(path = "/api/inventorys", method = RequestMethod.GET)
-	public List<InventoryData> getAll() throws ApiException {
-		return dto.getAll();
+	public List<InventoryData> getAllInventorys() throws ApiException {
+		return inventoryDto.getAllInventorys();
 	}
 
 	@ApiOperation(value = "Updates a product Quantity")
-	@RequestMapping(path = "/api/inventorys/{id}", method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody InventoryForm form) throws ApiException {
-		dto.update(id, form);
+	@RequestMapping(path = "/api/inventorys/{inventoryId}", method = RequestMethod.PUT)
+	public void update(@PathVariable int inventoryId, @RequestBody InventoryForm inventoryForm) throws ApiException {
+		inventoryDto.updateInventory(inventoryId, inventoryForm);
 	}
 }

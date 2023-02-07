@@ -36,39 +36,42 @@ public class SchedulerDto {
 	private static Logger logger = Logger.getLogger(SchedulerDto.class);
 
 	@Scheduled(cron = "00 00 12 * * *")
-	public void add() throws ApiException{
-		SchedulerPojo p = new SchedulerPojo();
-		p.setDate(TimestampUtil.getTimestamp().substring(0,10));
-		List<OrderPojo> list = orderService.selectRange(Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+"T00:00:00Z"),Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+"T23:59:59Z"));
-		p.setInvoiced_orders_count(list.size());
+	public void addReport() throws ApiException{
+
+		SchedulerPojo schedulerPojo = new SchedulerPojo();
+		schedulerPojo.setDate(TimestampUtil.getTimestamp().substring(0,10));
+
+		List<OrderPojo> orderPojoList = orderService.selectOrdersInRange(Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+"T00:00:00Z"),Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+"T23:59:59Z"));
+		schedulerPojo.setInvoiced_orders_count(orderPojoList.size());
+
 		double revenue = 0;
 		Integer totalItems = 0;
-		for(OrderPojo order : list){
-			List<OrderItemPojo> item = orderItemService.getOrderItemByOrderId(order.getId());
-			for(OrderItemPojo pojo : item){
-				totalItems+=pojo.getQuantity();
-				revenue+=(pojo.getQuantity()*pojo.getSellingPrice());
+
+		for(OrderPojo orderPojo : orderPojoList){
+			List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemByOrderId(orderPojo.getId());
+			for(OrderItemPojo orderItemPojo : orderItemPojoList){
+				totalItems+=orderItemPojo.getQuantity();
+				revenue+=(orderItemPojo.getQuantity()*orderItemPojo.getSellingPrice());
 			}
 		}
-		p.setTotal_revenue(revenue);
-		p.setInvoiced_items_count(totalItems);
-		schedulerService.add(p);
+
+		schedulerPojo.setTotal_revenue(revenue);
+		schedulerPojo.setInvoiced_items_count(totalItems);
+
+		schedulerService.addReport(schedulerPojo);
 		logger.info("Created Daily report at "+ Instant.now());
 	}
-	
-	public SchedulerData get(String date) throws ApiException {
-		SchedulerPojo p = schedulerService.get(date);
-		return ConvertUtil.objectMapper(p, SchedulerData.class);
-	}
-	
-	public List<SchedulerData> getRange(SchedulerForm form) throws ApiException {
-		List<SchedulerPojo> list = schedulerService.getRange(form.getStartDate(),form.getEndDate());
-		List<SchedulerData> list2 = new ArrayList<>();
-		for (SchedulerPojo p : list) {
-			list2.add(ConvertUtil.objectMapper(p, SchedulerData.class));
+
+	public List<SchedulerData> getReportInRange(SchedulerForm schedulerForm) throws ApiException {
+		List<SchedulerPojo> schedulerPojoList = schedulerService.getReportInRange(schedulerForm.getStartDate(),schedulerForm.getEndDate());
+		List<SchedulerData> schedulerDataList = new ArrayList<>();
+
+		for (SchedulerPojo schedulerPojo : schedulerPojoList) {
+			schedulerDataList.add(ConvertUtil.objectMapper(schedulerPojo, SchedulerData.class));
 		}
-		Collections.reverse(list2);
-		return list2;
+
+		Collections.reverse(schedulerDataList);
+		return schedulerDataList;
 	}
 
 }

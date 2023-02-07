@@ -23,7 +23,7 @@ public class TestBrandDto extends AbstractUnitTest{
 
     //Testing The CRUD Operations
     @Test
-    public void testAddAndGetAll() throws ApiException {
+    public void testAddAndgetAllBrands() throws ApiException {
         String brand = "testBrand";
         String category = "testCategory";
 
@@ -32,7 +32,7 @@ public class TestBrandDto extends AbstractUnitTest{
         brandDao.insert(p);
 
         //Verifying the getAll operation
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
         assertEquals(list.get(0).getBrand(),brand);
         assertEquals(list.get(0).getCategory(),category);
     }
@@ -43,10 +43,10 @@ public class TestBrandDto extends AbstractUnitTest{
 
         BrandPojo p = PojoUtil.getBrandPojo(brand,category);
         brandDao.insert(p);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //Verifying the getById operation
-        BrandData data = brandDto.get(list.get(0).getId());
+        BrandData data = brandDto.getBrandById(list.get(0).getId());
         assertEquals(data.getBrand(),brand);
         assertEquals(data.getCategory(),category);
 
@@ -59,14 +59,14 @@ public class TestBrandDto extends AbstractUnitTest{
         BrandPojo p = PojoUtil.getBrandPojo(brand,category);
         brandDao.insert(p);
 
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //Verifying the Update function
         brand="brand";
         category="category";
         int id = list.get(0).getId();
-        brandDto.update(list.get(0).getId(),PojoUtil.getBrandForm(brand,category));
-        list = brandDto.getAll();
+        brandDto.updateBrand(list.get(0).getId(),PojoUtil.getBrandForm(brand,category));
+        list = brandDto.getAllBrands();
         assertEquals(list.get(0).getBrand(),brand);
         assertEquals(list.get(0).getCategory(),category);
         assertEquals(list.get(0).getId(),id);
@@ -82,7 +82,7 @@ public class TestBrandDto extends AbstractUnitTest{
         BrandForm f = PojoUtil.getBrandForm("brand","category");
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Brand and Category already exists");
-        brandDto.add(f);
+        brandDto.addBrand(f);
 
     }
 
@@ -92,18 +92,18 @@ public class TestBrandDto extends AbstractUnitTest{
         brandDao.insert(p);
 
         //Check Uniqueness at the time of update
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
         BrandForm form = PojoUtil.getBrandForm("brand","category");
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Brand and Category already exists");
-        brandDto.update(list.get(0).getId(),form);
+        brandDto.updateBrand(list.get(0).getId(),form);
     }
     @Test
     public void testEmptyExceptions() throws ApiException {
         //checking for empty constraints
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Brand cannot be empty");
-        brandDto.add(PojoUtil.getBrandForm("","category"));
+        brandDto.addBrand(PojoUtil.getBrandForm("","category"));
     }
 
     @Test

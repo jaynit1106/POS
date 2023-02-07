@@ -26,53 +26,42 @@ public class ProductDto {
 	@Autowired
 	private  BrandService brandService ;
 	
-	public void add(ProductForm form) throws ApiException {
-		StringUtil.normalise(form,ProductForm.class);
-		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);
-		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
+	public void addProduct(ProductForm productForm) throws ApiException {
+		StringUtil.normalise(productForm,ProductForm.class);
+		ProductPojo productPojo = ConvertUtil.objectMapper(productForm, ProductPojo.class);
 
-		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());
-		p.setBrandId(brand.getId());
+		productPojo.setMrp(BigDecimal.valueOf(productForm.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
+		BrandPojo brand = brandService.getBrandByNameAndCategory(productForm.getBrand(), productForm.getCategory());
+		productPojo.setBrandId(brand.getId());
 
-		productService.add(p);
+		productService.add(productPojo);
 	}
-	
-	public ProductData get(int id) throws ApiException {
-		ProductPojo product = productService.get(id);
-		ProductData data = ConvertUtil.objectMapper(product, ProductData.class);
-		data.setMrp(StringUtil.convertMrp(product.getMrp()));
-		
-		BrandPojo brand = brandService.get(product.getBrandId());
-		data.setCategory(brand.getCategory());
-		data.setBrand(brand.getBrand());
 
-		return data;
-	}
-	
-	public List<ProductData> getAll() throws ApiException{
-		List<ProductPojo> list = productService.getAll();
-		List<ProductData> list2 = new ArrayList<>();
-		for (ProductPojo p : list) {
+	public List<ProductData> getAllProducts() throws ApiException{
+		List<ProductPojo> productPojoList = productService.getAllProducts();
+		List<ProductData> productDataList = new ArrayList<>();
+		for (ProductPojo productPojo : productPojoList) {
 			
-			ProductData data = ConvertUtil.objectMapper(p, ProductData.class);
-			data.setMrp(StringUtil.convertMrp(p.getMrp()));
+			ProductData productData = ConvertUtil.objectMapper(productPojo, ProductData.class);
+			productData.setMrp(StringUtil.convertMrp(productPojo.getMrp()));
 			
-			BrandPojo brand = brandService.get(p.getBrandId());
-			data.setCategory(brand.getCategory());
-			data.setBrand(brand.getBrand());
-			list2.add(data);
+			BrandPojo brand = brandService.getBrandById(productPojo.getBrandId());
+			productData.setCategory(brand.getCategory());
+			productData.setBrand(brand.getBrand());
+
+			productDataList.add(productData);
 		}
-		return list2;
+		return productDataList;
 	}
 	
-	public void update(int id,ProductForm form) throws ApiException {
-		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);
-		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
+	public void updateProduct(int productId,ProductForm productForm) throws ApiException {
+		ProductPojo productPojo = ConvertUtil.objectMapper(productForm, ProductPojo.class);
+		productPojo.setMrp(BigDecimal.valueOf(productForm.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
 
-		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());
-		p.setBrandId(brand.getId());
+		BrandPojo brandPojo = brandService.getBrandByNameAndCategory(productForm.getBrand(),productForm.getCategory());
+		productPojo.setBrandId(brandPojo.getId());
 		
-		productService.update(id,p);
+		productService.updateProduct(productId,productPojo);
 	}
 
 	public List<String> getBarcodeList(){return productService.getBarcodeList();}

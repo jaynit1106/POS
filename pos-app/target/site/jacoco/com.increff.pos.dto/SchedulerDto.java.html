@@ -36,39 +36,42 @@ import com.increff.pos.util.TimestampUtil;
 <span class="fc" id="L36">	private static Logger logger = Logger.getLogger(SchedulerDto.class);</span>
 
 	@Scheduled(cron = &quot;00 00 12 * * *&quot;)
-	public void add() throws ApiException{
-<span class="fc" id="L40">		SchedulerPojo p = new SchedulerPojo();</span>
-<span class="fc" id="L41">		p.setDate(TimestampUtil.getTimestamp().substring(0,10));</span>
-<span class="fc" id="L42">		List&lt;OrderPojo&gt; list = orderService.selectRange(Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T00:00:00Z&quot;),Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T23:59:59Z&quot;));</span>
-<span class="fc" id="L43">		p.setInvoiced_orders_count(list.size());</span>
-<span class="fc" id="L44">		double revenue = 0;</span>
-<span class="fc" id="L45">		Integer totalItems = 0;</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">		for(OrderPojo order : list){</span>
-<span class="fc" id="L47">			List&lt;OrderItemPojo&gt; item = orderItemService.getOrderItemByOrderId(order.getId());</span>
-<span class="fc bfc" id="L48" title="All 2 branches covered.">			for(OrderItemPojo pojo : item){</span>
-<span class="fc" id="L49">				totalItems+=pojo.getQuantity();</span>
-<span class="fc" id="L50">				revenue+=(pojo.getQuantity()*pojo.getSellingPrice());</span>
-<span class="fc" id="L51">			}</span>
-<span class="fc" id="L52">		}</span>
-<span class="fc" id="L53">		p.setTotal_revenue(revenue);</span>
-<span class="fc" id="L54">		p.setInvoiced_items_count(totalItems);</span>
-<span class="fc" id="L55">		schedulerService.add(p);</span>
-<span class="fc" id="L56">		logger.info(&quot;Created Daily report at &quot;+ Instant.now());</span>
-<span class="fc" id="L57">	}</span>
-	
-	public SchedulerData get(String date) throws ApiException {
-<span class="fc" id="L60">		SchedulerPojo p = schedulerService.get(date);</span>
-<span class="fc" id="L61">		return ConvertUtil.objectMapper(p, SchedulerData.class);</span>
-	}
-	
-	public List&lt;SchedulerData&gt; getRange(SchedulerForm form) throws ApiException {
-<span class="nc" id="L65">		List&lt;SchedulerPojo&gt; list = schedulerService.getRange(form.getStartDate(),form.getEndDate());</span>
-<span class="nc" id="L66">		List&lt;SchedulerData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">		for (SchedulerPojo p : list) {</span>
-<span class="nc" id="L68">			list2.add(ConvertUtil.objectMapper(p, SchedulerData.class));</span>
-<span class="nc" id="L69">		}</span>
-<span class="nc" id="L70">		Collections.reverse(list2);</span>
-<span class="nc" id="L71">		return list2;</span>
+	public void addReport() throws ApiException{
+
+<span class="fc" id="L41">		SchedulerPojo schedulerPojo = new SchedulerPojo();</span>
+<span class="fc" id="L42">		schedulerPojo.setDate(TimestampUtil.getTimestamp().substring(0,10));</span>
+
+<span class="fc" id="L44">		List&lt;OrderPojo&gt; orderPojoList = orderService.selectOrdersInRange(Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T00:00:00Z&quot;),Instant.parse(TimestampUtil.getTimestamp().substring(0,10)+&quot;T23:59:59Z&quot;));</span>
+<span class="fc" id="L45">		schedulerPojo.setInvoiced_orders_count(orderPojoList.size());</span>
+
+<span class="fc" id="L47">		double revenue = 0;</span>
+<span class="fc" id="L48">		Integer totalItems = 0;</span>
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		for(OrderPojo orderPojo : orderPojoList){</span>
+<span class="fc" id="L51">			List&lt;OrderItemPojo&gt; orderItemPojoList = orderItemService.getOrderItemByOrderId(orderPojo.getId());</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">			for(OrderItemPojo orderItemPojo : orderItemPojoList){</span>
+<span class="fc" id="L53">				totalItems+=orderItemPojo.getQuantity();</span>
+<span class="fc" id="L54">				revenue+=(orderItemPojo.getQuantity()*orderItemPojo.getSellingPrice());</span>
+<span class="fc" id="L55">			}</span>
+<span class="fc" id="L56">		}</span>
+
+<span class="fc" id="L58">		schedulerPojo.setTotal_revenue(revenue);</span>
+<span class="fc" id="L59">		schedulerPojo.setInvoiced_items_count(totalItems);</span>
+
+<span class="fc" id="L61">		schedulerService.addReport(schedulerPojo);</span>
+<span class="fc" id="L62">		logger.info(&quot;Created Daily report at &quot;+ Instant.now());</span>
+<span class="fc" id="L63">	}</span>
+
+	public List&lt;SchedulerData&gt; getReportInRange(SchedulerForm schedulerForm) throws ApiException {
+<span class="nc" id="L66">		List&lt;SchedulerPojo&gt; schedulerPojoList = schedulerService.getReportInRange(schedulerForm.getStartDate(),schedulerForm.getEndDate());</span>
+<span class="nc" id="L67">		List&lt;SchedulerData&gt; schedulerDataList = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		for (SchedulerPojo schedulerPojo : schedulerPojoList) {</span>
+<span class="nc" id="L70">			schedulerDataList.add(ConvertUtil.objectMapper(schedulerPojo, SchedulerData.class));</span>
+<span class="nc" id="L71">		}</span>
+
+<span class="nc" id="L73">		Collections.reverse(schedulerDataList);</span>
+<span class="nc" id="L74">		return schedulerDataList;</span>
 	}
 
 }

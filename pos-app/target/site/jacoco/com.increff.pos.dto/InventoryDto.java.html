@@ -21,46 +21,38 @@ import com.increff.pos.util.ConvertUtil;
 
 	@Autowired
 	private InventoryService inventoryService;
-	
-	
-<span class="fc" id="L26">	@Autowired</span>
-	private final ProductService productService = new ProductService();
-	
-	public void add(@RequestBody InventoryForm form) throws ApiException {
-<span class="fc" id="L30">		InventoryPojo p = ConvertUtil.objectMapper(form, InventoryPojo.class);</span>
 
-<span class="fc" id="L32">		ProductPojo product = productService.getProductByBarcode(form.getBarcode());</span>
-<span class="fc" id="L33">		p.setId(product.getId());</span>
-		
-
-<span class="fc" id="L36">		inventoryService.add(p);</span>
-<span class="fc" id="L37">	}</span>
+	@Autowired
+	private ProductService productService;
 	
-	public InventoryData get(int id) throws ApiException {
-<span class="fc" id="L40">		InventoryPojo p = inventoryService.get(id);</span>
-<span class="fc" id="L41">		InventoryData data =  ConvertUtil.objectMapper(p, InventoryData.class);</span>
-<span class="fc" id="L42">		ProductPojo product = productService.get(id);</span>
-<span class="fc" id="L43">		data.setBarcode(product.getBarcode());</span>
-<span class="fc" id="L44">		data.setName(product.getName());</span>
-<span class="fc" id="L45">		return  data;</span>
+	public void addInventory(@RequestBody InventoryForm inventoryForm) throws ApiException {
+<span class="fc" id="L29">		InventoryPojo inventoryPojo = ConvertUtil.objectMapper(inventoryForm, InventoryPojo.class);</span>
+
+<span class="fc" id="L31">		ProductPojo productPojo = productService.getProductByBarcode(inventoryForm.getBarcode());</span>
+<span class="fc" id="L32">		inventoryPojo.setId(productPojo.getId());</span>
+
+<span class="fc" id="L34">		inventoryService.addInventory(inventoryPojo);</span>
+<span class="fc" id="L35">	}</span>
+
+	
+	public List&lt;InventoryData&gt; getAllInventorys() throws ApiException {
+<span class="fc" id="L39">		List&lt;InventoryPojo&gt; inventoryPojoList = inventoryService.getAllInventorys();</span>
+<span class="fc" id="L40">		List&lt;InventoryData&gt; inventoryDataList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		for (InventoryPojo inventoryPojo : inventoryPojoList) {</span>
+<span class="fc" id="L42">			InventoryData inventoryData =  ConvertUtil.objectMapper(inventoryPojo,InventoryData.class);</span>
+
+<span class="fc" id="L44">			ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());</span>
+<span class="fc" id="L45">			inventoryData.setBarcode(productPojo.getBarcode());</span>
+<span class="fc" id="L46">			inventoryData.setName(productPojo.getName());</span>
+
+<span class="fc" id="L48">			inventoryDataList.add(inventoryData);</span>
+<span class="fc" id="L49">		}</span>
+<span class="fc" id="L50">		return inventoryDataList;</span>
 	}
 	
-	public List&lt;InventoryData&gt; getAll() throws ApiException {
-<span class="fc" id="L49">		List&lt;InventoryPojo&gt; list = inventoryService.getAll();</span>
-<span class="fc" id="L50">		List&lt;InventoryData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">		for (InventoryPojo p : list) {</span>
-<span class="fc" id="L52">			InventoryData data =  ConvertUtil.objectMapper(p,InventoryData.class);</span>
-<span class="fc" id="L53">			ProductPojo product = productService.get(p.getId());</span>
-<span class="fc" id="L54">			data.setBarcode(product.getBarcode());</span>
-<span class="fc" id="L55">			data.setName(product.getName());</span>
-<span class="fc" id="L56">			list2.add(data);</span>
-<span class="fc" id="L57">		}</span>
-<span class="fc" id="L58">		return list2;</span>
-	}
-	
-	public void update(int id,InventoryForm form) throws ApiException {
-<span class="fc" id="L62">		InventoryPojo inventory = ConvertUtil.objectMapper(form, InventoryPojo.class);</span>
-<span class="fc" id="L63">		inventoryService.update(id, inventory);</span>
-<span class="fc" id="L64">	}</span>
+	public void updateInventory(int inventoryId,InventoryForm inventoryForm) throws ApiException {
+<span class="fc" id="L54">		InventoryPojo inventoryPojo = ConvertUtil.objectMapper(inventoryForm, InventoryPojo.class);</span>
+<span class="fc" id="L55">		inventoryService.updateInventory(inventoryId, inventoryPojo);</span>
+<span class="fc" id="L56">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

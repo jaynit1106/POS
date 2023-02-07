@@ -13,7 +13,7 @@ import com.increff.pos.pojo.OrderPojo;
 
 <span class="fc" id="L14">	private static String SELECT_RANGE = &quot;select p from OrderPojo p where timestamp&gt;=:startDate and timestamp&lt;=:endDate&quot;;</span>
 
-	public List&lt;OrderPojo&gt; selectRange(Instant startDate , Instant endDate){
+	public List&lt;OrderPojo&gt; selectOrdersInRange(Instant startDate , Instant endDate){
 <span class="fc" id="L17">		TypedQuery&lt;OrderPojo&gt; query = getQuery(SELECT_RANGE, OrderPojo.class);</span>
 <span class="fc" id="L18">		query.setParameter(&quot;startDate&quot;, startDate);</span>
 <span class="fc" id="L19">		query.setParameter(&quot;endDate&quot;, endDate);</span>

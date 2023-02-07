@@ -39,101 +39,112 @@ import org.springframework.stereotype.Component;
 <span class="fc" id="L39">	private static Logger logger = Logger.getLogger(ReportsDto.class);</span>
 
 
-	public List&lt;BrandReportData&gt; getBrandReport(BrandReportForm form){
+	public List&lt;BrandReportData&gt; getBrandReport(BrandReportForm brandReportForm){
 <span class="fc" id="L43">		logger.info(&quot;creating brand report&quot;);</span>
-<span class="fc" id="L44">		List&lt;BrandPojo&gt; list = brandService.getAll();</span>
-<span class="fc" id="L45">		List&lt;BrandReportData&gt; data = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">		for(BrandPojo p : list){</span>
-<span class="pc bpc" id="L47" title="1 of 4 branches missed.">			if(!Objects.equals(form.getBrand(),&quot;All&quot;) &amp;&amp; !Objects.equals(form.getBrand(),p.getBrand()))continue;</span>
-<span class="pc bpc" id="L48" title="3 of 4 branches missed.">			if(!Objects.equals(form.getCategory(),&quot;All&quot;) &amp;&amp; !Objects.equals(form.getCategory(),p.getCategory()))continue;</span>
-<span class="fc" id="L49">			BrandReportData brand = new BrandReportData();</span>
-<span class="fc" id="L50">			brand.setBrand(p.getBrand());</span>
-<span class="fc" id="L51">			brand.setCategory(p.getCategory());</span>
-<span class="fc" id="L52">			data.add(brand);</span>
+<span class="fc" id="L44">		List&lt;BrandPojo&gt; brandPojoList = brandService.getAllBrands();</span>
+<span class="fc" id="L45">		List&lt;BrandReportData&gt; brandReportDataList = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L54">		}</span>
-<span class="fc" id="L55">		logger.info(&quot;Created Brand Report at &quot;+(Instant.now()));</span>
-<span class="fc" id="L56">		return data;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">		for(BrandPojo brandPojo : brandPojoList){</span>
+
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">			if(!Objects.equals(brandReportForm.getBrand(),&quot;All&quot;) &amp;&amp; !Objects.equals(brandReportForm.getBrand(), brandPojo.getBrand()))continue;</span>
+<span class="pc bpc" id="L50" title="3 of 4 branches missed.">			if(!Objects.equals(brandReportForm.getCategory(),&quot;All&quot;) &amp;&amp; !Objects.equals(brandReportForm.getCategory(), brandPojo.getCategory()))continue;</span>
+
+<span class="fc" id="L52">			BrandReportData brandReportData = new BrandReportData();</span>
+<span class="fc" id="L53">			brandReportData.setBrand(brandPojo.getBrand());</span>
+<span class="fc" id="L54">			brandReportData.setCategory(brandPojo.getCategory());</span>
+
+<span class="fc" id="L56">			brandReportDataList.add(brandReportData);</span>
+
+<span class="fc" id="L58">		}</span>
+<span class="fc" id="L59">		logger.info(&quot;Created Brand Report at &quot;+(Instant.now()));</span>
+<span class="fc" id="L60">		return brandReportDataList;</span>
 	}
-	public List&lt;InventoryReportData&gt; getInventoryReport(InventoryReportForm form) throws ApiException {
-<span class="fc" id="L59">		List&lt;InventoryPojo&gt; list = inventoryService.getAll();</span>
-<span class="fc" id="L60">		HashMap&lt;Integer,Integer&gt; inventory = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">		for(InventoryPojo p : list) {</span>
-<span class="fc" id="L62">			ProductPojo product = productService.get(p.getId());</span>
-<span class="fc" id="L63">			int quant = 0;</span>
-<span class="fc" id="L64">			int brandId = product.getBrandId();</span>
+	public List&lt;InventoryReportData&gt; getInventoryReport(InventoryReportForm inventoryReportForm) throws ApiException {
+<span class="fc" id="L63">		List&lt;InventoryPojo&gt; inventoryPojoList = inventoryService.getAllInventorys();</span>
+<span class="fc" id="L64">		HashMap&lt;Integer,Integer&gt; inventoryMap = new HashMap&lt;&gt;();</span>
 
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">			if(inventory.get(brandId)!= null)quant = inventory.get(brandId);</span>
-<span class="fc" id="L67">			inventory.put(brandId , quant + p.getQuantity());</span>
-<span class="fc" id="L68">		}</span>
+		//mapping brands with quantity
+<span class="fc bfc" id="L67" title="All 2 branches covered.">		for(InventoryPojo inventoryPojo : inventoryPojoList) {</span>
+<span class="fc" id="L68">			ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());</span>
 
-<span class="fc" id="L70">		List&lt;InventoryReportData&gt; Data = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">		for(Integer id : inventory.keySet()) {</span>
-<span class="fc" id="L72">			BrandPojo brand = brandService.get(id);</span>
-<span class="pc bpc" id="L73" title="3 of 4 branches missed.">			if(!Objects.equals(form.getBrand(),&quot;All&quot;) &amp;&amp; !Objects.equals(form.getBrand(),brand.getBrand()))continue;</span>
-<span class="pc bpc" id="L74" title="3 of 4 branches missed.">			if(!Objects.equals(form.getCategory(),&quot;All&quot;) &amp;&amp; !Objects.equals(form.getCategory(),brand.getCategory()))continue;</span>
-<span class="fc" id="L75">			InventoryReportData data = new InventoryReportData();</span>
-<span class="fc" id="L76">			data.setBrand(brand.getBrand());</span>
-<span class="fc" id="L77">			data.setCategory(brand.getCategory());</span>
-<span class="fc" id="L78">			data.setQuantity(inventory.get(id));</span>
-<span class="fc" id="L79">			Data.add(data);</span>
-<span class="fc" id="L80">		}</span>
+<span class="fc" id="L70">			int quantity = 0;</span>
+<span class="fc" id="L71">			int brandId = productPojo.getBrandId();</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">			if(inventoryMap.get(brandId)!= null) quantity = inventoryMap.get(brandId);</span>
 
-<span class="fc" id="L82">		logger.info(&quot;Created Inventory Report at &quot;+(Instant.now()));</span>
-<span class="fc" id="L83">		return Data;</span>
+<span class="fc" id="L74">			inventoryMap.put(brandId , quantity + inventoryPojo.getQuantity());</span>
+<span class="fc" id="L75">		}</span>
+
+<span class="fc" id="L77">		List&lt;InventoryReportData&gt; inventoryReportDataList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		for(Integer id : inventoryMap.keySet()) {</span>
+<span class="fc" id="L79">			BrandPojo brandPojo = brandService.getBrandById(id);</span>
+			//applying filters
+<span class="pc bpc" id="L81" title="3 of 4 branches missed.">			if(!Objects.equals(inventoryReportForm.getBrand(),&quot;All&quot;) &amp;&amp; !Objects.equals(inventoryReportForm.getBrand(), brandPojo.getBrand()))continue;</span>
+<span class="pc bpc" id="L82" title="3 of 4 branches missed.">			if(!Objects.equals(inventoryReportForm.getCategory(),&quot;All&quot;) &amp;&amp; !Objects.equals(inventoryReportForm.getCategory(), brandPojo.getCategory()))continue;</span>
+
+			//creating the output
+<span class="fc" id="L85">			InventoryReportData inventoryReportData = new InventoryReportData();</span>
+<span class="fc" id="L86">			inventoryReportData.setBrand(brandPojo.getBrand());</span>
+<span class="fc" id="L87">			inventoryReportData.setCategory(brandPojo.getCategory());</span>
+<span class="fc" id="L88">			inventoryReportData.setQuantity(inventoryMap.get(id));</span>
+<span class="fc" id="L89">			inventoryReportDataList.add(inventoryReportData);</span>
+<span class="fc" id="L90">		}</span>
+
+<span class="fc" id="L92">		logger.info(&quot;Created Inventory Report at &quot;+(Instant.now()));</span>
+<span class="fc" id="L93">		return inventoryReportDataList;</span>
 	}
 	
-	public List&lt;SalesReportData&gt; getSalesReport(SalesReportForm form) throws ApiException {
-<span class="fc" id="L87">		Instant range = Instant.now().minus(Period.ofDays(365));</span>
-<span class="fc" id="L88">		Instant startDate = form.getStartDate();</span>
-<span class="fc" id="L89">		Instant endDate = form.getEndDate();</span>
+	public List&lt;SalesReportData&gt; getSalesReport(SalesReportForm salesReportForm) throws ApiException {
+<span class="fc" id="L97">		Instant range = Instant.now().minus(Period.ofDays(365));</span>
+<span class="fc" id="L98">		Instant startDate = salesReportForm.getStartDate();</span>
+<span class="fc" id="L99">		Instant endDate = salesReportForm.getEndDate();</span>
 
-<span class="fc" id="L91">		int comparedValue = startDate.compareTo(endDate);</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">		if(comparedValue&gt;0){throw new ApiException(&quot;Invalid Time Period&quot;);}</span>
+<span class="fc" id="L101">		int comparedValue = startDate.compareTo(endDate);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">		if(comparedValue&gt;0){throw new ApiException(&quot;Invalid Time Period&quot;);}</span>
 
-<span class="fc" id="L94">		comparedValue = range.compareTo(startDate);</span>
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">		if(comparedValue&gt;0){throw new ApiException(&quot;Only one year is allowed for the reports&quot;);}</span>
+<span class="fc" id="L104">		comparedValue = range.compareTo(startDate);</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">		if(comparedValue&gt;0){throw new ApiException(&quot;Only one year is allowed for the reports&quot;);}</span>
 
-<span class="fc" id="L97">		comparedValue = Instant.now().compareTo(endDate);</span>
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">		if(comparedValue&lt;-1){throw new ApiException(&quot;Invalid Time Period&quot;);}</span>
+<span class="fc" id="L107">		comparedValue = Instant.now().compareTo(endDate);</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">		if(comparedValue&lt;-1){throw new ApiException(&quot;Invalid Time Period&quot;);}</span>
 
 
 		// querying the time range
-<span class="fc" id="L102">		List&lt;OrderPojo&gt; list = orderService.selectRange(startDate, endDate);</span>
+<span class="fc" id="L112">		List&lt;OrderPojo&gt; orderPojoList = orderService.selectOrdersInRange(startDate, endDate);</span>
 
 		//creating the list of order items based on orderId
-<span class="fc" id="L105">		List&lt;OrderItemPojo&gt; orders = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">		for(OrderPojo p : list) {</span>
-<span class="fc" id="L107">			List&lt;OrderItemPojo&gt; items = orderItemService.getOrderItemByOrderId(p.getId());</span>
-<span class="fc" id="L108">			orders.addAll(items);</span>
-<span class="fc" id="L109">		}</span>
+<span class="fc" id="L115">		List&lt;OrderItemPojo&gt; orderItemPojoList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">		for(OrderPojo orderPojo : orderPojoList) {</span>
+<span class="fc" id="L117">			List&lt;OrderItemPojo&gt; items = orderItemService.getOrderItemByOrderId(orderPojo.getId());</span>
+<span class="fc" id="L118">			orderItemPojoList.addAll(items);</span>
+<span class="fc" id="L119">		}</span>
 
 		//generate product revenues
-<span class="fc" id="L112">		HashMap&lt;Integer,Integer&gt; quantityProducts = (HashMap&lt;Integer, Integer&gt;)orders.stream().collect(Collectors.toMap(OrderItemPojo::getProductId,OrderItemPojo::getQuantity,(s, a)-&gt;s+a));</span>
-<span class="fc" id="L113">		HashMap&lt;Integer,Double&gt; revenueProducts = MapUtil.getProductsRevenue(orders);</span>
-<span class="fc" id="L114">		List&lt;ProductPojo&gt; products = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">		for(int id : revenueProducts.keySet()) {</span>
-<span class="fc" id="L116">			products.add(productService.get(id));</span>
-<span class="fc" id="L117">		}</span>
+<span class="fc" id="L122">		HashMap&lt;Integer,Integer&gt; quantityProducts = (HashMap&lt;Integer, Integer&gt;) orderItemPojoList.stream().collect(Collectors.toMap(OrderItemPojo::getProductId,OrderItemPojo::getQuantity,(s, a)-&gt;s+a));</span>
+<span class="fc" id="L123">		HashMap&lt;Integer,Double&gt; revenueProducts = MapUtil.getProductsRevenue(orderItemPojoList);</span>
+
+<span class="fc" id="L125">		List&lt;ProductPojo&gt; products = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">		for(int id : revenueProducts.keySet()) {</span>
+<span class="fc" id="L127">			products.add(productService.getProductById(id));</span>
+<span class="fc" id="L128">		}</span>
 
 		//generate brand revenues
-<span class="fc" id="L120">		HashMap&lt;Integer,Double&gt; revenueBrands = MapUtil.getBrandsRevenue(revenueProducts,products);</span>
-<span class="fc" id="L121">		HashMap&lt;Integer,Integer&gt; quantityBrands = MapUtil.getBrandsQuantity(quantityProducts,products);</span>
+<span class="fc" id="L131">		HashMap&lt;Integer,Double&gt; revenueBrands = MapUtil.getBrandsRevenue(revenueProducts,products);</span>
+<span class="fc" id="L132">		HashMap&lt;Integer,Integer&gt; quantityBrands = MapUtil.getBrandsQuantity(quantityProducts,products);</span>
 
 		//generate sales report
-<span class="fc" id="L124">		List&lt;SalesReportData&gt; data = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">		for(int id : revenueBrands.keySet()) {</span>
-<span class="fc" id="L126">			SalesReportData item = new SalesReportData();</span>
-<span class="fc" id="L127">			BrandPojo p = brandService.get(id);</span>
-<span class="fc" id="L128">			item.setBrand(p.getBrand());</span>
-<span class="fc" id="L129">			item.setCategory(p.getCategory());</span>
-<span class="fc" id="L130">			item.setRevenue(revenueBrands.get(id));</span>
-<span class="fc" id="L131">			item.setQuantity(quantityBrands.get(id));</span>
-<span class="fc" id="L132">			data.add(item);</span>
-<span class="fc" id="L133">		}</span>
+<span class="fc" id="L135">		List&lt;SalesReportData&gt; data = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">		for(int id : revenueBrands.keySet()) {</span>
+<span class="fc" id="L137">			SalesReportData item = new SalesReportData();</span>
+<span class="fc" id="L138">			BrandPojo p = brandService.getBrandById(id);</span>
+<span class="fc" id="L139">			item.setBrand(p.getBrand());</span>
+<span class="fc" id="L140">			item.setCategory(p.getCategory());</span>
+<span class="fc" id="L141">			item.setRevenue(revenueBrands.get(id));</span>
+<span class="fc" id="L142">			item.setQuantity(quantityBrands.get(id));</span>
+<span class="fc" id="L143">			data.add(item);</span>
+<span class="fc" id="L144">		}</span>
 
-<span class="fc" id="L135">		logger.info(&quot;Created Inventory Report at &quot;+(Instant.now()));</span>
-<span class="fc" id="L136">		return data;</span>
+<span class="fc" id="L146">		logger.info(&quot;Created Sales Report at &quot;+(Instant.now()));</span>
+<span class="fc" id="L147">		return data;</span>
 	}
 	
 }

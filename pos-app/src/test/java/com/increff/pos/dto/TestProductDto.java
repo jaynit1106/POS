@@ -31,14 +31,14 @@ public class TestProductDto extends AbstractUnitTest{
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand","category");
         brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //create a product
         ProductPojo p = PojoUtil.getProductPojo("name","abcdabcd",29,list.get(0).getId());
         productDao.insert(p);
 
         //checking the add and getAll operation
-        List<ProductData> productDataList = productDto.getAll();
+        List<ProductData> productDataList = productDto.getAllProducts();
         assertEquals(productDataList.get(0).getBarcode(),"abcdabcd");
         assertEquals(productDataList.get(0).getMrp(),"29.00");
         assertEquals(productDataList.get(0).getName(),"name");
@@ -47,40 +47,20 @@ public class TestProductDto extends AbstractUnitTest{
     }
 
     @Test
-    public void testGetById() throws ApiException {
-        //create a brand
-        BrandPojo brand = PojoUtil.getBrandPojo("brand","category");
-        brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
-
-        //create a product
-        ProductPojo p = PojoUtil.getProductPojo("name","abcdabcd",29,list.get(0).getId());
-        productDao.insert(p);
-        List<ProductData> productDataList = productDto.getAll();
-
-        //checking getById
-        ProductData product = productDto.get(productDataList.get(0).getId());
-        assertEquals(product.getBarcode(),"abcdabcd");
-        assertEquals(product.getMrp(),"29.00");
-        assertEquals(product.getName(),"name");
-        assertEquals(product.getBrand(),"brand");
-        assertEquals(product.getCategory(),"category");
-    }
-    @Test
     public void testUpdate() throws ApiException {
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand","category");
         brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //create a product
         ProductPojo p = PojoUtil.getProductPojo("name","abcdabcd",29,list.get(0).getId());
         productDao.insert(p);
-        List<ProductData> productDataList = productDto.getAll();
+        List<ProductData> productDataList = productDto.getAllProducts();
 
         //checking the update Operation
-        productDto.update(productDataList.get(0).getId(),PojoUtil.getProductForm("brand","category","changedname","abcdabcd",290));
-        productDataList = productDto.getAll();
+        productDto.updateProduct(productDataList.get(0).getId(),PojoUtil.getProductForm("brand","category","changedname","changeds",290));
+        productDataList = productDto.getAllProducts();
         assertEquals(productDataList.get(0).getBarcode(),"abcdabcd");
         assertEquals(productDataList.get(0).getMrp(),"290.00");
         assertEquals(productDataList.get(0).getName(),"changedname");
@@ -93,7 +73,7 @@ public class TestProductDto extends AbstractUnitTest{
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //create a product
         ProductPojo p = PojoUtil.getProductPojo("name", "abcdabcd", 29, list.get(0).getId());
@@ -102,7 +82,7 @@ public class TestProductDto extends AbstractUnitTest{
         //checking same brand category name exception
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Product already Exists");
-        productDto.add(PojoUtil.getProductForm("brand", "category", "name", "abcdabce", 290));
+        productDto.addProduct(PojoUtil.getProductForm("brand", "category", "name", "abcdabce", 290));
 
     }
 
@@ -111,7 +91,7 @@ public class TestProductDto extends AbstractUnitTest{
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //create a product
         ProductPojo p = PojoUtil.getProductPojo("name", "abcdabcd", 29, list.get(0).getId());
@@ -120,7 +100,7 @@ public class TestProductDto extends AbstractUnitTest{
         //Checking same barcode exception
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Barcode already Exists");
-        productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcdabcd", 290));
+        productDto.addProduct(PojoUtil.getProductForm("brand", "category", "names", "abcdabcd", 290));
 
     }
 
@@ -129,12 +109,12 @@ public class TestProductDto extends AbstractUnitTest{
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //checking if API exception is thrown when brand and category does not exist
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Brand And Category Does Not Exist");
-        productDto.add(PojoUtil.getProductForm("brand1", "category1", "names", "abcdabcd", 290));
+        productDto.addProduct(PojoUtil.getProductForm("brand1", "category1", "names", "abcdabcd", 290));
 
     }
 
@@ -143,13 +123,13 @@ public class TestProductDto extends AbstractUnitTest{
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
 
         //checks for incorrect barcode format
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("Barcode Should be of 8 characters");
-        productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcd", 290));
+        productDto.addProduct(PojoUtil.getProductForm("brand", "category", "names", "abcd", 290));
 
     }
     @Test
@@ -157,12 +137,12 @@ public class TestProductDto extends AbstractUnitTest{
         //create a brand
         BrandPojo brand = PojoUtil.getBrandPojo("brand", "category");
         brandDao.insert(brand);
-        List<BrandData> list = brandDto.getAll();
+        List<BrandData> list = brandDto.getAllBrands();
 
         //check for negative mrp
         exceptionRule.expect(ApiException.class);
         exceptionRule.expectMessage("MRP should be positive");
-        productDto.add(PojoUtil.getProductForm("brand", "category", "names", "abcdabcf", -290));
+        productDto.addProduct(PojoUtil.getProductForm("brand", "category", "names", "abcdabcf", -290));
 
     }
 
@@ -170,8 +150,8 @@ public class TestProductDto extends AbstractUnitTest{
     public void testGetAllBarcode(){
         //adding multiple products
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandDto.getAll().get(0).getId()));
-        productDao.insert(PojoUtil.getProductPojo("name1","abcdabce",20,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",20,brandDto.getAllBrands().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name1","abcdabce",20,brandDto.getAllBrands().get(0).getId()));
 
         //checking for the list of barcodes
         assertEquals(2,productDto.getBarcodeList().size());

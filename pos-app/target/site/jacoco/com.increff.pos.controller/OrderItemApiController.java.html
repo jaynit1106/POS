@@ -23,20 +23,13 @@ import io.swagger.annotations.ApiOperation;
 <span class="fc" id="L23">public class OrderItemApiController {</span>
 
 	@Autowired
-	private OrderItemDto dto;
+	private OrderItemDto orderItemDto;
 
 	@ApiOperation(value = &quot;Gets a Order Item by orderID&quot;)
 	@RequestMapping(path = &quot;/api/orderitems/{id}&quot;, method = RequestMethod.GET)
-	public List&lt;OrderItemData&gt; get(@PathVariable int id) throws ApiException, ParserConfigurationException, TransformerException {
-<span class="nc" id="L31">		return dto.getOrderItemByOrderID(id);</span>
+	public List&lt;OrderItemData&gt; getOrderItemsById(@PathVariable int orderId) throws ApiException, ParserConfigurationException, TransformerException {
+<span class="nc" id="L31">		return orderItemDto.getOrderItemByOrderID(orderId);</span>
 	}
-
-	@ApiOperation(value = &quot;Gets list of all Order Items&quot;)
-	@RequestMapping(path = &quot;/api/orderitems&quot;, method = RequestMethod.GET)
-	public List&lt;OrderItemData&gt; getAll() {
-<span class="nc" id="L37">		return dto.getAll();</span>
-	}
-
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

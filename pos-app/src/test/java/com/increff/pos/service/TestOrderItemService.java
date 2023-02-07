@@ -41,9 +41,9 @@ public class TestOrderItemService extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand", "category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name", "abcdabcd", 30, brandService.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name", "abcdabcd", 30, brandService.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100, productService.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100, productService.getAllProducts().get(0).getId()));
         //adds order
         orderDao.insert(PojoUtil.getOrderPojo());
         //adds order item
@@ -51,35 +51,11 @@ public class TestOrderItemService extends AbstractUnitTest{
         OrderItemPojo pojo = PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(), 20, productDao.selectAll(ProductPojo.class).get(0).getId(), 20.22);
         list.add(pojo);
 
-        orderItemService.add(list);
+        orderItemService.addOrderItems(list);
 
         //checking if the product is added
-        List<OrderItemPojo> data = orderItemService.getAll();
+        List<OrderItemPojo> data = orderItemService.getOrderItemByOrderId(orderDao.selectAll(OrderPojo.class).get(0).getId());
         Assert.assertEquals(data.size(),1);
-    }
-    @Test
-    public void testGetAll() throws ApiException {
-        //create brand
-        brandDao.insert(PojoUtil.getBrandPojo("brand", "category"));
-        //create product
-        productDao.insert(PojoUtil.getProductPojo("name", "abcdabcd", 30, brandService.getAll().get(0).getId()));
-        //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100, productService.getAll().get(0).getId()));
-        //adds order
-        orderDao.insert(PojoUtil.getOrderPojo());
-        //adds order item
-        List<OrderItemPojo> list = new ArrayList<>();
-        OrderItemPojo pojo = PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(), 20, productDao.selectAll(ProductPojo.class).get(0).getId(), 20.22);
-        list.add(pojo);
-        pojo = PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(), 20, productDao.selectAll(ProductPojo.class).get(0).getId(), 20.22);
-        list.add(pojo);
-        pojo = PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(), 20, productDao.selectAll(ProductPojo.class).get(0).getId(), 20.22);
-        list.add(pojo);
-        orderItemService.add(list);
-
-        //checking the get all operation
-        List<OrderItemPojo> data = orderItemService.getAll();
-        Assert.assertEquals(data.size(),3);
     }
 
     @Test
@@ -103,36 +79,6 @@ public class TestOrderItemService extends AbstractUnitTest{
         assertEquals(item.getOrderId(),orderDao.selectAll(OrderPojo.class).get(0).getId());
     }
 
-    @Test
-    public void testGetById() throws ApiException {
-        //create brand
-        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
-        //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDao.selectAll(BrandPojo.class).get(0).getId()));
-        //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDao.selectAll(ProductPojo.class).get(0).getId()));
-        //add order
-        orderDao.insert(PojoUtil.getOrderPojo());
-        //add order-item
-        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(),20,productDao.selectAll(ProductPojo.class).get(0).getId(),100));
 
-        List<OrderItemPojo> list = orderItemService.getAll();
 
-        //checking get by ID
-        OrderItemPojo data = orderItemService.get(list.get(0).getId());
-        assertEquals(data.getQuantity(),20);
-        assertEquals(data.getSellingPrice(),100,0);
-        assertEquals(data.getId(),list.get(0).getId());
-    }
-
-    @Test
-    public void testGetCheck(){
-        //checking if Api Exception is thrown or not
-        try {
-            orderItemService.get(10000);
-        }catch (ApiException e){
-            return;
-        }
-        fail();
-    }
 }

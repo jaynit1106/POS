@@ -17,9 +17,9 @@ import com.increff.pos.pojo.SchedulerPojo;
 <span class="fc" id="L17">	private static String SELECT_RANGE = &quot;select p from SchedulerPojo p where date&gt;=:startDate and date&lt;=:endDate&quot;;</span>
 	
 	public SchedulerPojo select(String date) {
-<span class="fc" id="L20">		TypedQuery&lt;SchedulerPojo&gt; query = getQuery(SELECT_DATE, SchedulerPojo.class);</span>
-<span class="fc" id="L21">		query.setParameter(&quot;date&quot;, date);</span>
-<span class="fc" id="L22">		return getSingle(query);</span>
+<span class="nc" id="L20">		TypedQuery&lt;SchedulerPojo&gt; query = getQuery(SELECT_DATE, SchedulerPojo.class);</span>
+<span class="nc" id="L21">		query.setParameter(&quot;date&quot;, date);</span>
+<span class="nc" id="L22">		return getSingle(query);</span>
 	}
 
 	public List&lt;SchedulerPojo&gt; selectRange(String startDate,String endDate){

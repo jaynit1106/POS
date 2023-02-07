@@ -19,70 +19,71 @@ import com.increff.pos.util.StringUtil;
 <span class="fc" id="L19">public class ProductService {</span>
 
 	@Autowired
-	private  ProductDao dao;
+	private  ProductDao productDao;
 
-	public void add(ProductPojo p) throws ApiException {
-<span class="pc bpc" id="L25" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(p.getName()))throw new ApiException(&quot;Name cannot be empty&quot;);</span>
-<span class="fc bfc" id="L26" title="All 2 branches covered.">		if(p.getBarcode().length()!=8)throw new ApiException(&quot;Barcode Should be of 8 characters&quot;);</span>
-<span class="fc bfc" id="L27" title="All 2 branches covered.">		if(p.getMrp()&lt;0)throw new ApiException(&quot;MRP should be positive&quot;);</span>
-<span class="fc bfc" id="L28" title="All 2 branches covered.">		if(Objects.nonNull(dao.getProductByNameAndBrandId(p.getBrandId(),p.getName())))throw new ApiException(&quot;Product already Exists&quot;);</span>
-<span class="fc bfc" id="L29" title="All 2 branches covered.">		if(Objects.nonNull(dao.barcodeExist(p.getBarcode())))throw new ApiException(&quot;Barcode already Exists&quot;);</span>
+	public void add(ProductPojo productPojo) throws ApiException {
+<span class="fc" id="L25">		validateProductPojo(productPojo);</span>
+<span class="fc" id="L26">		productDao.insert(productPojo);</span>
+<span class="fc" id="L27">	}</span>
 
-<span class="fc" id="L31">		dao.insert(p);</span>
-<span class="fc" id="L32">	}</span>
-
-	public ProductPojo get(int id) throws ApiException {
-<span class="fc" id="L35">		return getCheck(id);</span>
+	public ProductPojo getProductById(int productId) throws ApiException {
+<span class="fc" id="L30">		ProductPojo productPojo = productDao.select(productId,ProductPojo.class);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		if (Objects.isNull(productPojo)) {</span>
+<span class="fc" id="L32">			throw new ApiException(&quot;Product with given ID does not exit, id: &quot; + productId);</span>
+		}
+<span class="fc" id="L34">		return productPojo;</span>
 	}
 
-	public List&lt;ProductPojo&gt; getAll() {
-<span class="fc" id="L39">		return dao.selectAll(ProductPojo.class);</span>
+	public List&lt;ProductPojo&gt; getAllProducts() {
+<span class="fc" id="L38">		return productDao.selectAll(ProductPojo.class);</span>
 	}
 
-	public void update(int id, ProductPojo p) throws ApiException {
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">		if(p.getBarcode().length()!=8)throw new ApiException(&quot;Barcode Should be of 8 characters&quot;);</span>
-<span class="pc bpc" id="L44" title="1 of 2 branches missed.">		if(p.getMrp()&lt;0)throw new ApiException(&quot;MRP should be positive&quot;);</span>
+	public void updateProduct(int productId, ProductPojo productPojo) throws ApiException {
+<span class="fc" id="L42">		validateProductPojo(productPojo);</span>
 
-<span class="fc" id="L46">		ProductPojo prod = dao.getProductByNameAndBrandId(p.getBrandId(), p.getName());</span>
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">		if(!Objects.isNull(prod)){</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">			if(!Objects.equals(prod.getId(),id))throw new ApiException(&quot;Product already exists&quot;);</span>
-		}
+<span class="fc" id="L44">		ProductPojo ex = getProductById(productId);</span>
+<span class="fc" id="L45">		ex.setMrp(productPojo.getMrp());</span>
+<span class="fc" id="L46">		ex.setName(productPojo.getName());</span>
+<span class="fc" id="L47">	}</span>
 
-<span class="fc" id="L51">		ProductPojo product = dao.barcodeExist(p.getBarcode());</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">		if(!Objects.isNull(product)) {</span>
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">			if(!Objects.equals(product.getId(),id))throw new ApiException(&quot;Barcode already exists&quot;);</span>
-		}
 
-<span class="fc" id="L56">		ProductPojo ex = getCheck(id);</span>
-<span class="fc" id="L57">		ex.setMrp(p.getMrp());</span>
-<span class="fc" id="L58">		ex.setName(p.getName());</span>
-<span class="fc" id="L59">	}</span>
 
-	public ProductPojo getCheck(int id) throws ApiException {
-<span class="fc" id="L62">		ProductPojo p = dao.select(id,ProductPojo.class);</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">		if (Objects.isNull(p)) {</span>
-<span class="fc" id="L64">			throw new ApiException(&quot;Product with given ID does not exit, id: &quot; + id);</span>
-		}
-<span class="fc" id="L66">		return p;</span>
-	}
-
-	public ProductPojo getProductByNameAndBrandId(int brandId , String name){
-<span class="fc" id="L70">		return dao.getProductByNameAndBrandId(brandId, name);</span>
+	public ProductPojo getProductByNameAndBrandId(int brandId , String productName){
+<span class="fc" id="L52">		return productDao.getProductByNameAndBrandId(brandId, productName);</span>
 	}
 	
 	public ProductPojo getProductByBarcode(String barcode)throws ApiException{
-<span class="fc" id="L74">		ProductPojo p = dao.barcodeExist(barcode);</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">		if(Objects.isNull(p))throw new ApiException(&quot;Product Does Not Exists&quot;);</span>
-<span class="fc" id="L76">		return p;</span>
+<span class="fc" id="L56">		ProductPojo p = productDao.barcodeExist(barcode);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">		if(Objects.isNull(p)) {</span>
+<span class="fc" id="L58">			throw new ApiException(&quot;Product Does Not Exists&quot;);</span>
+		}
+<span class="fc" id="L60">		return p;</span>
 	}
 
 	public List&lt;String&gt; getBarcodeList(){
-<span class="fc" id="L80">		List&lt;String&gt; list = dao.getBarcodeList();</span>
-<span class="fc" id="L81">		Collections.sort(list);</span>
-<span class="fc" id="L82">		Collections.reverse(list);</span>
-<span class="fc" id="L83">		return list;</span>
+<span class="fc" id="L64">		List&lt;String&gt; barcodeList = productDao.getBarcodeList();</span>
+<span class="fc" id="L65">		Collections.sort(barcodeList);</span>
+<span class="fc" id="L66">		Collections.reverse(barcodeList);</span>
+<span class="fc" id="L67">		return barcodeList;</span>
 	}
 
+	public void validateProductPojo(ProductPojo productPojo) throws ApiException {
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">		if(StringUtil.isEmpty(productPojo.getName())) {</span>
+<span class="nc" id="L72">			throw new ApiException(&quot;Name cannot be empty&quot;);</span>
+		}
+<span class="fc bfc" id="L74" title="All 2 branches covered.">		if(productPojo.getBarcode().length()!=8) {</span>
+<span class="fc" id="L75">			throw new ApiException(&quot;Barcode Should be of 8 characters&quot;);</span>
+		}
+<span class="fc bfc" id="L77" title="All 2 branches covered.">		if(productPojo.getMrp()&lt;0) {</span>
+<span class="fc" id="L78">			throw new ApiException(&quot;MRP should be positive&quot;);</span>
+		}
+<span class="fc bfc" id="L80" title="All 2 branches covered.">		if(Objects.nonNull(productDao.getProductByNameAndBrandId(productPojo.getBrandId(),productPojo.getName()))) {</span>
+<span class="fc" id="L81">			throw new ApiException(&quot;Product already Exists&quot;);</span>
+		}
+<span class="fc bfc" id="L83" title="All 2 branches covered.">		if(Objects.nonNull(productDao.barcodeExist(productPojo.getBarcode()))) {</span>
+<span class="fc" id="L84">			throw new ApiException(&quot;Barcode already Exists&quot;);</span>
+		}
+<span class="fc" id="L86">	}</span>
 	
 
 	

@@ -16,7 +16,7 @@ public class BrandDao extends AbstractDao {
 	private static final String GET_CATEGORY = "select distinct category from BrandPojo p where p.brand=:brand";
 
 
-	public BrandPojo checkRepeat(String brand , String category) {
+	public BrandPojo getBrandByNameAndCategory(String brand , String category) {
 		TypedQuery<BrandPojo> query = getQuery(CHECK_ID, BrandPojo.class);
 		query.setParameter("category", category);
 		query.setParameter("brand", brand);

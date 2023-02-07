@@ -21,8 +21,8 @@ public class TestBrandService extends AbstractUnitTest{
     @Test
     public void testAdd() throws ApiException {
         //add a product
-        brandService.add(PojoUtil.getBrandPojo("brand","brand"));
-        List<BrandPojo> list = brandService.getAll();
+        brandService.addBrand(PojoUtil.getBrandPojo("brand","brand"));
+        List<BrandPojo> list = brandService.getAllBrands();
 
         //checking if the product has been added
         assertEquals(1,list.size());
@@ -35,7 +35,7 @@ public class TestBrandService extends AbstractUnitTest{
         brandDao.insert(PojoUtil.getBrandPojo("brand2","category2"));
 
         //checking getAll operation
-        List<BrandPojo> list = brandService.getAll();
+        List<BrandPojo> list = brandService.getAllBrands();
         assertEquals(3,list.size());
     }
 
@@ -46,10 +46,10 @@ public class TestBrandService extends AbstractUnitTest{
 
         BrandPojo p = PojoUtil.getBrandPojo(brand,category);
         brandDao.insert(p);
-        List<BrandPojo> list = brandService.getAll();
+        List<BrandPojo> list = brandService.getAllBrands();
 
         //Verifying the getById operation
-        BrandPojo data = brandService.get(list.get(0).getId());
+        BrandPojo data = brandService.getBrandById(list.get(0).getId());
         assertEquals(data.getBrand(),brand);
         assertEquals(data.getCategory(),category);
 
@@ -63,14 +63,14 @@ public class TestBrandService extends AbstractUnitTest{
         BrandPojo p = PojoUtil.getBrandPojo(brand,category);
         brandDao.insert(p);
 
-        List<BrandPojo> list = brandService.getAll();
+        List<BrandPojo> list = brandService.getAllBrands();
 
         //Verifying the Update function
         brand="brand";
         category="category";
         int id = list.get(0).getId();
-        brandService.update(list.get(0).getId(),PojoUtil.getBrandPojo(brand,category));
-        list = brandService.getAll();
+        brandService.updateBrand(list.get(0).getId(),PojoUtil.getBrandPojo(brand,category));
+        list = brandService.getAllBrands();
         assertEquals(list.get(0).getBrand(),brand);
         assertEquals(list.get(0).getCategory(),category);
         assertEquals(list.get(0).getId(),id);
@@ -81,10 +81,10 @@ public class TestBrandService extends AbstractUnitTest{
         //creating brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
 
-        List<BrandPojo> list = brandService.getAll();
+        List<BrandPojo> list = brandService.getAllBrands();
 
         //checking for BrandId
-        BrandPojo p = brandService.getBrandId("brand","category");
+        BrandPojo p = brandService.getBrandByNameAndCategory("brand","category");
         assertEquals(list.get(0).getId(),p.getId());
     }
 

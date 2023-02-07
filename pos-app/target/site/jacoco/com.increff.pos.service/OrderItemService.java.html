@@ -17,37 +17,18 @@ import com.increff.pos.pojo.OrderItemPojo;
 <span class="fc" id="L17">public class OrderItemService {</span>
 
 	@Autowired
-	private  OrderItemDao dao;
+	private  OrderItemDao orderItemDao;
 	
 	
 
-	public void add(List&lt;OrderItemPojo&gt; items) throws ApiException {
-<span class="fc bfc" id="L25" title="All 2 branches covered.">		for(OrderItemPojo p : items) {</span>
-			
-<span class="fc" id="L27">			dao.insert(p);</span>
-<span class="fc" id="L28">		}</span>
-		
-<span class="fc" id="L30">	}</span>
+	public void addOrderItems(List&lt;OrderItemPojo&gt; orderItemPojoList) throws ApiException {
+<span class="fc bfc" id="L25" title="All 2 branches covered.">		for(OrderItemPojo orderItemPojo : orderItemPojoList) {</span>
+<span class="fc" id="L26">			orderItemDao.insert(orderItemPojo);</span>
+<span class="fc" id="L27">		}</span>
+<span class="fc" id="L28">	}</span>
 
-	public OrderItemPojo get(int id) throws ApiException {
-<span class="fc" id="L33">		return getCheck(id);</span>
-	}
-
-	public List&lt;OrderItemPojo&gt; getAll() {
-<span class="fc" id="L37">		return dao.selectAll(OrderItemPojo.class);</span>
-	}
-
-
-	public OrderItemPojo getCheck(int id) throws ApiException {
-<span class="fc" id="L42">		OrderItemPojo p = dao.select(id,OrderItemPojo.class);</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">		if (Objects.isNull(p)) {</span>
-<span class="fc" id="L44">			throw new ApiException(&quot;OrderItem with given ID does not exit, id: &quot; + id);</span>
-		}
-<span class="fc" id="L46">		return p;</span>
-	}
-	
-	public List&lt;OrderItemPojo&gt; getOrderItemByOrderId(int id) {
-<span class="fc" id="L50">		return dao.selectByOrderId(id);</span>
+	public List&lt;OrderItemPojo&gt; getOrderItemByOrderId(int orderId) {
+<span class="fc" id="L31">		return orderItemDao.selectByOrderId(orderId);</span>
 	}
 	
 }

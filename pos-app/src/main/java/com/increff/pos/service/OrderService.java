@@ -27,52 +27,28 @@ import com.increff.pos.pojo.OrderPojo;
 public class OrderService {
 
 	@Autowired
-	private OrderDao dao;
+	private OrderDao orderDao;
 
 
-	public void add(OrderPojo p) throws ApiException {
-		dao.insert(p);
+	public void addOrder(OrderPojo orderPojo) throws ApiException {
+		orderDao.insert(orderPojo);
 	}
 
-	public OrderPojo get(int id) throws ApiException {
-		return getCheck(id);
-	}
-
-	public List<OrderPojo> getAll() {
-		return dao.selectAll(OrderPojo.class);
-	}
-
-	public OrderPojo getCheck(int id) throws ApiException {
-		OrderPojo p = dao.select(id,OrderPojo.class);
-		if (Objects.isNull(p)) {
-			throw new ApiException("Order with given ID does not exit, id: " + id);
+	public OrderPojo getOrderById(int orderId) throws ApiException {
+		OrderPojo orderPojo = orderDao.select(orderId,OrderPojo.class);
+		if (Objects.isNull(orderPojo)) {
+			throw new ApiException("Order with given ID does not exit, id: " + orderId);
 		}
-		return p;
+		return orderPojo;
 	}
 
-	public List<OrderPojo> selectRange(Instant startDate, Instant endDate){
-		return dao.selectRange(startDate,endDate);
+	public List<OrderPojo> getAllOrders() {
+		return orderDao.selectAll(OrderPojo.class);
 	}
 
-	public void downloadPdf(int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
-		try {
-		String path = new File("./src/main/resources/com/increff/pos/pdf/Invoice "+id+".pdf").getAbsolutePath();
-		File file = new File(path);
-		
-		InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-		String mimeType = URLConnection.guessContentTypeFromStream(inputStream);
-		
-		if(mimeType == null) {
-			mimeType = "application/octet-stream";
-		}
-		
-		response.setContentType(mimeType);
-		response.setContentLength((int) file.length());
-		response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
-		
-		FileCopyUtils.copy(inputStream, response.getOutputStream());
-		}catch (Exception e) {
-			throw new ApiException("Unable to download the file");
-		}
+
+	public List<OrderPojo> selectOrdersInRange(Instant startDate, Instant endDate){
+		return orderDao.selectOrdersInRange(startDate,endDate);
 	}
+
 }

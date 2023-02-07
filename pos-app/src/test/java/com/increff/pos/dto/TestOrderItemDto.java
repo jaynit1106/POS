@@ -41,20 +41,20 @@ public class TestOrderItemDto extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
         //add order
         orderDao.insert(PojoUtil.getOrderPojo());
         //add order-item
-        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAll().get(0).getId(),20,productDto.getAll().get(0).getId(),100));
+        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAllOrders().get(0).getId(),20,productDto.getAllProducts().get(0).getId(),100));
 
         //checking the getAll functionality
-        List<OrderItemData> list = orderItemDto.getAll();
-        assertEquals(list.get(0).getOrderId(),orderDto.getAll().get(0).getId());
+        List<OrderItemData> list = orderItemDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
+        assertEquals(list.get(0).getOrderId(),orderDto.getAllOrders().get(0).getId());
         assertEquals(list.get(0).getQuantity(),20);
-        assertEquals(list.get(0).getSellingPrice(),"100.0");
-        assertEquals(list.get(0).getProductId(),productDto.getAll().get(0).getId());
+        assertEquals(list.get(0).getSellingPrice(),"100.00");
+        assertEquals(list.get(0).getProductId(),productDto.getAllProducts().get(0).getId());
     }
 
     @Test
@@ -62,42 +62,21 @@ public class TestOrderItemDto extends AbstractUnitTest{
         //create brand
         brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
         //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
+        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAllBrands().get(0).getId()));
         //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
+        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAllProducts().get(0).getId()));
         //add order
         orderDao.insert(PojoUtil.getOrderPojo());
         //add order-item
-        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAll().get(0).getId(),20,productDto.getAll().get(0).getId(),100));
+        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAllOrders().get(0).getId(),20,productDto.getAllProducts().get(0).getId(),100));
 
-        List<OrderItemData> list = orderItemDto.getOrderItemByOrderID(orderDto.getAll().get(0).getId());
+        List<OrderItemData> list = orderItemDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
         OrderItemData item = list.get(0);
         assertEquals(item.getName(),"name");
         assertEquals(item.getBarcode(),"abcdabcd");
         assertEquals(item.getSellingPrice(),"100.00");
         assertEquals(item.getQuantity(),20);
-        assertEquals(item.getOrderId(),orderDto.getAll().get(0).getId());
-    }
-
-    @Test
-    public void testGetById() throws ApiException {
-        //create brand
-        brandDao.insert(PojoUtil.getBrandPojo("brand","category"));
-        //create product
-        productDao.insert(PojoUtil.getProductPojo("name","abcdabcd",30,brandDto.getAll().get(0).getId()));
-        //add inventory
-        inventoryDao.insert(PojoUtil.getInventoryPojo(100,productDto.getAll().get(0).getId()));
-        //add order
-        orderDao.insert(PojoUtil.getOrderPojo());
-        //add order-item
-        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAll().get(0).getId(),20,productDto.getAll().get(0).getId(),100));
-
-        List<OrderItemData> list = orderItemDto.getAll();
-
-        OrderItemData data = orderItemDto.get(list.get(0).getId());
-        assertEquals(data.getQuantity(),20);
-        assertEquals(data.getSellingPrice(),"100.0");
-        assertEquals(data.getId(),list.get(0).getId());
+        assertEquals(item.getOrderId(),orderDto.getAllOrders().get(0).getId());
     }
 
 

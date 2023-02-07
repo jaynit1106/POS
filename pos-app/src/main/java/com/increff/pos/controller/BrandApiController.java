@@ -18,41 +18,41 @@ import io.swagger.annotations.ApiOperation;
 public class BrandApiController {
 	
 	@Autowired
-	private BrandDto dto ;
+	private BrandDto brandDto ;
 
 	@ApiOperation(value = "Adds an Brand")
 	@RequestMapping(path = "/api/brands", method = RequestMethod.POST)
-	public void add(@RequestBody BrandForm form) throws ApiException {
-		dto.add(form);
+	public void addBrand(@RequestBody BrandForm brandForm) throws ApiException {
+		brandDto.addBrand(brandForm);
 	}
 
 	@ApiOperation(value = "Gets an brand by ID")
-	@RequestMapping(path = "/api/brands/{id}", method = RequestMethod.GET)
-	public BrandData get(@PathVariable int id) throws ApiException {
-		return dto.get(id);
+	@RequestMapping(path = "/api/brands/{brandId}", method = RequestMethod.GET)
+	public BrandData getBrandById(@PathVariable int brandId) throws ApiException {
+		return brandDto.getBrandById(brandId);
 	}
 
 	@ApiOperation(value = "gets all unique brand list")
 	@GetMapping(path = "/api/brands/unique")
 	public List<String> getBrandList(){
-		return dto.getBrandList();
+		return brandDto.getBrandList();
 	}
 
 	@ApiOperation(value = "gets all unique category list")
 	@GetMapping(path = "/api/brands/unique/{brand}")
 	public List<String> getCategoryList(@PathVariable String brand){
-		return dto.getCategoryList(brand);
+		return brandDto.getCategoryList(brand);
 	}
 
 	@ApiOperation(value = "Gets list of all Brands")
 	@RequestMapping(path = "/api/brands", method = RequestMethod.GET)
-	public List<BrandData> getAll() {
-		return dto.getAll();
+	public List<BrandData> getAllBrands() {
+		return brandDto.getAllBrands();
 	}
 
 	@ApiOperation(value = "Updates an Brand")
-	@RequestMapping(path = "/api/brands/{id}", method = RequestMethod.PUT)
-	public void update(@PathVariable int id, @RequestBody BrandForm f) throws ApiException {
-		dto.update(id, f);
+	@RequestMapping(path = "/api/brands/{brandId}", method = RequestMethod.PUT)
+	public void update(@PathVariable int brandId, @RequestBody BrandForm brandForm) throws ApiException {
+		brandDto.updateBrand(brandId, brandForm);
 	}
 }

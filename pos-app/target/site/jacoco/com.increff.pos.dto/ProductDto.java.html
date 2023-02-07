@@ -26,55 +26,44 @@ import com.increff.pos.util.StringUtil;
 	@Autowired
 	private  BrandService brandService ;
 	
-	public void add(ProductForm form) throws ApiException {
-<span class="fc" id="L30">		StringUtil.normalise(form,ProductForm.class);</span>
-<span class="fc" id="L31">		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);</span>
-<span class="fc" id="L32">		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+	public void addProduct(ProductForm productForm) throws ApiException {
+<span class="fc" id="L30">		StringUtil.normalise(productForm,ProductForm.class);</span>
+<span class="fc" id="L31">		ProductPojo productPojo = ConvertUtil.objectMapper(productForm, ProductPojo.class);</span>
 
-<span class="fc" id="L34">		BrandPojo brand = brandService.getBrandId(form.getBrand(), form.getCategory());</span>
-<span class="fc" id="L35">		p.setBrandId(brand.getId());</span>
+<span class="fc" id="L33">		productPojo.setMrp(BigDecimal.valueOf(productForm.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+<span class="fc" id="L34">		BrandPojo brand = brandService.getBrandByNameAndCategory(productForm.getBrand(), productForm.getCategory());</span>
+<span class="fc" id="L35">		productPojo.setBrandId(brand.getId());</span>
 
-<span class="nc" id="L37">		productService.add(p);</span>
+<span class="nc" id="L37">		productService.add(productPojo);</span>
 <span class="nc" id="L38">	}</span>
-	
-	public ProductData get(int id) throws ApiException {
-<span class="fc" id="L41">		ProductPojo product = productService.get(id);</span>
-<span class="fc" id="L42">		ProductData data = ConvertUtil.objectMapper(product, ProductData.class);</span>
-<span class="fc" id="L43">		data.setMrp(StringUtil.convertMrp(product.getMrp()));</span>
-		
-<span class="fc" id="L45">		BrandPojo brand = brandService.get(product.getBrandId());</span>
-<span class="fc" id="L46">		data.setCategory(brand.getCategory());</span>
-<span class="fc" id="L47">		data.setBrand(brand.getBrand());</span>
 
-<span class="fc" id="L49">		return data;</span>
+	public List&lt;ProductData&gt; getAllProducts() throws ApiException{
+<span class="fc" id="L41">		List&lt;ProductPojo&gt; productPojoList = productService.getAllProducts();</span>
+<span class="fc" id="L42">		List&lt;ProductData&gt; productDataList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		for (ProductPojo productPojo : productPojoList) {</span>
+			
+<span class="fc" id="L45">			ProductData productData = ConvertUtil.objectMapper(productPojo, ProductData.class);</span>
+<span class="fc" id="L46">			productData.setMrp(StringUtil.convertMrp(productPojo.getMrp()));</span>
+			
+<span class="fc" id="L48">			BrandPojo brand = brandService.getBrandById(productPojo.getBrandId());</span>
+<span class="fc" id="L49">			productData.setCategory(brand.getCategory());</span>
+<span class="fc" id="L50">			productData.setBrand(brand.getBrand());</span>
+
+<span class="fc" id="L52">			productDataList.add(productData);</span>
+<span class="fc" id="L53">		}</span>
+<span class="fc" id="L54">		return productDataList;</span>
 	}
 	
-	public List&lt;ProductData&gt; getAll() throws ApiException{
-<span class="fc" id="L53">		List&lt;ProductPojo&gt; list = productService.getAll();</span>
-<span class="fc" id="L54">		List&lt;ProductData&gt; list2 = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L55" title="All 2 branches covered.">		for (ProductPojo p : list) {</span>
-			
-<span class="fc" id="L57">			ProductData data = ConvertUtil.objectMapper(p, ProductData.class);</span>
-<span class="fc" id="L58">			data.setMrp(StringUtil.convertMrp(p.getMrp()));</span>
-			
-<span class="fc" id="L60">			BrandPojo brand = brandService.get(p.getBrandId());</span>
-<span class="fc" id="L61">			data.setCategory(brand.getCategory());</span>
-<span class="fc" id="L62">			data.setBrand(brand.getBrand());</span>
-<span class="fc" id="L63">			list2.add(data);</span>
-<span class="fc" id="L64">		}</span>
-<span class="fc" id="L65">		return list2;</span>
-	}
-	
-	public void update(int id,ProductForm form) throws ApiException {
-<span class="fc" id="L69">		ProductPojo p = ConvertUtil.objectMapper(form, ProductPojo.class);</span>
-<span class="fc" id="L70">		p.setMrp(BigDecimal.valueOf(form.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+	public void updateProduct(int productId,ProductForm productForm) throws ApiException {
+<span class="fc" id="L58">		ProductPojo productPojo = ConvertUtil.objectMapper(productForm, ProductPojo.class);</span>
+<span class="fc" id="L59">		productPojo.setMrp(BigDecimal.valueOf(productForm.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
 
-<span class="fc" id="L72">		BrandPojo brand = brandService.getBrandId(form.getBrand(),form.getCategory());</span>
-<span class="fc" id="L73">		p.setBrandId(brand.getId());</span>
+<span class="fc" id="L61">		BrandPojo brandPojo = brandService.getBrandByNameAndCategory(productForm.getBrand(),productForm.getCategory());</span>
+<span class="fc" id="L62">		productPojo.setBrandId(brandPojo.getId());</span>
 		
-<span class="fc" id="L75">		productService.update(id,p);</span>
-<span class="fc" id="L76">	}</span>
+<span class="fc" id="L64">		productService.updateProduct(productId,productPojo);</span>
+<span class="fc" id="L65">	}</span>
 
-<span class="fc" id="L78">	public List&lt;String&gt; getBarcodeList(){return productService.getBarcodeList();}</span>
+<span class="fc" id="L67">	public List&lt;String&gt; getBarcodeList(){return productService.getBarcodeList();}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

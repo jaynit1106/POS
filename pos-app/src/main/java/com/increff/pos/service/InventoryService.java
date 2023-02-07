@@ -22,68 +22,60 @@ import com.increff.pos.pojo.OrderItemPojo;
 public class InventoryService {
 
 	@Autowired
-	private  InventoryDao dao;
+	private  InventoryDao inventoryDao;
 
-	public void add(InventoryPojo p) throws ApiException {
-		if(p.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
-		InventoryPojo inventory = dao.select(p.getId(),InventoryPojo.class);
-		if(!Objects.isNull(inventory)) {
-			inventory.setQuantity(inventory.getQuantity()+p.getQuantity());
-			update(inventory.getId(), inventory);
+	public void addInventory(InventoryPojo inventoryPojo) throws ApiException {
+		if(inventoryPojo.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
+
+
+		InventoryPojo existingInventory = inventoryDao.select(inventoryPojo.getId(),InventoryPojo.class);
+		if(!Objects.isNull(existingInventory)) {
+			existingInventory.setQuantity(existingInventory.getQuantity()+inventoryPojo.getQuantity());
 			return;
 		}
-		dao.insert(p);
+
+		inventoryDao.insert(inventoryPojo);
 	}
 
-	public InventoryPojo get(int id) throws ApiException {
-		return getCheck(id);
+	public InventoryPojo getInventoryById(int inventoryId) throws ApiException {
+
+		InventoryPojo inventoryPojo = inventoryDao.select(inventoryId,InventoryPojo.class);
+		if(Objects.isNull(inventoryPojo))throw new ApiException("Inventory Does Not Exists");
+		return inventoryPojo;
 	}
 
-	public List<InventoryPojo> getAll() {
-		return dao.selectAll(InventoryPojo.class);
+	public List<InventoryPojo> getAllInventorys() {
+		return inventoryDao.selectAll(InventoryPojo.class);
 	}
 
-	public void update(int id, InventoryPojo p) throws ApiException {
+	public void updateInventory(int id, InventoryPojo p) throws ApiException {
 		if(p.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");
-		InventoryPojo ex = getCheck(id);
+		InventoryPojo ex = getInventoryById(id);
 		ex.setQuantity(p.getQuantity());
-		dao.update(ex);
-	}
-
-	public void reduceInventory(int id,InventoryPojo p) throws ApiException {
-		InventoryPojo ex = getCheck(id);
-		if(p.getQuantity()>ex.getQuantity())throw new ApiException("quantity does not exists");
-		ex.setQuantity(ex.getQuantity()-p.getQuantity());
-
-	}
-
-	public InventoryPojo getCheck(int id) throws ApiException{
-		InventoryPojo p = dao.select(id,InventoryPojo.class);
-		if(Objects.isNull(p))throw new ApiException("Inventory Does Not Exists");
-		return p;
+		inventoryDao.update(ex);
 	}
 
 	@Transactional(rollbackOn = ApiException.class)
-	public void checkAndCreateOrder(List<OrderItemPojo> items) throws ApiException {
+	public void checkAndCreateOrder(List<OrderItemPojo> itemPojoList) throws ApiException {
 		List<JSONObject> errors = new ArrayList<>();
-		for(OrderItemPojo p : items) {
-			if(p.getQuantity()<=0){
-				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Please Enter a Valid Quantity for "+p.getBarcode()));
+		for(OrderItemPojo orderItemPojo : itemPojoList) {
+			if(orderItemPojo.getQuantity()<=0){
+				errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),"Please Enter a Valid Quantity for "+orderItemPojo.getBarcode()));
 				continue;
 			}
-			if(p.getSellingPrice()<0) {
-				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Please Enter a Valid Price for "+p.getBarcode()));
+			if(orderItemPojo.getSellingPrice()<0) {
+				errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),"Please Enter a Valid Price for "+orderItemPojo.getBarcode()));
 				continue;
 			}
 			try {
-				InventoryPojo inventory = getCheck(p.getProductId());
-				if(inventory.getQuantity()<p.getQuantity()){
-					errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Only "+inventory.getQuantity()+" pieces left for " + p.getBarcode()));
+				InventoryPojo inventoryPojo = getInventoryById(orderItemPojo.getProductId());
+				if(inventoryPojo.getQuantity()<orderItemPojo.getQuantity()){
+					errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),"Only "+inventoryPojo.getQuantity()+" pieces left for " + orderItemPojo.getBarcode()));
 					continue;
 				}
-				inventory.setQuantity(inventory.getQuantity()-p.getQuantity());
+				inventoryPojo.setQuantity(inventoryPojo.getQuantity()-orderItemPojo.getQuantity());
 			}catch (ApiException e){
-				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Inventory does not exists for " + p.getBarcode()));
+				errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),"Inventory does not exists for " + orderItemPojo.getBarcode()));
 			}
 		}
 		if(errors.size()>0){

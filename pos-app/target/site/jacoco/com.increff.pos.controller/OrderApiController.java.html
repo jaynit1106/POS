@@ -24,31 +24,31 @@ import io.swagger.annotations.ApiOperation;
 <span class="fc" id="L24">public class OrderApiController {</span>
 
 	@Autowired
-	private  OrderDto dto;
+	private  OrderDto orderDto;
 
 	@ApiOperation(value = &quot;Adds a Order&quot;)
 	@RequestMapping(path = &quot;/api/orders&quot;, method = RequestMethod.POST)
-	public void add(@RequestBody List&lt;OrderItemForm&gt; form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-<span class="nc" id="L32">		int orderId = dto.add(form);</span>
-<span class="nc" id="L33">		dto.generatedPdf(orderId);</span>
+	public void addOrder(@RequestBody List&lt;OrderItemForm&gt; orderItemForms) throws ApiException, ParserConfigurationException, TransformerException, IOException {
+<span class="nc" id="L32">		int orderId = orderDto.addOrder(orderItemForms);</span>
+<span class="nc" id="L33">		orderDto.generatedPdf(orderId);</span>
 <span class="nc" id="L34">	}</span>
 
 	@ApiOperation(value = &quot;Gets a Order by ID&quot;)
 	@RequestMapping(path = &quot;/api/orders/{id}&quot;, method = RequestMethod.GET)
-	public OrderData get(@PathVariable int id) throws ApiException {
-<span class="nc" id="L39">		return dto.get(id);</span>
+	public OrderData getOrderById(@PathVariable int orderId) throws ApiException {
+<span class="nc" id="L39">		return orderDto.getOrderById(orderId);</span>
 	}
 
 	@ApiOperation(value = &quot;Gets list of all Orders&quot;)
 	@RequestMapping(path = &quot;/api/orders&quot;, method = RequestMethod.GET)
-	public List&lt;OrderData&gt; getAll() {
-<span class="nc" id="L45">		return dto.getAll();</span>
+	public List&lt;OrderData&gt; getAllOrders() {
+<span class="nc" id="L45">		return orderDto.getAllOrders();</span>
 	}
 	
 	@ApiOperation(value = &quot;Gets Pdf&quot;)
 	@RequestMapping(path = &quot;/api/orders/download/{id}&quot;, method = RequestMethod.GET)
-	public void downloadPdf(@PathVariable int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
-<span class="nc" id="L51">		dto.downloadPdf(id, request, response);</span>
+	public void downloadPdf(@PathVariable int orderId, HttpServletRequest request,HttpServletResponse response) throws ApiException {
+<span class="nc" id="L51">		orderDto.downloadPdf(orderId, request, response);</span>
 <span class="nc" id="L52">	}</span>
 	
 }

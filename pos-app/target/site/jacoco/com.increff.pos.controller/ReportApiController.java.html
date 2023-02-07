@@ -25,24 +25,24 @@ import io.swagger.annotations.ApiOperation;
 <span class="fc" id="L25">public class ReportApiController {</span>
 
 	@Autowired
-	private ReportsDto dto;
+	private ReportsDto reportsDto;
 
 	@ApiOperation(value = &quot;gives inventory report&quot;)
 	@RequestMapping(path = &quot;/api/reports/inventory&quot;, method = RequestMethod.POST)
-	public List&lt;InventoryReportData&gt; getInventoryReport(@RequestBody InventoryReportForm form) throws ApiException {
-<span class="nc" id="L33">		return dto.getInventoryReport(form);</span>
+	public List&lt;InventoryReportData&gt; getInventoryReport(@RequestBody InventoryReportForm inventoryReportForm) throws ApiException {
+<span class="nc" id="L33">		return reportsDto.getInventoryReport(inventoryReportForm);</span>
 	}
 	
 	@ApiOperation(value = &quot;gives sales report&quot;)
 	@RequestMapping(path = &quot;/api/reports/sales&quot;, method = RequestMethod.POST)
-	public List&lt;SalesReportData&gt; getSalesReport(@RequestBody SalesReportForm form) throws ApiException{
-<span class="nc" id="L39">		return dto.getSalesReport(form);</span>
+	public List&lt;SalesReportData&gt; getSalesReport(@RequestBody SalesReportForm salesReportForm) throws ApiException{
+<span class="nc" id="L39">		return reportsDto.getSalesReport(salesReportForm);</span>
 	}
 
 	@ApiOperation(value = &quot;gives sales report&quot;)
 	@RequestMapping(path = &quot;/api/reports/brand&quot;, method = RequestMethod.POST)
-	public List&lt;BrandReportData&gt; getBrandReport(@RequestBody BrandReportForm form){
-<span class="nc" id="L45">		return dto.getBrandReport(form);</span>
+	public List&lt;BrandReportData&gt; getBrandReport(@RequestBody BrandReportForm brandReportForm){
+<span class="nc" id="L45">		return reportsDto.getBrandReport(brandReportForm);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

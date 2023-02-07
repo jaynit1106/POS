@@ -23,19 +23,12 @@ import io.swagger.annotations.ApiOperation;
 public class OrderItemApiController {
 
 	@Autowired
-	private OrderItemDto dto;
+	private OrderItemDto orderItemDto;
 
 	@ApiOperation(value = "Gets a Order Item by orderID")
-	@RequestMapping(path = "/api/orderitems/{id}", method = RequestMethod.GET)
-	public List<OrderItemData> get(@PathVariable int id) throws ApiException, ParserConfigurationException, TransformerException {
-		return dto.getOrderItemByOrderID(id);
+	@RequestMapping(path = "/api/orderitems/{orderId}", method = RequestMethod.GET)
+	public List<OrderItemData> getOrderItemsById(@PathVariable int orderId) throws ApiException, ParserConfigurationException, TransformerException {
+		return orderItemDto.getOrderItemByOrderID(orderId);
 	}
-
-	@ApiOperation(value = "Gets list of all Order Items")
-	@RequestMapping(path = "/api/orderitems", method = RequestMethod.GET)
-	public List<OrderItemData> getAll() {
-		return dto.getAll();
-	}
-
 
 }
