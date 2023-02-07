@@ -17,7 +17,7 @@ import com.increff.pos.pojo.OrderItemPojo;
 public class OrderItemService {
 
 	@Autowired
-	private final OrderItemDao dao = new OrderItemDao();
+	private  OrderItemDao dao;
 	
 	
 

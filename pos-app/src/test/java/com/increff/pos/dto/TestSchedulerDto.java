@@ -19,17 +19,17 @@ import java.util.List;
 
 public class TestSchedulerDto extends AbstractUnitTest{
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao ;
     @Autowired
-    private final ProductDao productDao = new ProductDao();
+    private  ProductDao productDao ;
     @Autowired
-    private final InventoryDao inventoryDao = new InventoryDao();
+    private  InventoryDao inventoryDao ;
     @Autowired
-    private final OrderDao orderDao = new OrderDao();
+    private  OrderDao orderDao ;
     @Autowired
-    private final OrderItemDao orderItemDao = new OrderItemDao();
+    private  OrderItemDao orderItemDao ;
     @Autowired
-    private final SchedulerDto schedulerDto = new SchedulerDto();
+    private  SchedulerDto schedulerDto ;
 
     @Test
     public void testAdd() throws ApiException {

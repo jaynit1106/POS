@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 public class InventoryApiController {
 
 	@Autowired
-	private final InventoryDto dto = new InventoryDto();
+	private InventoryDto dto;
 
 	@ApiOperation(value = "Adds a Product Quantity")
 	@RequestMapping(path = "/api/inventorys", method = RequestMethod.POST)

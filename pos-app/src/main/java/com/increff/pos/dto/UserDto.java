@@ -18,7 +18,7 @@ public class UserDto {
     @Value("${supervisor.email}")
     private  String email;
     @Autowired
-    private final UserService userService = new UserService();
+    private  UserService userService;
 
     public ModelAndView add(UserForm form) throws ApiException {
         UserPojo p = ConvertUtil.objectMapper(form, UserPojo.class);

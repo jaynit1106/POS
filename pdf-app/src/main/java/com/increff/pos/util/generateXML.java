@@ -24,7 +24,6 @@ import com.increff.pos.model.OrderItemData;
 public class generateXML {
 
     public static void createXml(List<OrderItemData> list) throws ParserConfigurationException, TransformerException {
-        System.out.println("Inside XML");
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Document doc = docBuilder.newDocument();

@@ -12,15 +12,15 @@
 
 <div class="container">
 
-<h3>Brands</h3>
+<h3>Brand</h3>
 
  <!-- Top row with form-->
  <div class="row" th:if="${info.getRole()}=='supervisor'">
 	 <div class="col-12">
 			<form class="form-inline">
-			  <button type="button" class="btn btn-primary" id="add-brand"><i class="fa-sharp fa-solid fa-plus"></i></button>
+			  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To add a brand" id="add-brand"><i class="fa-sharp fa-solid fa-plus"></i></button>
 			  &nbsp;
-			  <button type="button" class="btn btn-primary" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+			  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To upload tsv" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
 			</form>
 	 </div>	
 </div> 
@@ -40,7 +40,7 @@
 	      <th scope="col" style="text-align:center;">S.No.</th>
 	      <th scope="col" style="text-align:center;">Brand</th>
 	      <th scope="col" style="text-align:center;">Category</th>
-	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Actions</th>
+	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Action</th>
 	    </tr>
 	  </thead>
 	  <tbody>

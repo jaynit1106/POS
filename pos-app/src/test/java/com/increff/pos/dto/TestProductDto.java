@@ -21,13 +21,13 @@ import java.util.Objects;
 
 public class TestProductDto extends AbstractUnitTest{
     @Autowired
-    private final ProductDto productDto = new ProductDto();
+    private  ProductDto productDto ;
     @Autowired
-    private final ProductDao productDao = new ProductDao();
+    private  ProductDao productDao ;
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao ;
     @Autowired
-    private  final BrandDto brandDto = new BrandDto();
+    private   BrandDto brandDto ;
 
     @Test
     public void testAddAndGetAll() throws ApiException {

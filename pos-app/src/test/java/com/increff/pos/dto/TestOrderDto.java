@@ -27,21 +27,21 @@ import static org.junit.Assert.fail;
 
 public class TestOrderDto extends  AbstractUnitTest{
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao = new BrandDao();
     @Autowired
-    private final ProductDao productDao = new ProductDao();
+    private  ProductDao productDao ;
     @Autowired
-    private final InventoryDao inventoryDao = new InventoryDao();
+    private  InventoryDao inventoryDao ;
     @Autowired
-    private final OrderDao orderDao = new OrderDao();
+    private  OrderDao orderDao ;
     @Autowired
-    private final BrandDto brandDto = new BrandDto();
+    private  BrandDto brandDto ;
     @Autowired
-    private final ProductDto productDto = new ProductDto();
+    private  ProductDto productDto ;
     @Autowired
-    private final OrderDto orderDto = new OrderDto();
+    private  OrderDto orderDto ;
     @Autowired
-    private final OrderItemDto orderItemDto = new OrderItemDto();
+    private  OrderItemDto orderItemDto ;
 
     @Test
     public void testAdd() throws ApiException, ParserConfigurationException, TransformerException, IOException {

@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserService {
 
 	@Autowired
-	private final UserDao dao = new UserDao();
+	private  UserDao dao;
 
 	@Autowired
 	private InfoData info;

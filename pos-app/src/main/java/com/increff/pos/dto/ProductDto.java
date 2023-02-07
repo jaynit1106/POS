@@ -22,10 +22,10 @@ import com.increff.pos.util.StringUtil;
 @Component
 public class ProductDto {
 	@Autowired
-	private final ProductService productService = new ProductService();
+	private  ProductService productService ;
 	
 	@Autowired
-	private final BrandService brandService = new BrandService();
+	private  BrandService brandService ;
 	
 	public void add(ProductForm form) throws ApiException {
 		StringUtil.normalise(form,ProductForm.class);

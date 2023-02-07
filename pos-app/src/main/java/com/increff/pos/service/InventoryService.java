@@ -22,7 +22,7 @@ import com.increff.pos.pojo.OrderItemPojo;
 public class InventoryService {
 
 	@Autowired
-	private final InventoryDao dao = new InventoryDao();
+	private  InventoryDao dao;
 
 	public void add(InventoryPojo p) throws ApiException {
 		if(p.getQuantity()<0)throw new ApiException("Quantity cannot be Negative");

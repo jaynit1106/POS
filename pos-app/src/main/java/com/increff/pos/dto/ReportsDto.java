@@ -15,6 +15,7 @@ import com.increff.pos.pojo.*;
 import com.increff.pos.service.*;
 import com.increff.pos.util.MapUtil;
 import io.swagger.models.auth.In;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,18 +23,21 @@ import org.springframework.stereotype.Component;
 public class ReportsDto {
 
 	@Autowired
-	private final BrandService brandService = new BrandService();
+	private  BrandService brandService;
 	@Autowired
-	private final ProductService productService = new ProductService();
+	private  ProductService productService;
 	@Autowired
-	private final InventoryService inventoryService = new InventoryService();
+	private  InventoryService inventoryService;
 	@Autowired
-	private final OrderService orderService = new OrderService();
+	private  OrderService orderService ;
 	@Autowired
-	private final OrderItemService orderItemService = new OrderItemService();
+	private  OrderItemService orderItemService;
+
+	private static Logger logger = Logger.getLogger(ReportsDto.class);
 
 
 	public List<BrandReportData> getBrandReport(BrandReportForm form){
+		logger.info("creating brand report");
 		List<BrandPojo> list = brandService.getAll();
 		List<BrandReportData> data = new ArrayList<>();
 		for(BrandPojo p : list){
@@ -45,6 +49,7 @@ public class ReportsDto {
 			data.add(brand);
 
 		}
+		logger.info("Created Brand Report at "+(Instant.now()));
 		return data;
 	}
 	public List<InventoryReportData> getInventoryReport(InventoryReportForm form) throws ApiException {
@@ -59,7 +64,7 @@ public class ReportsDto {
 			inventory.put(brandId , quant + p.getQuantity());
 		}
 
-		List<InventoryReportData> finalData = new ArrayList<>();
+		List<InventoryReportData> Data = new ArrayList<>();
 		for(Integer id : inventory.keySet()) {
 			BrandPojo brand = brandService.get(id);
 			if(!Objects.equals(form.getBrand(),"All") && !Objects.equals(form.getBrand(),brand.getBrand()))continue;
@@ -68,10 +73,11 @@ public class ReportsDto {
 			data.setBrand(brand.getBrand());
 			data.setCategory(brand.getCategory());
 			data.setQuantity(inventory.get(id));
-			finalData.add(data);
+			Data.add(data);
 		}
 
-		return finalData;
+		logger.info("Created Inventory Report at "+(Instant.now()));
+		return Data;
 	}
 	
 	public List<SalesReportData> getSalesReport(SalesReportForm form) throws ApiException {
@@ -122,6 +128,8 @@ public class ReportsDto {
 			item.setQuantity(quantityBrands.get(id));
 			data.add(item);
 		}
+
+		logger.info("Created Inventory Report at "+(Instant.now()));
 		return data;
 	}
 	

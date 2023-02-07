@@ -18,9 +18,9 @@ import static org.junit.Assert.fail;
 public class TestBrandService extends AbstractUnitTest{
 
     @Autowired
-    private final BrandService brandService = new BrandService();
+    private  BrandService brandService ;
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao ;
 
     @Test
     public void testAdd() throws ApiException {

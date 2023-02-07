@@ -21,7 +21,7 @@ import com.increff.pos.util.ConvertUtil;
 public class InventoryDto {
 
 	@Autowired
-	private final InventoryService inventoryService = new InventoryService();
+	private InventoryService inventoryService;
 	
 	
 	@Autowired

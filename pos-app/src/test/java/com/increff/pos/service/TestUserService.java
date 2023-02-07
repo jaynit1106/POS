@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserService extends AbstractUnitTest{
     @Autowired
-    private final UserService userService = new UserService();
+    private  UserService userService ;
 
     @Test
     public void testAdd() throws ApiException {

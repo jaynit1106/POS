@@ -27,7 +27,7 @@ import com.increff.pos.pojo.OrderPojo;
 public class OrderService {
 
 	@Autowired
-	private final OrderDao dao = new OrderDao();
+	private OrderDao dao;
 
 
 	public void add(OrderPojo p) throws ApiException {

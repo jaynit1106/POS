@@ -25,6 +25,7 @@ function addBrand(event){
 	   success: function(response) {
 	   		getBrandList();
 	   		swal("Hurray", "Brand added successfully", "success");
+	   		document.getElementById('brand-form').reset();
 	   		$('#addBrandModal').modal('toggle');
 	   },
 	   error: function(response){
@@ -122,7 +123,7 @@ function uploadRows(){
 	processCount++;
 	var title = Object.keys(row);
 	if(title[0]!='brand' || title[1]!='category' || title.length!=2){
-	    swal("Oops!","incorrect tsv format please check the sample file", "error");
+	    swal("Oops!","Incorrect tsv format please check the sample file", "error");
 	    return;
 	}
 
@@ -141,7 +142,7 @@ function uploadRows(){
 	   		uploadRows();  
 	   },
 	   error: function(response){
-	   		row.error=response.responseText
+	   		row.error=response.responseJSON.message
 	   		errorData.push(row);
 	   		uploadRows();
 	   }
@@ -186,7 +187,7 @@ function displayBrandList(data){
 		var e = data[i];
 		brandData.push(e);
 		let id = counter-1;
-		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id +')"><i class="fa-solid fa-pen-to-square"></i></button>';
+		var buttonHtml = '<button class="btn btn-dark" data-toggle="tooltip" data-placement="top" title="edit brand"  onclick="displayUpdateDialog(' + id +')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var row = '<tr>'
 		+ '<td style="text-align:center;">' + counter + '</td>'
 		+ '<td style="text-align:center;">' + e.brand + '</td>'

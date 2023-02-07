@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class UserApiController {
     @Autowired
-    private final UserDto dto = new UserDto();
+    private UserDto dto;
 
     @ApiOperation(value = "Adds a User")
     @RequestMapping(path = "/session/signup", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

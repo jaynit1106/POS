@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 public class ReportApiController {
 
 	@Autowired
-	private final ReportsDto dto = new ReportsDto();
+	private ReportsDto dto;
 
 	@ApiOperation(value = "gives inventory report")
 	@RequestMapping(path = "/api/reports/inventory", method = RequestMethod.POST)

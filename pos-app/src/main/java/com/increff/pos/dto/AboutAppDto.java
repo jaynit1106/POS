@@ -10,7 +10,7 @@ import com.increff.pos.service.AboutAppService;
 public class AboutAppDto {
 
 	@Autowired
-	private final AboutAppService service = new AboutAppService();
+	private AboutAppService service;
 	
 	public AboutAppData getDetails() {
 		AboutAppData d = new AboutAppData();

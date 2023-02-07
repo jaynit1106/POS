@@ -15,6 +15,7 @@ function getProductUrl(){
 function addInventory(event){
 	//Set the values to update
 	var $form = $("#inventory-form");
+	if(!validateForm($form))return;
 	var json = toJson($form);
 	var url = getInventoryUrl();
 	$.ajax({
@@ -55,6 +56,7 @@ function updateInventory(){
 	var url = getInventoryUrl() + "/" + editInventoryId;
 	var $form = $("#inventory-edit-form");
 	var json = toJson($form);
+	if(!validateForm($form))return;
 	
 	$.ajax({
 	   url: url,
@@ -137,7 +139,7 @@ function uploadRows(){
 	processCount++;
 	var title = Object.keys(row);
     if(title[0]!='barcode' || title[1]!='quantity' || title.length!=2){
-        swal("Oops!","incorrect tsv format please check the sample file", "error");
+        swal("Oops!","Incorrect tsv format please check the sample file", "error");
         return;
     }
 	
@@ -156,7 +158,7 @@ function uploadRows(){
 	   		uploadRows();  
 	   },
 	   error: function(response){
-	   		row.error=response.responseText
+	   		row.error=response.responseJSON.message
 	   		errorData.push(row);
 	   		uploadRows();
 	   }
@@ -186,7 +188,7 @@ function displayInventoryList(data){
 		var e = data[i];
 		inventoryData.push(e)
 		let id =counter-1;
-		var buttonHtml = '<button class="btn btn-dark" onclick="displayUpdateDialog(' + id + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
+		var buttonHtml = '<button class="btn btn-dark" data-toggle="tooltip" data-placement="top" title="edit inventory"  onclick="displayUpdateDialog(' + id + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
 		var row = '<tr>'
 		+ '<td style="text-align:center;">' + counter + '</td>'
 		+ '<td style="text-align:center;">' + e.name + '</td>'

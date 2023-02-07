@@ -19,17 +19,17 @@ import static org.junit.Assert.fail;
 
 public class TestInventoryDto extends AbstractUnitTest{
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao ;
     @Autowired
-    private final ProductDao productDao = new ProductDao();
+    private  ProductDao productDao ;
     @Autowired
-    private final InventoryDao inventoryDao = new InventoryDao();
+    private  InventoryDao inventoryDao ;
     @Autowired
-    private final InventoryDto inventoryDto = new InventoryDto();
+    private  InventoryDto inventoryDto ;
     @Autowired
-    private final BrandDto brandDto = new BrandDto();
+    private  BrandDto brandDto ;
     @Autowired
-    private final ProductDto productDto = new ProductDto();
+    private  ProductDto productDto ;
 
     @Test
     public void testAddAndGetAll() throws ApiException {

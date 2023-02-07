@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 public class ProductApiController {
 
 	@Autowired
-	private final ProductDto dto = new ProductDto();
+	private ProductDto dto;
 
 	@ApiOperation(value = "Adds a Product")
 	@RequestMapping(path = "/api/products", method = RequestMethod.POST)

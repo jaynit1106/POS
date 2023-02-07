@@ -12,6 +12,8 @@ import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
+import io.swagger.models.auth.In;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,11 +30,13 @@ import com.increff.pos.util.TimestampUtil;
 public class SchedulerDto {
 	
 	@Autowired
-	private final SchedulerService schedulerService = new SchedulerService();
+	private  SchedulerService schedulerService;
 	@Autowired
-	private final OrderService orderService = new OrderService();
+	private  OrderService orderService;
 	@Autowired
-	private final OrderItemService orderItemService = new OrderItemService();
+	private  OrderItemService orderItemService;
+
+	private static Logger logger = Logger.getLogger(SchedulerDto.class);
 
 	@Scheduled(cron = "00 00 12 * * *")
 	public void add() throws ApiException{
@@ -52,6 +56,7 @@ public class SchedulerDto {
 		p.setTotal_revenue(revenue);
 		p.setInvoiced_items_count(totalItems);
 		schedulerService.add(p);
+		logger.info("Created Daily report at "+ Instant.now());
 	}
 	
 	public SchedulerData get(String date) throws ApiException {

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TestOrderService extends AbstractUnitTest{
     @Autowired
-    private final OrderService orderService = new OrderService();
+    private  OrderService orderService;
 
     @Test
     public void testAdd() throws ApiException {

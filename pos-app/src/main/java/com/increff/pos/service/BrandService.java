@@ -21,7 +21,7 @@ import com.increff.pos.util.StringUtil;
 public class BrandService {
 
 	@Autowired
-	private final BrandDao dao = new BrandDao();
+	private  BrandDao dao ;
 
 
 	public void add(BrandPojo p) throws ApiException {

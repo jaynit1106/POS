@@ -27,10 +27,10 @@ import org.json.simple.JSONObject;
 @Component
 public class OrderItemDto {
 	@Autowired
-	private final OrderItemService orderItemService = new OrderItemService();
+	private  OrderItemService orderItemService;
 	
 	@Autowired
-	private final ProductService productService = new ProductService();
+	private  ProductService productService;
 
 
 	public OrderItemData get(int id) throws ApiException {

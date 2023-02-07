@@ -19,23 +19,23 @@ import static org.junit.Assert.fail;
 
 public class TestOrderItemService extends AbstractUnitTest{
     @Autowired
-    private final BrandService brandService = new BrandService();
+    private  BrandService brandService ;
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao ;
     @Autowired
-    private final ProductService productService = new ProductService();
+    private  ProductService productService ;
     @Autowired
-    private final ProductDao productDao = new ProductDao();
+    private  ProductDao productDao ;
     @Autowired
-    private final InventoryService inventoryService = new InventoryService();
+    private  InventoryService inventoryService ;
     @Autowired
-    private final InventoryDao inventoryDao = new InventoryDao();
+    private  InventoryDao inventoryDao ;
     @Autowired
-    private final OrderDao orderDao = new OrderDao();
+    private  OrderDao orderDao ;
     @Autowired
-    private final OrderItemDao orderItemDao = new OrderItemDao();
+    private  OrderItemDao orderItemDao ;
     @Autowired
-    private final OrderItemService orderItemService = new OrderItemService();
+    private  OrderItemService orderItemService ;
 
     @Test
     public void testAdd() throws ApiException {

@@ -21,7 +21,7 @@ public class StringUtil {
 				field.setAccessible(true);
 				try{
 					if(Objects.nonNull(field.get(form))){
-						field.set(form,(field.get(form).toString()).toLowerCase());
+						field.set(form,(field.get(form).toString()).toLowerCase().trim());
 					}
 				} catch(IllegalAccessException e){
 					throw new ApiException("Error normalising form");

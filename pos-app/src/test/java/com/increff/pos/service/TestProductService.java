@@ -16,13 +16,13 @@ import static org.junit.Assert.*;
 
 public class TestProductService extends AbstractUnitTest{
     @Autowired
-    private final BrandService brandService = new BrandService();
+    private  BrandService brandService ;
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao ;
     @Autowired
-    private final ProductService productService = new ProductService();
+    private  ProductService productService ;
     @Autowired
-    private final ProductDao productDao = new ProductDao();
+    private  ProductDao productDao;
 
     @Test
     public void testAdd() throws ApiException {

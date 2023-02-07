@@ -19,7 +19,7 @@ import com.increff.pos.util.StringUtil;
 public class ProductService {
 
 	@Autowired
-	private final ProductDao dao = new ProductDao();
+	private  ProductDao dao;
 
 	public void add(ProductPojo p) throws ApiException {
 		if(StringUtil.isEmpty(p.getName()))throw new ApiException("Name cannot be empty");
@@ -54,10 +54,8 @@ public class ProductService {
 		}
 
 		ProductPojo ex = getCheck(id);
-		ex.setBrandId(p.getBrandId());
 		ex.setMrp(p.getMrp());
 		ex.setName(p.getName());
-		ex.setBarcode(p.getBarcode());
 	}
 
 	public ProductPojo getCheck(int id) throws ApiException {

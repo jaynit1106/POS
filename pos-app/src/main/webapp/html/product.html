@@ -11,16 +11,15 @@
 
 <div class="container">
 
-<h3>Products</h3>
+<h3>Product</h3>
 
  <!-- Top row with form-->
  <div class="row" th:if="${info.getRole()}=='supervisor'">
 	 <div class="col-12">
-			  <div class="col-sm-10">
-		  	  <button type="button" class="btn btn-primary" id="add-product"><i class="fa-sharp fa-solid fa-plus"></i></button>
-		 	  	&nbsp;
-		  	  <button type="button" class="btn btn-primary" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
-		  	</div>
+		  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To add a product" id="add-product"><i class="fa-sharp fa-solid fa-plus"></i></button>
+			&nbsp;
+		  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="To upload tsv" id="upload-data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+
 	 </div>	
 </div> 
 
@@ -42,7 +41,7 @@
 	      <th scope="col" style="text-align:center;">name</th>
 		  <th scope="col" style="text-align:center;">Barcode</th>
 	      <th scope="col" style="text-align:right;">MRP</th>
-	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Actions</th>
+	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Action</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -68,14 +67,14 @@
 			  <div class="form-row">
 			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="brand" id="editBrand" placeholder="enter brand">
+			      <input type="text" class="form-control" name="brand" id="editBrand" placeholder="enter brand" disabled>
 			    </div>
 			  </div>
 			  <br>
 			  <div class="form-row">
 			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" id="editCategory" placeholder="enter category">
+			      <input type="text" class="form-control" name="category" id="editCategory" placeholder="enter category" disabled>
 			    </div>
 			  </div>
 			  <br>
@@ -94,9 +93,9 @@
 			  </div>
 			  <br>
 			  <div class="form-row">
-			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
+			    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="mrp" id="editMrp" placeholder="enter MRP">
+			      <input type="number" class="form-control" name="mrp" id="editMrp"  placeholder="enter MRP">
 			    </div>
 			  </div>
 			</form>   
@@ -154,9 +153,9 @@
 					</div>
 					<br>
 					<div class="form-row">
-						<label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
+						<label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" name="mrp" id="addMrp" placeholder="enter MRP">
+							<input type="number" class="form-control" name="mrp" id="addMrp" maxlength="10" placeholder="enter MRP">
 						</div>
 					</div>
 				</form>

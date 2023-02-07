@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserDto extends AbstractUnitTest{
     @Autowired
-    private final UserDto userDto = new UserDto();
+    private  UserDto userDto;
 
     @Autowired
-    private final UserService userService = new UserService();
+    private  UserService userService ;
     @Test
     public void testAdd() throws ApiException {
         UserForm f = new UserForm();

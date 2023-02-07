@@ -18,7 +18,7 @@ import com.increff.pos.pojo.SchedulerPojo;
 public class SchedulerService {
 
 	@Autowired
-	private final SchedulerDao dao = new SchedulerDao();
+	private  SchedulerDao dao;
 	
 
 	public void add(SchedulerPojo p) throws ApiException {

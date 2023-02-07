@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestAboutAppDto extends AbstractUnitTest{
 
     @Autowired
-    private final AboutAppDto aboutAppDto = new AboutAppDto();
+    private  AboutAppDto aboutAppDto;
 
     @Test
     public void testAboutApp(){

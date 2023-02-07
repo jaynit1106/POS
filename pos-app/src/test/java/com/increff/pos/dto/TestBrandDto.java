@@ -19,9 +19,9 @@ import java.util.Objects;
 
 public class TestBrandDto extends AbstractUnitTest{
     @Autowired
-    private final BrandDao brandDao = new BrandDao();
+    private  BrandDao brandDao;
     @Autowired
-    private  final BrandDto brandDto = new BrandDto();
+    private   BrandDto brandDto;
 
 
     //Testing The CRUD Operations

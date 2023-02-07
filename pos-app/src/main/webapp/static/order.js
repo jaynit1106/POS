@@ -96,6 +96,7 @@ errorData = [];
 errorName = new Map();
 function submitOrder(){
 	errorData = [];
+	document.getElementById('submit-order').disabled = true;
 	var url = getOrderUrl();
 	let form = convertArrayToJson();
 	if(itemList.length-deleteList.length==0){
@@ -116,15 +117,16 @@ function submitOrder(){
 				getOrderList();  
 		},
 		error: function(response){
-		        var json = JSON.parse(response.responseJSON.message);
-		        errorName.clear()
-		        for(var i in json){
-		            e = json[i];
-		            errorName.set(Object.keys(e)[0],e[Object.keys(e)[0]]);
-		            errorData.push(e);
-		        }
-				swal("Oops!", "There are "+errorData.length+" errors", "error");
-				displayItemList();
+            document.getElementById('submit-order').disabled = false;
+            var json = JSON.parse(response.responseJSON.message);
+            errorName.clear()
+            for(var i in json){
+                e = json[i];
+                errorName.set(Object.keys(e)[0],e[Object.keys(e)[0]]);
+                errorData.push(e);
+            }
+            swal("Oops!", "There are "+errorData.length+" errors", "error");
+            displayItemList();
 		}
 	 });
 }
@@ -172,8 +174,8 @@ function displayOrderList(data){
 	var counter=1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="btn btn-dark" onclick="viewModal(' + e.id + ')"><i class="fa-solid fa-eye"></i></button>';
-		var downloadPdf = '<button class="btn btn-primary" onclick="downloadPdf(' + e.id + ')"><i class="fa-solid fa-download"></i></button>';
+		var buttonHtml = '<button class="btn btn-dark" data-toggle="tooltip" data-placement="top" title="view order"  onclick="viewModal(' + e.id + ')"><i class="fa-solid fa-eye"></i></button>';
+		var downloadPdf = '<button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="download invoice"  onclick="downloadPdf(' + e.id + ')"><i class="fa-solid fa-download"></i></button>';
 		var date = new Date(e.timestamp).toLocaleString().replace(",","");
 		var arr = date.split("/")
 		date = arr[1]+'/'+arr[0]+'/'+arr[2];
@@ -195,7 +197,6 @@ function displayItemList(){
 	$tbody.empty();
 	var itr = 0;
 	var serialId=1;
-	console.log(itemList);
 	localStorage.items = JSON.stringify(itemList);
 	localStorage.removeItems = JSON.stringify(deleteList);
 	for(var i in itemList){
@@ -206,8 +207,8 @@ function displayItemList(){
 		var e = JSON.parse(itemList[i]);
 		productMap.set(e.barcode,itr);
 
-		var buttonHtml = '<button id="button'+itr+'"class="btn btn-dark" onclick="editItem(' + itr + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
-		var deleteButton = '<button class="btn btn-danger" onclick="deleteItem(' + itr + ')"><i class="fa-solid fa-trash"></i></button>';
+		var buttonHtml = '<button id="button'+itr+'"class="btn btn-dark" data-toggle="tooltip" data-placement="top" title="edit item"   onclick="editItem(' + itr + ')"><i class="fa-solid fa-pen-to-square"></i></button>';
+		var deleteButton = '<button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="delete item"  onclick="deleteItem(' + itr + ')"><i class="fa-solid fa-trash"></i></button>';
 		var row;
 		var sp = parseFloat(e.sellingPrice);
         sp=sp.toFixed(2);
@@ -242,18 +243,20 @@ function viewModal(id){
 	var url = getOrderItemUrl()+'/'+id;
 	getItemList(url);
 }
-
+productMap = new Map();
 function displayCreateItemModal(){
+	document.getElementById('submit-order').disabled = false;
     if(localStorage.items==undefined)itemList=[]
     else itemList=JSON.parse(localStorage.items)
 
     if(localStorage.removeItems==undefined)deleteList=[]
     else deleteList=JSON.parse(localStorage.removeItems);
 
+
 	displayItemList();
 //	itemList=[];
 //	deleteList=[];
-	productMap = new Map();
+//	productMap = new Map();
 //	var $tbody = $('#items-table').find('tbody');
 //	$tbody.empty();
 	$('#edit-order-modal').modal('toggle');
@@ -307,6 +310,7 @@ function edits(id){
 
 function addItem(){
 	var $form = $("#item-form");
+	if(!validateForm($form))return;
 	var json = toJson($form);
 	var e =JSON.parse(json);
 	if(e.quantity=="" || e.barcode=="" || e.sellingPrice==""){
@@ -360,6 +364,7 @@ function cancelOrder(){
     itemList=[]
     deleteList=[]
     errorName.clear();
+    productMap.clear();
     localStorage.clear();
     $('#edit-order-modal').modal('toggle');
 }

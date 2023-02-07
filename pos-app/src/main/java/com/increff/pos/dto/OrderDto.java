@@ -34,18 +34,18 @@ import com.increff.pos.util.ConvertUtil;
 @Component
 public class OrderDto {
 	@Autowired
-	private final PdfDto pdfDto = new PdfDto();
+	private PdfDto pdfDto;
 
 	@Autowired
-	private final OrderItemService orderItemService = new OrderItemService();
+	private  OrderItemService orderItemService;
 
 	@Autowired
-	private final ProductService productService = new ProductService();
+	private  ProductService productService;
 
 	@Autowired
-	private final InventoryService inventoryService = new InventoryService();
+	private  InventoryService inventoryService;
 	@Autowired
-	private final OrderService orderService = new OrderService();
+	private  OrderService orderService;
 
 	@Transactional(rollbackOn = ApiException.class)
 	public int add(List<OrderItemForm> form) throws ApiException, ParserConfigurationException, TransformerException, IOException {
@@ -57,6 +57,9 @@ public class OrderDto {
 			ProductPojo product;
 			try {
 				product = productService.getProductByBarcode(f.getBarcode());
+				if(product.getMrp()<f.getSellingPrice()){
+					errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Selling price should be less than "+product.getMrp()));
+				}
 			}catch (ApiException e){
 				errors.add(JSONUTil.getJSONObject(p.getBarcode(),"Product "+f.getBarcode()+" Does Not exists"));
 				continue;
