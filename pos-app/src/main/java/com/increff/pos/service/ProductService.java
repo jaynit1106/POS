@@ -44,6 +44,10 @@ public class ProductService {
 				throw new ApiException("Product already Exists");
 			}
 		}
+
+		if(productPojo.getMrp()<=0) {
+			throw new ApiException("MRP should be positive");
+		}
 		ProductPojo ex = getProductById(productId);
 		ex.setMrp(productPojo.getMrp());
 		ex.setName(productPojo.getName());
@@ -56,11 +60,12 @@ public class ProductService {
 	}
 	
 	public ProductPojo getProductByBarcode(String barcode)throws ApiException{
-		ProductPojo p = productDao.barcodeExist(barcode);
-		if(Objects.isNull(p)) {
+		ProductPojo productPojo = productDao.barcodeExist(barcode);
+		if(Objects.isNull(productPojo)) {
 			throw new ApiException("Product Does Not Exists");
 		}
-		return p;
+
+		return productPojo;
 	}
 
 	public List<String> getBarcodeList(){
@@ -77,7 +82,7 @@ public class ProductService {
 		if(productPojo.getBarcode().length()!=8) {
 			throw new ApiException("Barcode Should be of 8 characters");
 		}
-		if(productPojo.getMrp()<0) {
+		if(productPojo.getMrp()<=0) {
 			throw new ApiException("MRP should be positive");
 		}
 		if(Objects.nonNull(productDao.getProductByNameAndBrandId(productPojo.getBrandId(),productPojo.getName()))) {

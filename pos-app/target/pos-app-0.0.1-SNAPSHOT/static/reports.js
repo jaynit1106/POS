@@ -42,9 +42,11 @@ function displaySchedulerList(data){
 	var $tbody = $('#scheduler-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
+	var total = 0;
 	for(var i in data){
 		var e = data[i];
 		var rev = parseFloat(e.total_revenue);
+        total+=rev;
         rev=rev.toFixed(2);
 
 		var row = '<tr>'
@@ -57,6 +59,14 @@ function displaySchedulerList(data){
         $tbody.append(row);
         counter++;
 	}
+	var row = '<tr>'
+    		+ '<td style="text-align:center;"> </td>'
+    		+ '<td style="text-align:center;"> </td>'
+    		+ '<td style="text-align:center;"> </td>'
+    		+ '<td style="text-align:center;font-weight:bold;">'  + 'Total Revenue' + '</td>'
+    		+ '<td style="text-align:right;font-weight:bold;">'  + total.toFixed(2) + '</td>'
+    		+ '</tr>';
+    $tbody.append(row);
 	paginate();
 	
 }
@@ -75,11 +85,6 @@ function paginate() {
                 title:'Daily Report',
                 filename:'dailyReport'
             },
-            {
-                  extend:'csv',
-                  title:'Daily Report',
-                  filename:'dailyReport'
-              },
               {
                   extend:'excel',
                   title:'Daily Report',

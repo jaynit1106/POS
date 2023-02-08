@@ -66,6 +66,6 @@
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
   <testcase classname="com.increff.pos.service.TestUserService" name="testAdd" time="0"/>
-  <testcase classname="com.increff.pos.service.TestUserService" name="testGetByEmail" time="0"/>
-  <testcase classname="com.increff.pos.service.TestUserService" name="testGetAll" time="0.016"/>
+  <testcase classname="com.increff.pos.service.TestUserService" name="testGetByEmail" time="0.016"/>
+  <testcase classname="com.increff.pos.service.TestUserService" name="testGetAll" time="0"/>
 </testsuite>

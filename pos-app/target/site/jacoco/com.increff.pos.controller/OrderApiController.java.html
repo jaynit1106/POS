@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import com.increff.pos.model.form.OrderItemForm;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,35 +22,38 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-<span class="fc" id="L24">public class OrderApiController {</span>
+<span class="fc" id="L25">public class OrderApiController {</span>
 
 	@Autowired
 	private  OrderDto orderDto;
 
+<span class="fc" id="L30">	private static Logger logger = Logger.getLogger(OrderApiController.class);</span>
+
 	@ApiOperation(value = &quot;Adds a Order&quot;)
 	@RequestMapping(path = &quot;/api/orders&quot;, method = RequestMethod.POST)
 	public void addOrder(@RequestBody List&lt;OrderItemForm&gt; orderItemForms) throws ApiException, ParserConfigurationException, TransformerException, IOException {
-<span class="nc" id="L32">		int orderId = orderDto.addOrder(orderItemForms);</span>
-<span class="nc" id="L33">		orderDto.generatedPdf(orderId);</span>
-<span class="nc" id="L34">	}</span>
+<span class="nc" id="L35">		int orderId = orderDto.addOrder(orderItemForms);</span>
+<span class="nc" id="L36">		orderDto.generatedPdf(orderId);</span>
+<span class="nc" id="L37">		logger.info(&quot;Created PDF for &quot; + orderId);</span>
+<span class="nc" id="L38">	}</span>
 
 	@ApiOperation(value = &quot;Gets a Order by ID&quot;)
-	@RequestMapping(path = &quot;/api/orders/{id}&quot;, method = RequestMethod.GET)
+	@RequestMapping(path = &quot;/api/orders/{orderId}&quot;, method = RequestMethod.GET)
 	public OrderData getOrderById(@PathVariable int orderId) throws ApiException {
-<span class="nc" id="L39">		return orderDto.getOrderById(orderId);</span>
+<span class="nc" id="L43">		return orderDto.getOrderById(orderId);</span>
 	}
 
 	@ApiOperation(value = &quot;Gets list of all Orders&quot;)
 	@RequestMapping(path = &quot;/api/orders&quot;, method = RequestMethod.GET)
 	public List&lt;OrderData&gt; getAllOrders() {
-<span class="nc" id="L45">		return orderDto.getAllOrders();</span>
+<span class="nc" id="L49">		return orderDto.getAllOrders();</span>
 	}
 	
 	@ApiOperation(value = &quot;Gets Pdf&quot;)
-	@RequestMapping(path = &quot;/api/orders/download/{id}&quot;, method = RequestMethod.GET)
+	@RequestMapping(path = &quot;/api/orders/download/{orderId}&quot;, method = RequestMethod.GET)
 	public void downloadPdf(@PathVariable int orderId, HttpServletRequest request,HttpServletResponse response) throws ApiException {
-<span class="nc" id="L51">		orderDto.downloadPdf(orderId, request, response);</span>
-<span class="nc" id="L52">	}</span>
+<span class="nc" id="L55">		orderDto.downloadPdf(orderId, request, response);</span>
+<span class="nc" id="L56">	}</span>
 	
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

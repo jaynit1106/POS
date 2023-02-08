@@ -16,7 +16,6 @@ function getReportUrl(){
 //JSON Converting function
 function toJsonArr($form){
     var serialized = $form.serializeArray();
-    console.log(serialized);
     var s = '';
     var data = {};
     let itr = 0;
@@ -31,6 +30,7 @@ function toJsonArr($form){
 //API CALLING FUNCTIONS
 function getSalesReport(){
     var $form = $("#sales-form");
+    if(!validateForm($form))return;
 	var json = toJsonArr($form);
     var url = getReportUrl()+"/sales";
 	if(JSON.parse(json).startDate>JSON.parse(json).endDate){
@@ -46,7 +46,6 @@ function getSalesReport(){
         },	   
         success: function(response) {
                 swal("Hurray", "Created Report Successfully", "success");
-                console.log(response);
                 salesData = response; 
                 displaySalesList();
                 $('#filterModal').modal('toggle');
@@ -92,6 +91,7 @@ function displaySalesList(){
 	var $tbody = $('#sales-table').find('tbody');
 	$tbody.empty();
 	var counter=1;
+	var total = 0;
 	for(var i in data){
 		var e = data[i];
         if(document.getElementById('brands').value != "All"){
@@ -103,6 +103,7 @@ function displaySalesList(){
         }
 
         var rev = parseFloat(e.revenue);
+        total+=rev;
         rev=rev.toFixed(2);
 		var row = '<tr>'
 		+ '<td style="text-align:center;">' + counter + '</td>'
@@ -114,6 +115,14 @@ function displaySalesList(){
         $tbody.append(row);
         counter++;
 	}
+	var row = '<tr>'
+        		+ '<td style="text-align:center;"> </td>'
+        		+ '<td style="text-align:center;"> </td>'
+        		+ '<td style="text-align:center;"> </td>'
+        		+ '<td style="text-align:center;font-weight:bold;">'  + 'Total Revenue' + '</td>'
+        		+ '<td style="text-align:right;font-weight:bold;">'  + total.toFixed(2) + '</td>'
+        		+ '</tr>';
+        $tbody.append(row);
 	paginate();
 	
 }
@@ -132,11 +141,6 @@ function paginate() {
 	            title:'Sales Report',
 	            filename:'salesReport'
 	        },
-	        {
-                extend:'csv',
-                title:'Sales Report',
-                filename:'salesReport'
-            },
             {
                 extend:'excel',
                 title:'Sales Report',

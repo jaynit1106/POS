@@ -13,6 +13,7 @@ function getBrandUrl(){
 function addBrand(event){
 	//Set the values to update
 	var $form = $("#brand-form");
+	if(!validateForm($form))return;
 	var json = toJson($form);
 	var url = getBrandUrl();
 	$.ajax({
@@ -40,6 +41,7 @@ function addBrand(event){
 function updateBrand(){
 	var url = getBrandUrl() + "/" + editBrandId;
 	var $form = $("#brand-edit-form");
+	if(!validateForm($form))return;
 	var json = toJson($form);
 	
 	$.ajax({
@@ -89,11 +91,13 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+	processCount=0;
 	uploadRows();
 }
 function uploadRows(){
 	//Update progress
 	updateUploadDialog();
+
 	
 	//To avoid large files
 	if(fileData.length>5000){

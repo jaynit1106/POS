@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 <span class="nc" id="L27">	}</span>
 
 	@ApiOperation(value = &quot;Gets an brand by ID&quot;)
-	@RequestMapping(path = &quot;/api/brands/{id}&quot;, method = RequestMethod.GET)
+	@RequestMapping(path = &quot;/api/brands/{brandId}&quot;, method = RequestMethod.GET)
 	public BrandData getBrandById(@PathVariable int brandId) throws ApiException {
 <span class="nc" id="L32">		return brandDto.getBrandById(brandId);</span>
 	}
@@ -51,7 +51,7 @@ import io.swagger.annotations.ApiOperation;
 	}
 
 	@ApiOperation(value = &quot;Updates an Brand&quot;)
-	@RequestMapping(path = &quot;/api/brands/{id}&quot;, method = RequestMethod.PUT)
+	@RequestMapping(path = &quot;/api/brands/{brandId}&quot;, method = RequestMethod.PUT)
 	public void update(@PathVariable int brandId, @RequestBody BrandForm brandForm) throws ApiException {
 <span class="nc" id="L56">		brandDto.updateBrand(brandId, brandForm);</span>
 <span class="nc" id="L57">	}</span>

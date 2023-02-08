@@ -152,18 +152,28 @@ function displayItemData(data){
 	var $tbody = $('#view-table').find('tbody');
 	$tbody.empty();
 	var counter = 1;
+	var total = 0;
 	for(var i in data){
 		var e = data[i];
+		total+=parseFloat(e.sellingPrice*e.quantity);
 		var row = '<tr>'
-		+ '<td style="text-align:center;">' + counter + '</td>'
-		+ '<td style="text-align:center;">' + e.name + '</td>'
-		+ '<td style="text-align:center;">' + e.barcode + '</td>'
-		+ '<td style="text-align:center;">' + e.quantity + '</td>'
-		+ '<td style="text-align:center;">' + e.sellingPrice +'</td>'
+		+ '<td style="text-align:center;"><label>'+counter+'</label></td>'
+		+ '<td style="text-align:center;"><label>'+e.name+'</label></td>'
+		+ '<td style="text-align:center;"><label>'+e.barcode+'</label></td>'
+		+ '<td style="text-align:center;"><label>'+e.quantity+'</label></td>'
+		+ '<td style="text-align:right;"><label>'+e.sellingPrice+'</label></td>'
 		+ '</tr>';
         $tbody.append(row);
         counter++;
 	}
+	var row = '<tr>'
+        		+ '<td style="text-align:center;visibility:hidden">'+counter+'</td>'
+        		+ '<td style="text-align:center;"> </td>'
+        		+ '<td style="text-align:center;"> </td>'
+        		+ '<td style="text-align:center;font-weight:bold;">'  + 'Total Cost' + '</td>'
+        		+ '<td style="text-align:right;font-weight:bold;">'  + total.toFixed(2) + '</td>'
+        		+ '</tr>';
+        $tbody.append(row);
 	paginateView();
 }
 
@@ -296,6 +306,7 @@ function editItem(id){
 }
 function edits(id){
     var $form = $("#row"+id);
+    if(!validateForm($form))return;
     var json = toJson($form);
     json = JSON.parse(json);
     json.barcode = JSON.parse(itemList[id]).barcode;
@@ -310,6 +321,7 @@ function edits(id){
 
 function addItem(){
 	var $form = $("#item-form");
+
 	if(!validateForm($form))return;
 	var json = toJson($form);
 	var e =JSON.parse(json);

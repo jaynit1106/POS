@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
 	}
 
 	@ApiOperation(value = &quot;Updates a product Quantity&quot;)
-	@RequestMapping(path = &quot;/api/inventorys/{id}&quot;, method = RequestMethod.PUT)
+	@RequestMapping(path = &quot;/api/inventorys/{inventoryId}&quot;, method = RequestMethod.PUT)
 	public void update(@PathVariable int inventoryId, @RequestBody InventoryForm inventoryForm) throws ApiException {
 <span class="nc" id="L43">		inventoryDto.updateInventory(inventoryId, inventoryForm);</span>
 <span class="nc" id="L44">	}</span>

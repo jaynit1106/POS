@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiOperation;
 	private OrderItemDto orderItemDto;
 
 	@ApiOperation(value = &quot;Gets a Order Item by orderID&quot;)
-	@RequestMapping(path = &quot;/api/orderitems/{id}&quot;, method = RequestMethod.GET)
+	@RequestMapping(path = &quot;/api/orderitems/{orderId}&quot;, method = RequestMethod.GET)
 	public List&lt;OrderItemData&gt; getOrderItemsById(@PathVariable int orderId) throws ApiException, ParserConfigurationException, TransformerException {
 <span class="nc" id="L31">		return orderItemDto.getOrderItemByOrderID(orderId);</span>
 	}

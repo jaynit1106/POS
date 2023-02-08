@@ -32,7 +32,7 @@ public class AppRestControllerAdvice{
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public MessageData handleException(HttpMessageNotReadableException e) {
 		MessageData data = new MessageData();
-		data.setMessage("Invalid input");
+		data.setMessage("Invalid inputs");
 		return data;
 	}
 

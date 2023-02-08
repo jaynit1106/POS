@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,8 @@ import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.*;
 import com.increff.pos.util.Base64Util;
 import com.increff.pos.util.JSONUTil;
+import io.swagger.models.auth.In;
+import org.hibernate.criterion.Order;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,10 @@ public class OrderDto {
 
 	@Transactional(rollbackOn = ApiException.class)
 	public int addOrder(List<OrderItemForm> orderItemForms) throws ApiException, ParserConfigurationException, TransformerException, IOException {
+		if(orderItemForms.size()==0){
+			throw new ApiException("Cart is empty please add items");
+		}
+
 		List<JSONObject> errors = new ArrayList<>();
 		List<OrderItemPojo> orderItemPojoList = new ArrayList<>();
 
@@ -82,8 +89,31 @@ public class OrderDto {
 			orderItemPojo.setOrderId(orderPojo.getId());
 		}
 
+		//checking duplicate items
+		HashMap<String,Integer> itemMap = new HashMap<>();
+		List<OrderItemPojo> distinctItems = new ArrayList<>();
+		int counter = 0;
+
+		for(OrderItemPojo orderItemPojo : orderItemPojoList){
+			if(itemMap.get(orderItemPojo.getBarcode())!=null){
+				int index = itemMap.get(orderItemPojo.getBarcode());
+				int quantity = distinctItems.get(index).getQuantity();
+				if(distinctItems.get(index).getSellingPrice()!=orderItemPojo.getSellingPrice()){
+					errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),"Selling price does not match for "+orderItemPojo.getBarcode()));
+					continue;
+				}
+				distinctItems.get(index).setQuantity(quantity+orderItemPojo.getQuantity());
+				continue;
+			}
+			itemMap.put(orderItemPojo.getBarcode(),counter);
+			distinctItems.add(orderItemPojo);
+		}
+		if(errors.size()>0){
+			throw new ApiException(JSONValue.toJSONString(errors));
+		}
+
 		//adding the order-items to DB
-		orderItemService.addOrderItems(orderItemPojoList);
+		orderItemService.addOrderItems(distinctItems);
 
 		//returning the order Id
 		return orderPojo.getId();

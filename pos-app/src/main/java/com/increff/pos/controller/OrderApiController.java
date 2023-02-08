@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import com.increff.pos.model.form.OrderItemForm;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +27,14 @@ public class OrderApiController {
 	@Autowired
 	private  OrderDto orderDto;
 
+	private static Logger logger = Logger.getLogger(OrderApiController.class);
+
 	@ApiOperation(value = "Adds a Order")
 	@RequestMapping(path = "/api/orders", method = RequestMethod.POST)
 	public void addOrder(@RequestBody List<OrderItemForm> orderItemForms) throws ApiException, ParserConfigurationException, TransformerException, IOException {
 		int orderId = orderDto.addOrder(orderItemForms);
 		orderDto.generatedPdf(orderId);
+		logger.info("Created PDF for " + orderId);
 	}
 
 	@ApiOperation(value = "Gets a Order by ID")

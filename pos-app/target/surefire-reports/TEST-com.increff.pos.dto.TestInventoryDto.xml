@@ -68,6 +68,6 @@
   <testcase classname="com.increff.pos.dto.TestInventoryDto" name="testAddAndgetAllBrands" time="0.062"/>
   <testcase classname="com.increff.pos.dto.TestInventoryDto" name="testForProductDoesNotExist" time="0"/>
   <testcase classname="com.increff.pos.dto.TestInventoryDto" name="testForAdditionOfInventory" time="0.031"/>
-  <testcase classname="com.increff.pos.dto.TestInventoryDto" name="testUpdate" time="0.032"/>
-  <testcase classname="com.increff.pos.dto.TestInventoryDto" name="testForNegativeQuantity" time="0.015"/>
+  <testcase classname="com.increff.pos.dto.TestInventoryDto" name="testUpdate" time="0.031"/>
+  <testcase classname="com.increff.pos.dto.TestInventoryDto" name="testForNegativeQuantity" time="0.016"/>
 </testsuite>

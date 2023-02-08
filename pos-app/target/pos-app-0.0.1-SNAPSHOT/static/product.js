@@ -29,6 +29,7 @@ function addProduct(event){
        },	   
 	   success: function(response) {
 	   		getProductList();
+	   		document.getElementById('product-form').reset();
 	   		swal("Hurray", "Product added successfully", "success");
 	   		$('#addProductModal').modal('toggle');
 	   },

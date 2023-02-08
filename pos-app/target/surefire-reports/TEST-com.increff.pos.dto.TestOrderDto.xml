@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="7" failures="0" name="com.increff.pos.dto.TestOrderDto" time="3.297" errors="0" skipped="0">
+<testsuite tests="7" failures="0" name="com.increff.pos.dto.TestOrderDto" time="3.341" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_202\jre\bin"/>
@@ -65,11 +65,11 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForInvalidQuantity" time="0.047"/>
-  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForInvalidSellingPrice" time="0.015"/>
-  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testAdd" time="0.235"/>
-  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForExcessQuantity" time="0.015"/>
-  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForInvalidProduct" time="0.016"/>
-  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testGetOrderById" time="0.016"/>
-  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testCreatePdf" time="2.953"/>
+  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForInvalidQuantity" time="0.062"/>
+  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForInvalidSellingPrice" time="0.016"/>
+  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testAdd" time="0.219"/>
+  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForExcessQuantity" time="0.016"/>
+  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testForInvalidProduct" time="0.031"/>
+  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testGetOrderById" time="0"/>
+  <testcase classname="com.increff.pos.dto.TestOrderDto" name="testCreatePdf" time="2.997"/>
 </testsuite>

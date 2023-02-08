@@ -29,6 +29,7 @@ function addProduct(event){
        },	   
 	   success: function(response) {
 	   		getProductList();
+	   		document.getElementById('product-form').reset();
 	   		swal("Hurray", "Product added successfully", "success");
 	   		$('#addProductModal').modal('toggle');
 	   },
@@ -127,6 +128,7 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+	processCount=0;
 	uploadRows();
 }
 

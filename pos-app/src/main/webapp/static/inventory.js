@@ -27,6 +27,7 @@ function addInventory(event){
        },	   
 	   success: function(response) {
 	   		getInventoryList();
+	   		document.getElementById('inventory-form').reset();
 	   		swal("Hurray", "Inventory added successfully", "success");
 	   		$('#addInventoryModal').modal('toggle');
 	   },
@@ -104,6 +105,7 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+	processCount=0;
 	uploadRows();
 }
 
