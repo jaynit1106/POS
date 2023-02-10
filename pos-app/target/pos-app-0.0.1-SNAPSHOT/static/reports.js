@@ -9,6 +9,7 @@ function getSchedulerUrl(){
 //API CALLING FUNCTIONS
 function getSchedulerList(){
 	var $form = $("#sales-form");
+	if(!validateForm($form))return;
     var json = toJson($form);
     var url = getSchedulerUrl();
     if( document.getElementById('startDate').value>document.getElementById('endDate').value){

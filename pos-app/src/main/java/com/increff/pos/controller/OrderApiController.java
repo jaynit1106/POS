@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.model.form.OrderItemForm;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,12 @@ public class OrderApiController {
 	@RequestMapping(path = "/api/orders/download/{orderId}", method = RequestMethod.GET)
 	public void downloadPdf(@PathVariable int orderId, HttpServletRequest request,HttpServletResponse response) throws ApiException {
 		orderDto.downloadPdf(orderId, request, response);
+	}
+
+	@ApiOperation(value = "Gets a Order Item by orderID")
+	@RequestMapping(path = "/api/orderitems/{orderId}", method = RequestMethod.GET)
+	public List<OrderItemData> getOrderItemsById(@PathVariable int orderId) throws ApiException, ParserConfigurationException, TransformerException {
+		return orderDto.getOrderItemByOrderID(orderId);
 	}
 	
 }

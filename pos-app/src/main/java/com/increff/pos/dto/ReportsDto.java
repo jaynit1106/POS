@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
+import com.increff.pos.helper.ReportHelper;
 import com.increff.pos.model.data.BrandReportData;
 import com.increff.pos.model.data.InventoryReportData;
 import com.increff.pos.model.data.SalesReportData;
@@ -33,8 +34,7 @@ public class ReportsDto {
 	private  InventoryService inventoryService;
 	@Autowired
 	private  OrderService orderService ;
-	@Autowired
-	private  OrderItemService orderItemService;
+
 
 	private static Logger logger = Logger.getLogger(ReportsDto.class);
 
@@ -46,8 +46,11 @@ public class ReportsDto {
 
 		for(BrandPojo brandPojo : brandPojoList){
 
-			if(!Objects.equals(brandReportForm.getBrand(),"All") && !Objects.equals(brandReportForm.getBrand(), brandPojo.getBrand()))continue;
-			if(!Objects.equals(brandReportForm.getCategory(),"All") && !Objects.equals(brandReportForm.getCategory(), brandPojo.getCategory()))continue;
+			if(!Objects.equals(brandReportForm.getBrand(),"All") &&
+					!Objects.equals(brandReportForm.getBrand(), brandPojo.getBrand()))continue;
+
+			if(!Objects.equals(brandReportForm.getCategory(),"All") &&
+					!Objects.equals(brandReportForm.getCategory(), brandPojo.getCategory()))continue;
 
 			BrandReportData brandReportData = new BrandReportData();
 			brandReportData.setBrand(brandPojo.getBrand());
@@ -61,25 +64,19 @@ public class ReportsDto {
 	}
 	public List<InventoryReportData> getInventoryReport(InventoryReportForm inventoryReportForm) throws ApiException {
 		List<InventoryPojo> inventoryPojoList = inventoryService.getAllInventorys();
-		HashMap<Integer,Integer> inventoryMap = new HashMap<>();
 
 		//mapping brands with quantity
-		for(InventoryPojo inventoryPojo : inventoryPojoList) {
-			ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());
-
-			int quantity = 0;
-			int brandId = productPojo.getBrandId();
-			if(inventoryMap.get(brandId)!= null) quantity = inventoryMap.get(brandId);
-
-			inventoryMap.put(brandId , quantity + inventoryPojo.getQuantity());
-		}
+		HashMap<Integer,Integer> inventoryMap = getInventoryMap(inventoryPojoList);
 
 		List<InventoryReportData> inventoryReportDataList = new ArrayList<>();
 		for(Integer id : inventoryMap.keySet()) {
 			BrandPojo brandPojo = brandService.getBrandById(id);
 			//applying filters
-			if(!Objects.equals(inventoryReportForm.getBrand(),"All") && !Objects.equals(inventoryReportForm.getBrand(), brandPojo.getBrand()))continue;
-			if(!Objects.equals(inventoryReportForm.getCategory(),"All") && !Objects.equals(inventoryReportForm.getCategory(), brandPojo.getCategory()))continue;
+			if(!Objects.equals(inventoryReportForm.getBrand(),"All") &&
+					!Objects.equals(inventoryReportForm.getBrand(), brandPojo.getBrand()))continue;
+
+			if(!Objects.equals(inventoryReportForm.getCategory(),"All") &&
+					!Objects.equals(inventoryReportForm.getCategory(), brandPojo.getCategory()))continue;
 
 			//creating the output
 			InventoryReportData inventoryReportData = new InventoryReportData();
@@ -94,34 +91,22 @@ public class ReportsDto {
 	}
 	
 	public List<SalesReportData> getSalesReport(SalesReportForm salesReportForm) throws ApiException {
-		Instant range = Instant.now().minus(Period.ofDays(365));
-		Instant startDate = salesReportForm.getStartDate();
-		Instant endDate = salesReportForm.getEndDate();
-
-		int comparedValue = startDate.compareTo(endDate);
-		if(comparedValue>0){throw new ApiException("Invalid Time Period");}
-
-		comparedValue = range.compareTo(startDate);
-		if(comparedValue>0){throw new ApiException("Only one year is allowed for the reports");}
-
-		comparedValue = Instant.now().compareTo(endDate);
-		if(comparedValue<-1){throw new ApiException("Invalid Time Period");}
-
-
+		ReportHelper.salesReportsCheck(salesReportForm);
 		// querying the time range
-		List<OrderPojo> orderPojoList = orderService.selectOrdersInRange(startDate, endDate);
-
+		List<OrderPojo> orderPojoList = orderService
+				.selectOrdersInRange(salesReportForm.getStartDate(), salesReportForm.getEndDate());
 		//creating the list of order items based on orderId
 		List<OrderItemPojo> orderItemPojoList = new ArrayList<>();
 		for(OrderPojo orderPojo : orderPojoList) {
-			List<OrderItemPojo> items = orderItemService.getOrderItemByOrderId(orderPojo.getId());
+			List<OrderItemPojo> items = orderService.getOrderItemByOrderId(orderPojo.getId());
 			orderItemPojoList.addAll(items);
 		}
-
 		//generate product revenues
-		HashMap<Integer,Integer> quantityProducts = (HashMap<Integer, Integer>) orderItemPojoList.stream().collect(Collectors.toMap(OrderItemPojo::getProductId,OrderItemPojo::getQuantity,(s, a)->s+a));
-		HashMap<Integer,Double> revenueProducts = MapUtil.getProductsRevenue(orderItemPojoList);
+		HashMap<Integer,Integer> quantityProducts = (HashMap<Integer, Integer>) orderItemPojoList
+				.stream()
+				.collect(Collectors.toMap(OrderItemPojo::getProductId,OrderItemPojo::getQuantity,(s, a)->s+a));
 
+		HashMap<Integer,Double> revenueProducts = MapUtil.getProductsRevenue(orderItemPojoList);
 		List<ProductPojo> products = new ArrayList<>();
 		for(int id : revenueProducts.keySet()) {
 			products.add(productService.getProductById(id));
@@ -132,6 +117,14 @@ public class ReportsDto {
 		HashMap<Integer,Integer> quantityBrands = MapUtil.getBrandsQuantity(quantityProducts,products);
 
 		//generate sales report
+		List<SalesReportData> data = generateSalesReportData(revenueBrands,quantityBrands);
+		logger.info("Created Sales Report at "+(Instant.now()));
+
+
+		return data;
+	}
+
+	public List<SalesReportData> generateSalesReportData(HashMap<Integer,Double> revenueBrands,HashMap<Integer,Integer> quantityBrands) throws ApiException {
 		List<SalesReportData> data = new ArrayList<>();
 		for(int id : revenueBrands.keySet()) {
 			SalesReportData item = new SalesReportData();
@@ -143,8 +136,23 @@ public class ReportsDto {
 			data.add(item);
 		}
 
-		logger.info("Created Sales Report at "+(Instant.now()));
 		return data;
+	}
+
+	public  HashMap<Integer,Integer> getInventoryMap(List<InventoryPojo> inventoryPojoList) throws ApiException {
+		HashMap<Integer,Integer> inventoryMap = new HashMap<>();
+
+		//mapping brands with quantity
+		for(InventoryPojo inventoryPojo : inventoryPojoList) {
+			ProductPojo productPojo = productService.getProductById(inventoryPojo.getId());
+
+			int quantity = 0;
+			int brandId = productPojo.getBrandId();
+			if(inventoryMap.get(brandId)!= null) quantity = inventoryMap.get(brandId);
+
+			inventoryMap.put(brandId , quantity + inventoryPojo.getQuantity());
+		}
+		return inventoryMap;
 	}
 	
 }

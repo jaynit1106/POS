@@ -1,12 +1,19 @@
 package com.increff.pos.util;
 
+import com.increff.pos.pojo.InventoryPojo;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.ProductPojo;
+import com.increff.pos.service.ApiException;
+import com.increff.pos.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class MapUtil {
+    @Autowired
+    private static ProductService productService;
+
     public static HashMap<Integer,Double> getBrandsRevenue(HashMap<Integer,Double> revenueProducts, List<ProductPojo> products){
 
         HashMap<Integer,Double> revenueBrands = new HashMap<>();
@@ -47,4 +54,7 @@ public class MapUtil {
 
         return revenueProducts;
     }
+
+
+
 }

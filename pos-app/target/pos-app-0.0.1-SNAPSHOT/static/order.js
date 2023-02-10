@@ -306,6 +306,7 @@ function editItem(id){
 }
 function edits(id){
     var $form = $("#row"+id);
+    if(!validateForm($form))return;
     var json = toJson($form);
     json = JSON.parse(json);
     json.barcode = JSON.parse(itemList[id]).barcode;
@@ -320,6 +321,7 @@ function edits(id){
 
 function addItem(){
 	var $form = $("#item-form");
+
 	if(!validateForm($form))return;
 	var json = toJson($form);
 	var e =JSON.parse(json);

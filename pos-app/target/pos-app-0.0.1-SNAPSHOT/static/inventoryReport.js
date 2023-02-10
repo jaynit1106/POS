@@ -98,11 +98,6 @@ function paginate() {
                 title:'Inventory Report',
                 filename:'inventoryReport'
             },
-            {
-                  extend:'csv',
-                  title:'Inventory Report',
-                  filename:'inventoryReport'
-              },
               {
                   extend:'excel',
                   title:'Inventory Report',

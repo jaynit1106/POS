@@ -52,7 +52,7 @@ import io.swagger.annotations.ApiOperation;
 
 	@ApiOperation(value = &quot;Updates an Brand&quot;)
 	@RequestMapping(path = &quot;/api/brands/{brandId}&quot;, method = RequestMethod.PUT)
-	public void update(@PathVariable int brandId, @RequestBody BrandForm brandForm) throws ApiException {
+	public void updateBrand(@PathVariable int brandId, @RequestBody BrandForm brandForm) throws ApiException {
 <span class="nc" id="L56">		brandDto.updateBrand(brandId, brandForm);</span>
 <span class="nc" id="L57">	}</span>
 }

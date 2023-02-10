@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.increff.pos.dao.OrderItemDao;
+import com.increff.pos.pojo.OrderItemPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -28,6 +30,8 @@ public class OrderService {
 
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private OrderItemDao orderItemDao;
 
 
 	public void addOrder(OrderPojo orderPojo) throws ApiException {
@@ -49,6 +53,16 @@ public class OrderService {
 
 	public List<OrderPojo> selectOrdersInRange(Instant startDate, Instant endDate){
 		return orderDao.selectOrdersInRange(startDate,endDate);
+	}
+
+	public void addOrderItems(List<OrderItemPojo> orderItemPojoList) throws ApiException {
+		for(OrderItemPojo orderItemPojo : orderItemPojoList) {
+			orderItemDao.insert(orderItemPojo);
+		}
+	}
+
+	public List<OrderItemPojo> getOrderItemByOrderId(int orderId) {
+		return orderItemDao.selectByOrderId(orderId);
 	}
 
 }

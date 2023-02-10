@@ -36,8 +36,6 @@ public class TestOrderDto extends  AbstractUnitTest{
     private  ProductDto productDto ;
     @Autowired
     private  OrderDto orderDto ;
-    @Autowired
-    private  OrderItemDto orderItemDto ;
 
     @Test
     public void testAdd() throws ApiException, ParserConfigurationException, TransformerException, IOException {
@@ -56,7 +54,7 @@ public class TestOrderDto extends  AbstractUnitTest{
         orderDto.addOrder(lists);
 
         //checking the order-item
-        List<OrderItemData> list = orderItemDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
+        List<OrderItemData> list = orderDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
         assertEquals(list.get(0).getOrderId(),orderDto.getAllOrders().get(0).getId());
         assertEquals(list.get(0).getQuantity(),11);
         assertEquals(new Double(list.get(0).getSellingPrice()),(Double) 20.0,0);

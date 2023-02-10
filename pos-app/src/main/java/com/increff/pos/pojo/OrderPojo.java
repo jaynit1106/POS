@@ -11,11 +11,15 @@ import java.time.Instant;
 
 @Entity
 @Getter @Setter
+@Table(
+		name = "order_pojo"
+)
 public class OrderPojo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable = false)
 	private Instant timestamp;
 
 	@PrePersist

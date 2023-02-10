@@ -12,28 +12,36 @@ import java.util.Objects;
 <span class="pc bpc" id="L12" title="1 of 4 branches missed.">		return s == null || s.trim().length() == 0;</span>
 	}
 
-	public static &lt;T&gt; void normalise(T form, Class&lt;T&gt; type) throws ApiException {
+	public static &lt;T&gt; void normalise(T form, Class&lt;T&gt; type) throws ApiException{
 <span class="fc" id="L16">		Field[] fields = type.getDeclaredFields();</span>
 
 <span class="fc bfc" id="L18" title="All 2 branches covered.">		for(Field field: fields) {</span>
 
 <span class="fc bfc" id="L20" title="All 2 branches covered.">			if(field.getType().getSimpleName().equals(&quot;String&quot;)){</span>
 <span class="fc" id="L21">				field.setAccessible(true);</span>
-				try{
-<span class="pc bpc" id="L23" title="1 of 2 branches missed.">					if(Objects.nonNull(field.get(form))){</span>
-<span class="fc" id="L24">						field.set(form,(field.get(form).toString()).toLowerCase().trim());</span>
+				try {
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">					if((field.get(form).toString()).toLowerCase().trim().length()&gt;15){</span>
+<span class="nc" id="L24">						throw new ApiException(&quot;Invalid length &quot;+(field.get(form).toString()).toLowerCase().trim());</span>
 					}
-<span class="nc" id="L26">				} catch(IllegalAccessException e){</span>
-<span class="nc" id="L27">					throw new ApiException(&quot;Error normalising form&quot;);</span>
+<span class="nc" id="L26">				}catch (IllegalAccessException e){</span>
+
 <span class="fc" id="L28">				}</span>
+
+				try{
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">					if(Objects.nonNull(field.get(form))){</span>
+<span class="fc" id="L32">						field.set(form,(field.get(form).toString()).toLowerCase().trim());</span>
+					}
+<span class="nc" id="L34">				} catch(IllegalAccessException e){</span>
+<span class="nc" id="L35">					throw new ApiException(&quot;Error normalising form&quot;);</span>
+<span class="fc" id="L36">				}</span>
 			}
 		}
-<span class="fc" id="L31">	}</span>
+<span class="fc" id="L39">	}</span>
 
 	public static String convertMrp(double val) {
-<span class="fc" id="L34">		DecimalFormat df = new DecimalFormat(&quot;0.00&quot;);</span>
-<span class="fc" id="L35">	    String mrpFormated = df.format(val);</span>
-<span class="fc" id="L36">	    return mrpFormated;</span>
+<span class="fc" id="L42">		DecimalFormat df = new DecimalFormat(&quot;0.00&quot;);</span>
+<span class="fc" id="L43">	    String mrpFormated = df.format(val);</span>
+<span class="fc" id="L44">	    return mrpFormated;</span>
 	}
 
 }

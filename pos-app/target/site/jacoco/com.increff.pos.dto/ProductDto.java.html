@@ -55,15 +55,16 @@ import com.increff.pos.util.StringUtil;
 	}
 	
 	public void updateProduct(int productId,ProductForm productForm) throws ApiException {
-<span class="fc" id="L58">		ProductPojo productPojo = ConvertUtil.objectMapper(productForm, ProductPojo.class);</span>
-<span class="fc" id="L59">		productPojo.setMrp(BigDecimal.valueOf(productForm.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
+<span class="fc" id="L58">		StringUtil.normalise(productForm,ProductForm.class);</span>
+<span class="fc" id="L59">		ProductPojo productPojo = ConvertUtil.objectMapper(productForm, ProductPojo.class);</span>
+<span class="fc" id="L60">		productPojo.setMrp(BigDecimal.valueOf(productForm.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());</span>
 
-<span class="fc" id="L61">		BrandPojo brandPojo = brandService.getBrandByNameAndCategory(productForm.getBrand(),productForm.getCategory());</span>
-<span class="fc" id="L62">		productPojo.setBrandId(brandPojo.getId());</span>
+<span class="fc" id="L62">		BrandPojo brandPojo = brandService.getBrandByNameAndCategory(productForm.getBrand(),productForm.getCategory());</span>
+<span class="fc" id="L63">		productPojo.setBrandId(brandPojo.getId());</span>
 		
-<span class="fc" id="L64">		productService.updateProduct(productId,productPojo);</span>
-<span class="fc" id="L65">	}</span>
+<span class="fc" id="L65">		productService.updateProduct(productId,productPojo);</span>
+<span class="fc" id="L66">	}</span>
 
-<span class="fc" id="L67">	public List&lt;String&gt; getBarcodeList(){return productService.getBarcodeList();}</span>
+<span class="fc" id="L68">	public List&lt;String&gt; getBarcodeList(){return productService.getBarcodeList();}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

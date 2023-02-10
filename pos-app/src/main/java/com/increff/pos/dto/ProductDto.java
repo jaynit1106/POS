@@ -55,6 +55,7 @@ public class ProductDto {
 	}
 	
 	public void updateProduct(int productId,ProductForm productForm) throws ApiException {
+		StringUtil.normalise(productForm,ProductForm.class);
 		ProductPojo productPojo = ConvertUtil.objectMapper(productForm, ProductPojo.class);
 		productPojo.setMrp(BigDecimal.valueOf(productForm.getMrp()).setScale(2,RoundingMode.HALF_UP).doubleValue());
 

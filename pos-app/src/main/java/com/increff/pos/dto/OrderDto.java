@@ -1,6 +1,8 @@
 package com.increff.pos.dto;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,9 +40,6 @@ public class OrderDto {
 	private PdfDto pdfDto;
 
 	@Autowired
-	private  OrderItemService orderItemService;
-
-	@Autowired
 	private  ProductService productService;
 
 	@Autowired
@@ -53,7 +52,57 @@ public class OrderDto {
 		if(orderItemForms.size()==0){
 			throw new ApiException("Cart is empty please add items");
 		}
+		List<JSONObject> errors = new ArrayList<>();
+		//product checks and conversions to pojo
+		List<OrderItemPojo> orderItemPojoList = convertToPojo(orderItemForms);
 
+		//checking for the inventory
+		inventoryService.checkAndCreateOrder(orderItemPojoList);
+
+		//creating order Id
+		OrderPojo orderPojo = new OrderPojo();
+		orderService.addOrder(orderPojo);
+		for (OrderItemPojo orderItemPojo : orderItemPojoList) {
+			orderItemPojo.setOrderId(orderPojo.getId());
+		}
+
+		//checking duplicate items
+		List<OrderItemPojo> distinctItems = generateDistinctItems(orderItemPojoList);
+
+		//adding the order-items to DB
+		orderService.addOrderItems(distinctItems);
+
+		//returning the order Id
+		return orderPojo.getId();
+	}
+	public List<OrderItemPojo> generateDistinctItems(List<OrderItemPojo> orderItemPojoList) throws ApiException {
+
+		List<JSONObject> errors = new ArrayList<>();
+		HashMap<String,Integer> itemMap = new HashMap<>();
+		List<OrderItemPojo> distinctItems = new ArrayList<>();
+		int counter = 0;
+
+		for(OrderItemPojo orderItemPojo : orderItemPojoList){
+			if(itemMap.get(orderItemPojo.getBarcode())!=null){
+				int index = itemMap.get(orderItemPojo.getBarcode());
+				int quantity = distinctItems.get(index).getQuantity();
+				if(distinctItems.get(index).getSellingPrice()!=orderItemPojo.getSellingPrice()){
+					errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),"Selling price does not match for "+orderItemPojo.getBarcode()));
+					continue;
+				}
+				distinctItems.get(index).setQuantity(quantity+orderItemPojo.getQuantity());
+				continue;
+			}
+			itemMap.put(orderItemPojo.getBarcode(),counter);
+			distinctItems.add(orderItemPojo);
+		}
+		if(errors.size()>0){
+			throw new ApiException(JSONValue.toJSONString(errors));
+		}
+		return distinctItems;
+
+	}
+	public List<OrderItemPojo> convertToPojo(List<OrderItemForm> orderItemForms) throws ApiException {
 		List<JSONObject> errors = new ArrayList<>();
 		List<OrderItemPojo> orderItemPojoList = new ArrayList<>();
 
@@ -79,44 +128,7 @@ public class OrderDto {
 		if(errors.size()>0){
 			throw new ApiException(JSONValue.toJSONString(errors));
 		}
-		//checking for the inventory
-		inventoryService.checkAndCreateOrder(orderItemPojoList);
-
-		//creating order Id
-		OrderPojo orderPojo = new OrderPojo();
-		orderService.addOrder(orderPojo);
-		for (OrderItemPojo orderItemPojo : orderItemPojoList) {
-			orderItemPojo.setOrderId(orderPojo.getId());
-		}
-
-		//checking duplicate items
-		HashMap<String,Integer> itemMap = new HashMap<>();
-		List<OrderItemPojo> distinctItems = new ArrayList<>();
-		int counter = 0;
-
-		for(OrderItemPojo orderItemPojo : orderItemPojoList){
-			if(itemMap.get(orderItemPojo.getBarcode())!=null){
-				int index = itemMap.get(orderItemPojo.getBarcode());
-				int quantity = distinctItems.get(index).getQuantity();
-				if(distinctItems.get(index).getSellingPrice()!=orderItemPojo.getSellingPrice()){
-					errors.add(JSONUTil.getJSONObject(orderItemPojo.getBarcode(),"Selling price does not match for "+orderItemPojo.getBarcode()));
-					continue;
-				}
-				distinctItems.get(index).setQuantity(quantity+orderItemPojo.getQuantity());
-				continue;
-			}
-			itemMap.put(orderItemPojo.getBarcode(),counter);
-			distinctItems.add(orderItemPojo);
-		}
-		if(errors.size()>0){
-			throw new ApiException(JSONValue.toJSONString(errors));
-		}
-
-		//adding the order-items to DB
-		orderItemService.addOrderItems(distinctItems);
-
-		//returning the order Id
-		return orderPojo.getId();
+		return orderItemPojoList;
 	}
 
 	
@@ -144,7 +156,24 @@ public class OrderDto {
 		Collections.reverse(orderDataList);
 		return orderDataList;
 	}
-	
+
+	public List<OrderItemData> getOrderItemByOrderID(int id) throws ApiException {
+		List<OrderItemPojo> orderItemPojoList = orderService.getOrderItemByOrderId(id);
+		List<OrderItemData> orderItemDataList = new ArrayList<>();
+
+		for(OrderItemPojo orderItemPojo : orderItemPojoList) {
+			OrderItemData orderItemData = ConvertUtil.objectMapper(orderItemPojo, OrderItemData.class);
+
+			ProductPojo productPojo = productService.getProductById(orderItemPojo.getProductId());
+			orderItemData.setSellingPrice(String.format("%.2f", new BigDecimal(orderItemPojo.getSellingPrice()).setScale(2, RoundingMode.HALF_UP).doubleValue()));
+			orderItemData.setBarcode(productPojo.getBarcode());
+			orderItemData.setName(productPojo.getName());
+
+			orderItemDataList.add(orderItemData);
+		}
+
+		return orderItemDataList;
+	}
 	public void downloadPdf(int id, HttpServletRequest request,HttpServletResponse response) throws ApiException {
 		try {
 			String path = new File("./src/main/resources/com/increff/pos/pdf/Invoice "+id+".pdf").getAbsolutePath();
@@ -168,7 +197,7 @@ public class OrderDto {
 	}
 
 	public void generatedPdf(int orderId) throws ApiException {
-		List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemByOrderId(orderId);
+		List<OrderItemPojo> orderItemPojoList = orderService.getOrderItemByOrderId(orderId);
 		List<OrderItemData> orderItemDataList = new ArrayList<>();
 		List<JSONObject> errors = new ArrayList<>();
 
@@ -191,4 +220,6 @@ public class OrderDto {
 
 		if(errors.size()>0)throw new ApiException(JSONValue.toJSONString(errors));
 	}
+
+
 }

@@ -63,7 +63,7 @@ public class TestReportsDto extends AbstractUnitTest{
         orderDao.insert(PojoUtil.getOrderPojo());
         //add order-items
         orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(),11,productDao.selectAll(ProductPojo.class).get(0).getId(),20));
-        orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(),11,productDao.selectAll(ProductPojo.class).get(0).getId(),20));
+        orderItemDao.insert(PojoUtil.getOrderItemPojo(3,11,productDao.selectAll(ProductPojo.class).get(0).getId(),20));
 
         SalesReportForm salesReportForm = new SalesReportForm();
         salesReportForm.setEndDate(Instant.now());
@@ -71,8 +71,8 @@ public class TestReportsDto extends AbstractUnitTest{
         List<SalesReportData> list = reportsDto.getSalesReport(salesReportForm);
         Assert.assertEquals(list.get(0).getBrand(),"brand");
         Assert.assertEquals(list.get(0).getCategory(),"category");
-        Assert.assertEquals(list.get(0).getQuantity(),22);
-        Assert.assertEquals(list.get(0).getRevenue(),440,0);
+        Assert.assertEquals(list.get(0).getQuantity(),11);
+        Assert.assertEquals(list.get(0).getRevenue(),220,0);
     }
 
     @Test

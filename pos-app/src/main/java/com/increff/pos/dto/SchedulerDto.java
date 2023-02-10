@@ -8,7 +8,6 @@ import java.util.List;
 import com.increff.pos.model.form.SchedulerForm;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
-import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,6 @@ public class SchedulerDto {
 	private  SchedulerService schedulerService;
 	@Autowired
 	private  OrderService orderService;
-	@Autowired
-	private  OrderItemService orderItemService;
 
 	private static Logger logger = Logger.getLogger(SchedulerDto.class);
 
@@ -48,7 +45,7 @@ public class SchedulerDto {
 		Integer totalItems = 0;
 
 		for(OrderPojo orderPojo : orderPojoList){
-			List<OrderItemPojo> orderItemPojoList = orderItemService.getOrderItemByOrderId(orderPojo.getId());
+			List<OrderItemPojo> orderItemPojoList = orderService.getOrderItemByOrderId(orderPojo.getId());
 			for(OrderItemPojo orderItemPojo : orderItemPojoList){
 				totalItems+=orderItemPojo.getQuantity();
 				revenue+=(orderItemPojo.getQuantity()*orderItemPojo.getSellingPrice());

@@ -38,7 +38,7 @@
 	      <th scope="col" style="text-align:center;">S.No.</th>
 	      <th scope="col" style="text-align:center;">Brand</th>
 	      <th scope="col" style="text-align:center;">Category</th>
-	      <th scope="col" style="text-align:center;">name</th>
+	      <th scope="col" style="text-align:center;">Name</th>
 		  <th scope="col" style="text-align:center;">Barcode</th>
 	      <th scope="col" style="text-align:right;">MRP</th>
 	      <th scope="col" style="text-align:center;" th:if="${info.getRole()}=='supervisor'">Action</th>
@@ -67,35 +67,35 @@
 			  <div class="form-row">
 			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="brand" id="editBrand" placeholder="enter brand" disabled>
+			      <input required type="text" class="form-control" name="brand" id="editBrand" placeholder="enter brand" disabled>
 			    </div>
 			  </div>
 			  <br>
 			  <div class="form-row">
 			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" id="editCategory" placeholder="enter category" disabled>
+			      <input required  type="text" class="form-control" name="category" id="editCategory" placeholder="enter category" disabled>
 			    </div>
 			  </div>
 			  <br>
 			  <div class="form-row">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="name" id="editName" placeholder="enter product name">
+			      <input required  type="text" class="form-control" name="name" id="editName" placeholder="enter product name">
 			    </div>
 			  </div>
 			  <br>
 			  <div class="form-row">
 			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="barcode" id="editBarcode" placeholder="enter barcode" disabled>
+			      <input required  type="text" class="form-control" name="barcode" id="editBarcode" placeholder="enter barcode" disabled>
 			    </div>
 			  </div>
 			  <br>
 			  <div class="form-row">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
 			    <div class="col-sm-10">
-			      <input type="number" class="form-control" name="mrp" id="editMrp"  placeholder="enter MRP">
+			      <input required  type="text" class="form-control" name="mrp" id="editMrp"  placeholder="enter MRP">
 			    </div>
 			  </div>
 			</form>   
@@ -141,21 +141,21 @@
 					<div class="form-row">
 						<label for="inputName" class="col-sm-2 col-form-label">Name</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" name="name" id="addName" placeholder="enter product name">
+							<input required  type="text" class="form-control" name="name" id="addName" placeholder="enter product name">
 						</div>
 					</div>
 					<br>
 					<div class="form-row">
 						<label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" name="barcode" id="addBarcode" placeholder="enter barcode">
+							<input required  type="text" class="form-control" name="barcode" id="addBarcode" placeholder="enter barcode">
 						</div>
 					</div>
 					<br>
 					<div class="form-row">
 						<label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" name="mrp" id="addMrp" maxlength="10" placeholder="enter MRP">
+							<input required  type="text" class="form-control" name="mrp" id="addMrp" maxlength="10" placeholder="enter MRP">
 						</div>
 					</div>
 				</form>

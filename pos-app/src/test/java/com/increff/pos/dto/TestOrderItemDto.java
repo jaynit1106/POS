@@ -33,8 +33,6 @@ public class TestOrderItemDto extends AbstractUnitTest{
     private  ProductDto productDto ;
     @Autowired
     private  OrderDto orderDto ;
-    @Autowired
-    private  OrderItemDto orderItemDto ;
 
     @Test
     public void testGetAll() throws ApiException, ParserConfigurationException, TransformerException {
@@ -50,7 +48,7 @@ public class TestOrderItemDto extends AbstractUnitTest{
         orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAllOrders().get(0).getId(),20,productDto.getAllProducts().get(0).getId(),100));
 
         //checking the getAll functionality
-        List<OrderItemData> list = orderItemDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
+        List<OrderItemData> list = orderDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
         assertEquals(list.get(0).getOrderId(),orderDto.getAllOrders().get(0).getId());
         assertEquals(list.get(0).getQuantity(),20);
         assertEquals(list.get(0).getSellingPrice(),"100.00");
@@ -70,7 +68,7 @@ public class TestOrderItemDto extends AbstractUnitTest{
         //add order-item
         orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDto.getAllOrders().get(0).getId(),20,productDto.getAllProducts().get(0).getId(),100));
 
-        List<OrderItemData> list = orderItemDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
+        List<OrderItemData> list = orderDto.getOrderItemByOrderID(orderDto.getAllOrders().get(0).getId());
         OrderItemData item = list.get(0);
         assertEquals(item.getName(),"name");
         assertEquals(item.getBarcode(),"abcdabcd");

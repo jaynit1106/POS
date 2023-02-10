@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.transaction.Transactional;
 
+import com.increff.pos.helper.ProductHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,11 @@ public class ProductService {
 	@Autowired
 	private  ProductDao productDao;
 
+	@Autowired
+	private ProductHelper productHelper;
+
 	public void add(ProductPojo productPojo) throws ApiException {
-		validateProductPojo(productPojo);
+		productHelper.validateProductPojo(productPojo);
 		productDao.insert(productPojo);
 	}
 
@@ -74,25 +78,4 @@ public class ProductService {
 		Collections.reverse(barcodeList);
 		return barcodeList;
 	}
-
-	public void validateProductPojo(ProductPojo productPojo) throws ApiException {
-		if(StringUtil.isEmpty(productPojo.getName())) {
-			throw new ApiException("Name cannot be empty");
-		}
-		if(productPojo.getBarcode().length()!=8) {
-			throw new ApiException("Barcode Should be of 8 characters");
-		}
-		if(productPojo.getMrp()<=0) {
-			throw new ApiException("MRP should be positive");
-		}
-		if(Objects.nonNull(productDao.getProductByNameAndBrandId(productPojo.getBrandId(),productPojo.getName()))) {
-			throw new ApiException("Product already Exists");
-		}
-		if(Objects.nonNull(productDao.barcodeExist(productPojo.getBarcode()))) {
-			throw new ApiException("Barcode already Exists");
-		}
-	}
-	
-
-	
 }

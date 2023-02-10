@@ -6,6 +6,7 @@ import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
 import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.util.PojoUtil;
+import org.hibernate.criterion.Order;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class TestOrderItemService extends AbstractUnitTest{
     @Autowired
     private  OrderItemDao orderItemDao ;
     @Autowired
-    private  OrderItemService orderItemService ;
+    private OrderService orderService;
 
     @Test
     public void testAdd() throws ApiException {
@@ -51,10 +52,10 @@ public class TestOrderItemService extends AbstractUnitTest{
         OrderItemPojo pojo = PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(), 20, productDao.selectAll(ProductPojo.class).get(0).getId(), 20.22);
         list.add(pojo);
 
-        orderItemService.addOrderItems(list);
+        orderService.addOrderItems(list);
 
         //checking if the product is added
-        List<OrderItemPojo> data = orderItemService.getOrderItemByOrderId(orderDao.selectAll(OrderPojo.class).get(0).getId());
+        List<OrderItemPojo> data = orderService.getOrderItemByOrderId(orderDao.selectAll(OrderPojo.class).get(0).getId());
         Assert.assertEquals(data.size(),1);
     }
 
@@ -72,7 +73,7 @@ public class TestOrderItemService extends AbstractUnitTest{
         orderItemDao.insert(PojoUtil.getOrderItemPojo(orderDao.selectAll(OrderPojo.class).get(0).getId(),20,productDao.selectAll(ProductPojo.class).get(0).getId(),100));
 
         //checking the operation
-        List<OrderItemPojo> list = orderItemService.getOrderItemByOrderId(orderDao.selectAll(OrderPojo.class).get(0).getId());
+        List<OrderItemPojo> list = orderService.getOrderItemByOrderId(orderDao.selectAll(OrderPojo.class).get(0).getId());
         OrderItemPojo item = list.get(0);
         assertEquals(item.getSellingPrice(),100,0);
         assertEquals(item.getQuantity(),20);

@@ -11,6 +11,7 @@ C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\controller\AccessDe
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dao\OrderDao.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\UserService.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\data\InfoData.java
+C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\helper\ReportHelper.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\controller\AbstractUiController.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\data\SchedulerData.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\spring\SpringSecurityInitializer.java
@@ -25,6 +26,7 @@ C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\util\ConvertUtil.ja
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\form\InventoryReportForm.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\AboutAppService.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dto\InventoryDto.java
+C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\helper\ProductHelper.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dao\InventoryDao.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\controller\UserApiController.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\data\BrandData.java
@@ -51,7 +53,6 @@ C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\form\Schedule
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\spring\WebInitializer.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\util\TimestampUtil.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\BrandService.java
-C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\controller\OrderItemApiController.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\ProductService.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\pojo\SchedulerPojo.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dao\BrandDao.java
@@ -77,11 +78,9 @@ C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\form\OrderIte
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\spring\SecurityConfig.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\util\UserPrincipal.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\form\LoginForm.java
-C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dto\OrderItemDto.java
-C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\service\OrderItemService.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dao\AbstractDao.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\model\data\OrderItemData.java
-C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\util\CookieUtil.java
+C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\helper\BrandHelper.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dto\ReportsDto.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\controller\ProductApiController.java
 C:\Increff Project\POS\pos-app\src\main\java\com\increff\pos\dao\OrderItemDao.java

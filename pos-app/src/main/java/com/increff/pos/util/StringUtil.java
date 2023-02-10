@@ -12,13 +12,21 @@ public class StringUtil {
 		return s == null || s.trim().length() == 0;
 	}
 
-	public static <T> void normalise(T form, Class<T> type) throws ApiException {
+	public static <T> void normalise(T form, Class<T> type) throws ApiException{
 		Field[] fields = type.getDeclaredFields();
 
 		for(Field field: fields) {
 
 			if(field.getType().getSimpleName().equals("String")){
 				field.setAccessible(true);
+				try {
+					if((field.get(form).toString()).toLowerCase().trim().length()>15){
+						throw new ApiException("Invalid length "+(field.get(form).toString()).toLowerCase().trim());
+					}
+				}catch (IllegalAccessException e){
+
+				}
+
 				try{
 					if(Objects.nonNull(field.get(form))){
 						field.set(form,(field.get(form).toString()).toLowerCase().trim());

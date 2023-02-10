@@ -96,11 +96,6 @@ function paginate() {
 	            title:'Brand Report',
 	            filename:'brandReport'
 	        },
-	        {
-                extend:'csv',
-                title:'Brand Report',
-                filename:'brandReport'
-            },
             {
                 extend:'excel',
                 title:'Brand Report',

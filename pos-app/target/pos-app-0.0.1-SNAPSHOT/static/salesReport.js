@@ -16,7 +16,6 @@ function getReportUrl(){
 //JSON Converting function
 function toJsonArr($form){
     var serialized = $form.serializeArray();
-    console.log(serialized);
     var s = '';
     var data = {};
     let itr = 0;
@@ -31,6 +30,7 @@ function toJsonArr($form){
 //API CALLING FUNCTIONS
 function getSalesReport(){
     var $form = $("#sales-form");
+    if(!validateForm($form))return;
 	var json = toJsonArr($form);
     var url = getReportUrl()+"/sales";
 	if(JSON.parse(json).startDate>JSON.parse(json).endDate){
@@ -46,7 +46,6 @@ function getSalesReport(){
         },	   
         success: function(response) {
                 swal("Hurray", "Created Report Successfully", "success");
-                console.log(response);
                 salesData = response; 
                 displaySalesList();
                 $('#filterModal').modal('toggle');

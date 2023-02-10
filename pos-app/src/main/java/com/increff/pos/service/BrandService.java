@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import com.increff.pos.dao.BrandDao;
+import com.increff.pos.helper.BrandHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,11 @@ public class BrandService {
 	@Autowired
 	private BrandDao brandDao ;
 
+	@Autowired
+	private BrandHelper brandHelper;
 
 	public void addBrand(BrandPojo brandPojo) throws ApiException {
-		validateBrandPojo(brandPojo);
+		brandHelper.validateBrandPojo(brandPojo);
 		brandDao.insert(brandPojo);
 	}
 
@@ -42,8 +45,7 @@ public class BrandService {
 	}
 
 	public void updateBrand(int brandId, BrandPojo brandPojo) throws ApiException {
-		validateBrandPojo(brandPojo);
-
+		brandHelper.validateBrandPojo(brandPojo);
 		BrandPojo ex = brandDao.select(brandId,BrandPojo.class);
 		if(Objects.isNull(ex)) {
 			throw new ApiException("Brand with id-" + brandId + " does not exist");
@@ -84,16 +86,5 @@ public class BrandService {
 		return brandPojo;
 	}
 
-	public void validateBrandPojo(BrandPojo brandPojo) throws ApiException{
-		if(StringUtil.isEmpty(brandPojo.getBrand())) {
-			throw new ApiException("Brand cannot be empty");
-		}
-		if(StringUtil.isEmpty(brandPojo.getCategory())) {
-			throw new ApiException("Category cannot be empty");
-		}
-		if(Objects.nonNull(brandDao.getBrandByNameAndCategory(brandPojo.getBrand(),brandPojo.getCategory()))) {
-			throw new ApiException("Brand and Category already exists");
-		}
-	}
 
 }

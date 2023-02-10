@@ -105,6 +105,7 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+	processCount=0;
 	uploadRows();
 }
 
